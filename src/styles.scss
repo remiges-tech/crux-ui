@@ -1,1 +1,169 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'bootstrap/scss/bootstrap';
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+:root {
+    --primary: #3f859c;
+    --primary-text: #fff;
+    --white: #fff;
+    --background: #f7f7f7;
+    --text-color: #000;
+    --disabled-color: #777;
+  }
+
+
+@font-face {
+    font-family: 'Gotham-Black';
+    src: url('./assets/font/Gotham-Font/Gotham-Black.otf');
+  }
+  
+  @font-face {
+    font-family: 'Gotham-Bold';
+    src: url('./assets/font/Gotham-Font/Gotham-Bold.otf');
+  }
+  
+  @font-face {
+    font-family: 'GothamBold';
+    src: url('./assets/font/Gotham-Font/GothamBold.ttf');
+  }
+  
+  @font-face {
+    font-family: 'GothamBoldItalic';
+    src: url('./assets/font/Gotham-Font/GothamBoldItalic.ttf');
+  }
+  
+  @font-face {
+    font-family: 'GothamBook';
+    src: url('./assets/font/Gotham-Font/GothamBook.ttf');
+  }
+  
+  @font-face {
+    font-family: 'Gotham-BookItalic';
+    src: url('./assets/font/Gotham-Font/Gotham-BookItalic.otf');
+  }
+  
+  @font-face {
+    font-family: 'GothamBookItalic';
+    src: url('./assets/font/Gotham-Font/GothamBookItalic.ttf');
+  }
+  
+  @font-face {
+    font-family: 'Gotham-Light';
+    src: url('./assets/font/Gotham-Font/Gotham-Light.otf');
+  }
+  
+  @font-face {
+    font-family: 'GothamLight';
+    src: url('./assets/font/Gotham-Font/GothamLight.ttf');
+  }
+  
+  @font-face {
+    font-family: 'GothamLightItalic';
+    src: url('./assets/font/Gotham-Font/GothamLightItalic.ttf');
+  }
+  
+  @font-face {
+    font-family: 'GothamMedium';
+    src: url('./assets/font/Gotham-Font/GothamMedium.ttf');
+  }
+  
+  @font-face {
+    font-family: 'GothamMedium_1';
+    src: url('./assets/font/Gotham-Font/GothamMedium_1.ttf');
+  }
+  
+  @font-face {
+    font-family: 'GothamMediumItalic';
+    src: url('./assets/font/Gotham-Font/GothamMediumItalic.ttf');
+  }
+  
+  @font-face {
+    font-family: 'Gotham-Thin';
+    src: url('./assets/font/Gotham-Font/Gotham-Thin.otf');
+  }
+  
+  @font-face {
+    font-family: 'Gotham-ThinItalic';
+    src: url('./assets/font/Gotham-Font/Gotham-ThinItalic.otf');
+  }
+  
+  @font-face {
+    font-family: 'Gotham-UltraItalic';
+    src: url('./assets/font/Gotham-Font/Gotham-UltraItalic.otf');
+  }
+  
+  @font-face {
+    font-family: 'Gotham-XLight';
+    src: url('./assets/font/Gotham-Font/Gotham-XLight.otf');
+  }
+  
+  @font-face {
+    font-family: 'Gotham-XLightItalic';
+    src: url('./assets/font/Gotham-Font/Gotham-XLightItalic.otf');
+  }
+  
+  /* fonts end */
+  
+  html,
+  body {
+    padding: 0;
+    height: 100%;
+    background-color: var(--background);
+  }
+  
+  body {
+    margin: 0;
+    font-family: "GothamBook", "Helvetica Neue", sans-serif;
+  }
+  
+  .navHeading{
+    color: var(--primary-text);
+  }
+  
+  .text-color{
+    color: var(--text-color);
+  }
+  
+  .top-menu{
+    background-color: var(--primary);
+  }
+
+  .sliceName{
+    margin-left: 20px;
+  }
+  
+  .className{
+    margin-left: 40px;
+  }
+
+  .ng-select  .ng-select-container{
+    background-color: var(--white);
+    border-radius: 10px !important;
+    outline: none !important;
+    color: var(--input-field) !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+    padding: 3px 10px;
+    height: 56px;
+  }
+  
+  .ng-select-dropdown{
+    width: 18rem;
+  }
+  
+  //  .ng-select .ng-value {
+  //   display: -webkit-box;
+  //   -webkit-line-clamp: 2;
+  //   -webkit-box-orient: vertical;
+  //   overflow: hidden !important;
+  //   text-overflow: ellipsis !important;
+  //   white-space: initial !important;
+  // }
+
+  .fs-20{
+    font-size: 20px;
+  }
+  
+  .fw-600{
+    font-weight: 600;
+  }
