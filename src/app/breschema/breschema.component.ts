@@ -49,7 +49,7 @@ export class BREschemaComponent {
 
   getSliceList() {
     this.clearCache();
-    if (this.schemasList && this.selectedData.app && this.selectedData.applong) {
+    if (this.schemasList && this.selectedData.app) {
       this.selectedData.slice = null
       this.sliceList = this._commonService.getSliceNumbersForSelectedApp(this.schemasList, this.selectedData.app)
     }

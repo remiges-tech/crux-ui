@@ -21,13 +21,13 @@ export class CommonService {
   }
 
   getAppNamesFromList(list:SchemaList[]):any[]{
-    return [...new Set(list.map((item:SchemaList) =>item.applong + "("+ item.app +")"))];
+    return [...new Set(list.map((item:SchemaList) => item.app))];
 }
 
-getSliceNumbersForSelectedApp(list: SchemaList[], app: string): any[] {
-    const data = list.filter((item: SchemaList) => item.app.toUpperCase() === app.toUpperCase()) ?? [];
-    return [...data.map((item: SchemaList) => item.slice)];
-  }
+getSliceNumbersForSelectedApp(list:SchemaList[],app:string):any[]{
+    const data = list.filter((item:SchemaList) => item.app.toUpperCase() == app.toUpperCase()) ?? null
+    return [...data.map((item:SchemaList) => item.slice)];
+}
 
 getClassNameForSelectedSchemaData(list:SchemaList[],app:string, slice:number){
     const data = list.filter((item:SchemaList) => item.app.toUpperCase() == app.toUpperCase() && item.slice == slice) ?? null;

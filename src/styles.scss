@@ -106,6 +106,7 @@
   
   html,
   body {
+    overflow: hidden;
     padding: 0;
     height: 100%;
     background-color: var(--background);
@@ -114,10 +115,6 @@
   body {
     margin: 0;
     font-family: "GothamBook", "Helvetica Neue", sans-serif;
-  }
-  
-  .navHeading{
-    color: var(--primary-text);
   }
   
   .text-color{
@@ -149,6 +146,10 @@
   
   .ng-select-dropdown{
     width: 18rem;
+  }
+
+  .dropdown{
+    width: 250px;
   }
   
   //  .ng-select .ng-value {
