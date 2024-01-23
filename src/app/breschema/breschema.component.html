@@ -5,7 +5,7 @@
                 <label class="fs-20 fw-600 me-2">Select App:</label>
                 <ng-select class="dropdown" (change)="getSliceList()" id="app" [(ngModel)]="selectedData.app"
                     placeholder="--Select App--">
-                    <ng-option *ngFor="let app of appList" [value]="app">{{app}}</ng-option>
+                    <ng-option *ngFor="let app of appList" [value]="app.value">{{app.discription}}</ng-option>
                 </ng-select>
             </div>
         </div>
@@ -24,10 +24,14 @@
         <div class="col">
             <div *ngIf="classList" class="d-flex flex-column flex-md-row className">
                 <label class="fs-20 fw-600 me-2">Select Class:</label>
-                <ng-select class="dropdown" [(ngModel)]="selectedData.class" id="class" placeholder="--Select Class--">
+                <ng-select (change)="getSchemaDetails()" class="dropdown" [(ngModel)]="selectedData.class" id="class" placeholder="--Select Class--">
                     <ng-option *ngFor="let class of classList" [value]="class">{{class}}</ng-option>
                 </ng-select>
             </div>
         </div>
+    </div>
+
+    <div class="container mt-3">
+        <app-tabslist *ngIf="schemaData" [schemaData]="schemaData"></app-tabslist>
     </div>
 </div>

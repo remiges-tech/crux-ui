@@ -4,3 +4,20 @@ export interface SchemaList{
     class:string,
     applong: string,
 }
+
+export interface SchemaDetails{
+    slice:number,
+    app:string,
+    class:string,
+    patternschema:object,
+    actionschema:object,
+    createdat:string,
+    createdby:string,
+    editedat:string,
+    editedby:string
+}
+
+export interface AppInfo {
+    discription: string;
+    value: string;
+  }

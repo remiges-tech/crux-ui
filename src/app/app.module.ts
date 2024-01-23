@@ -5,9 +5,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { TopMenuComponent } from './top-menu/top-menu.component';
 import { BREschemaComponent } from './breschema/breschema.component';
+import { TabslistComponent } from './components/tabslist/tabslist.component';
+import { TabsdetailComponent } from './components/tabsdetail/tabsdetail.component';
 
 
 @NgModule({
@@ -15,6 +17,8 @@ import { BREschemaComponent } from './breschema/breschema.component';
     AppComponent,
     TopMenuComponent,
     BREschemaComponent,
+    TabslistComponent,
+    TabsdetailComponent,
   ],
   imports: [
     BrowserModule,

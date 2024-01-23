@@ -1,0 +1,23 @@
+<!-- Tabs Panel -->
+<nav>
+  <div class="nav nav-tabs nav-pills" id="nav-tab" role="tablist">
+    <button class="nav-link active" id="schema-tab" data-bs-toggle="tab" data-bs-target="#schema" type="button" role="tab" aria-controls="schema" aria-selected="true">Schema</button>
+    <button class="nav-link" id="rulesets-tab" data-bs-toggle="tab" data-bs-target="#rulesets" type="button" role="tab" aria-controls="rulesets" aria-selected="true">Rulesets</button>
+  </div>
+</nav>
+
+<!-- Tabs content -->
+<div class="tab-content mt-4" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="schema" role="tabpanel" aria-labelledby="schema-tab">
+    <div class="container" >
+      <div class="row">
+        <div class="col-md-6 col-sm-12" *ngFor="let item of schemaData | keyvalue">
+          <b>{{item.key | titlecase}}: </b><p>{{item.value}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane fade show" id="rulesets" role="tabpanel" aria-labelledby="rulesets-tab">
+    <app-tabsdetail></app-tabsdetail>
+  </div>
+</div>
