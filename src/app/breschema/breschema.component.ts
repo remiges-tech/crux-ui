@@ -1,5 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { AppInfo, SchemaDetails, SchemaList } from 'src/models/common-interfaces';
 import { BREschemaService } from 'src/services/breschema.service';
 import { CommonService } from 'src/services/common.service';
@@ -16,6 +17,7 @@ export class BREschemaComponent {
   fileName: string = 'SchemaComponent';
   private _schemaService = inject(BREschemaService);
   private _commonService = inject(CommonService);
+  private _toastr = inject(ToastrService);
   schemasList?: SchemaList[];
   appList?: AppInfo[];
   sliceList?: string[];
@@ -38,7 +40,7 @@ export class BREschemaComponent {
           this.schemasList = res?.data?.schemas;
           this.appList = this._commonService.getAppNamesFromList(res?.data?.schemas);
         }else{
-          // Toaster here if list is not present
+          this._toastr.error(res?.message, CONSTANTS.ERROR);
         }
       })
     } catch (error) {
@@ -80,7 +82,7 @@ export class BREschemaComponent {
         if (res.status == CONSTANTS.SUCCESS) {
           this.schemaData = res.data
         } else {
-          // toaster Here if Data is not present
+          this._toastr.error(res?.message, CONSTANTS.ERROR);
         }
       })
     } catch (error) {

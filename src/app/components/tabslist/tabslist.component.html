@@ -2,22 +2,50 @@
 <nav>
   <div class="nav nav-tabs nav-pills" id="nav-tab" role="tablist">
     <button class="nav-link active" id="schema-tab" data-bs-toggle="tab" data-bs-target="#schema" type="button" role="tab" aria-controls="schema" aria-selected="true">Schema</button>
-    <button class="nav-link" id="rulesets-tab" data-bs-toggle="tab" data-bs-target="#rulesets" type="button" role="tab" aria-controls="rulesets" aria-selected="true">Rulesets</button>
+    <button class="nav-link" id="rulesets-tab" data-bs-toggle="tab" data-bs-target="#rulesets" type="button" role="tab" aria-controls="rulesets" aria-selected="true">Workflows</button>
   </div>
 </nav>
 
 <!-- Tabs content -->
 <div class="tab-content mt-4" id="nav-tabContent">
   <div class="tab-pane fade show active" id="schema" role="tabpanel" aria-labelledby="schema-tab">
-    <div class="container" >
+    <div class="container">
+       <!-- First Section: patternschema attributes -->
       <div class="row">
-        <div class="col-md-6 col-sm-12" *ngFor="let item of schemaData | keyvalue">
-          <b>{{item.key | titlecase}}: </b><p>{{item.value}}</p>
+          <h3>Patternschema</h3>
+        <div class="col-12 mb-4" *ngFor="let patternschema of schemaData?.patternschema.attr">
+          <div class="row">
+            <div class="col-6 fs-20">
+              <b>{{ patternschema.name }}</b>
+            </div>
+            <div class="col-6 fs-20">
+              <p>{{ patternschema.valtype }}</p>
+            </div>
+            <span style="margin-top: -10px;">
+              <small>{{ patternschema.longdesc}}</small>
+            </span>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+       <!-- Second Section: Actionschema details -->
+       <div class="row mt-4">
+        <h4 class="mb-4">Actionschema</h4>
+        <div class="d-flex fs-20 mb-2">
+          <b>Tasks:</b>
+            <span class="badge bg-primary mx-2 fs-10" *ngFor="let task of schemaData?.actionschema.tasks">{{ task }}</span>
+        </div>
+        <div class="d-flex mt-2 fs-20">
+          <b>Properties:</b>
+            <span class="badge bg-success mx-2 fs-10" *ngFor="let property of schemaData?.actionschema.properties">{{ property }}</span>
+        </div>
+      </div>
+   </div> 
+  </div> 
   <div class="tab-pane fade show" id="rulesets" role="tabpanel" aria-labelledby="rulesets-tab">
     <app-tabsdetail></app-tabsdetail>
   </div>
 </div>
+
+
+<!-- Tabs content -->
+
