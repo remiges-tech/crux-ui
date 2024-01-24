@@ -1,8 +1,8 @@
 <!-- Tabs Panel -->
 <nav>
-  <div class="nav nav-tabs nav-pills" id="nav-tab" role="tablist">
-    <button class="nav-link active" id="schema-tab" data-bs-toggle="tab" data-bs-target="#schema" type="button" role="tab" aria-controls="schema" aria-selected="true">Schema</button>
-    <button class="nav-link" id="rulesets-tab" data-bs-toggle="tab" data-bs-target="#rulesets" type="button" role="tab" aria-controls="rulesets" aria-selected="true">Workflows</button>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <button class="nav-link active fw-600 fs-20" id="schema-tab" data-bs-toggle="tab" data-bs-target="#schema" type="button" role="tab" aria-controls="schema" aria-selected="true">Schema</button>
+    <button class="nav-link fw-600 fs-20" id="rulesets-tab" data-bs-toggle="tab" data-bs-target="#rulesets" type="button" role="tab" aria-controls="rulesets" aria-selected="true">Workflows</button>
   </div>
 </nav>
 
@@ -12,7 +12,7 @@
     <div class="container">
        <!-- First Section: patternschema attributes -->
       <div class="row">
-          <h3>Patternschema</h3>
+          <h3 class="heading-color">Patternschema</h3>
         <div class="col-12 mb-4" *ngFor="let patternschema of schemaData?.patternschema.attr">
           <div class="row">
             <div class="col-6 fs-20">
@@ -26,17 +26,32 @@
             </span>
           </div>
         </div>
-      </div>
+      </div><hr>
        <!-- Second Section: Actionschema details -->
-       <div class="row mt-4">
-        <h4 class="mb-4">Actionschema</h4>
-        <div class="d-flex fs-20 mb-2">
+       <div class="row">
+        <h4 class="mb-4 heading-color">Actionschema</h4>
+        <div class=" fs-20 mb-2">
           <b>Tasks:</b>
             <span class="badge bg-primary mx-2 fs-10" *ngFor="let task of schemaData?.actionschema.tasks">{{ task }}</span>
         </div>
-        <div class="d-flex mt-2 fs-20">
+        <div class=" mt-2 fs-20">
           <b>Properties:</b>
             <span class="badge bg-success mx-2 fs-10" *ngFor="let property of schemaData?.actionschema.properties">{{ property }}</span>
+        </div>
+      </div><hr>
+      <!--MetaData fields-->
+      <div class="row">
+        <div class="col-6">
+          <h4 class="heading-color">createdat:</h4><p>{{schemaData?.createdat}}</p>
+        </div>
+        <div class="col-6">
+          <h4 class="heading-color">createdby:</h4><p>{{schemaData?.createdby}}</p>
+        </div>
+        <div class="col-6">
+          <h4 class="heading-color">editedat:</h4><p>{{schemaData?.editedat}}</p>
+        </div>
+        <div class="col-6">
+          <h4 class="heading-color">editedby:</h4><p>{{schemaData?.editedby}}</p>
         </div>
       </div>
    </div> 
@@ -47,5 +62,4 @@
 </div>
 
 
-<!-- Tabs content -->
 
