@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment.development';
   providedIn: 'root'
 })
 export class BREschemaService {
-  fileName:string='SchemaService'
+  fileName: string = 'SchemaService'
   _httpService = inject(HttpService);
   _commonService = inject(CommonService);
   constructor() { }
@@ -38,11 +38,11 @@ export class BREschemaService {
     }
   }
 
-  getBRESchemaDetail(obj:any): any {
+  getBRESchemaDetail(obj: any): any {
     try {
       let dataObj = {
         method: 'get',
-        api_url: environment.apiUrl +Enums.CONSTANTS.BRESchema_GET_API,
+        api_url: environment.apiUrl + Enums.CONSTANTS.BRESchema_GET_API,
         local_json_file: '',
         param_data: obj,
         mapcol: false,
@@ -55,9 +55,35 @@ export class BREschemaService {
       });
       return resp;
     } catch (error) {
+      alert(error)
       this._commonService.log({
         fileName: this.fileName,
         functionName: 'getBRESchemaDetail',
+        msg: error
+      });
+    }
+  }
+
+  getBREWorkflowList(): any {
+    try {
+      let dataObj = {
+        method: 'get',
+        api_url: environment.apiUrl + Enums.CONSTANTS.BRERulesets_LIST_API,
+        local_json_file: '',
+        param_data: {},
+        mapcol: false,
+      };
+      let resp = this._httpService.fetchData(dataObj);
+      this._commonService.log({
+        fileName: this.fileName,
+        functionName: 'getBREWorkflowList',
+        msg: resp
+      });
+      return resp;
+    } catch (error) {
+      this._commonService.log({
+        fileName: this.fileName,
+        functionName: 'getBREWorkflowList',
         msg: error
       });
     }

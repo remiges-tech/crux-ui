@@ -27,7 +27,7 @@ export class BREschemaComponent {
     slice: null,
     class: null,
   }
-  schemaData?:SchemaDetails;
+  schemaData?: SchemaDetails;
 
   ngOnInit() {
     this.getSchemaList();
@@ -39,9 +39,11 @@ export class BREschemaComponent {
         if (res?.status == CONSTANTS.SUCCESS) {
           this.schemasList = res?.data?.schemas;
           this.appList = this._commonService.getAppNamesFromList(res?.data?.schemas);
-        }else{
+        } else {
           this._toastr.error(res?.message, CONSTANTS.ERROR);
         }
+      }, (err: any) => {
+        this._toastr.error(err, CONSTANTS.ERROR)
       })
     } catch (error) {
       this._commonService.log({
@@ -60,10 +62,10 @@ export class BREschemaComponent {
     }
   }
 
-  getClassList(){
+  getClassList() {
     this.classList = undefined;
     this.schemaData = undefined
-    if (this.schemasList && this.selectedData.app && this.selectedData.slice){
+    if (this.schemasList && this.selectedData.app && this.selectedData.slice) {
       this.selectedData.class = null
       this.classList = this._commonService.getClassNameForSelectedSchemaData(this.schemasList, this.selectedData.app, this.selectedData.slice)
     }
@@ -84,6 +86,8 @@ export class BREschemaComponent {
         } else {
           this._toastr.error(res?.message, CONSTANTS.ERROR);
         }
+      }, (err: any) => {
+        this._toastr.error(err, CONSTANTS.ERROR)
       })
     } catch (error) {
       this._commonService.log({
@@ -99,5 +103,5 @@ export class BREschemaComponent {
     this.classList = undefined;
     this.schemaData = undefined;
   }
-  
+
 }

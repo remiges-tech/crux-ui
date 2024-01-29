@@ -21,3 +21,17 @@ export interface AppInfo {
     discription: string;
     value: string;
   }
+
+export interface RulesetsList{
+    id: number,
+    slice: number,
+    app: string,
+    class: string,
+    name: string,
+    is_active: boolean,
+    is_internal: boolean,
+    createdat: string,
+    createdby: string,
+    editedat: string,
+    editedby: string
+}

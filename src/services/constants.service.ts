@@ -5,4 +5,14 @@ export enum CONSTANTS {
   WARNING = 'warning',
   BRESchema_LIST_API = '/bre-schema-list',
   BRESchema_GET_API = '/bre-schema-get',
+  BRERulesets_LIST_API = '/bre-rulesets-list',
+}
+
+export const OperatorsUnicode = {
+  ge : '&#8805;',
+  gt : '&#62;',
+  le : '&#8804;',
+  lt : '&#60;',
+  eq : '&#61;',
+  ne : '&#8800;',
 }

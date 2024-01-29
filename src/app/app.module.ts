@@ -12,6 +12,7 @@ import { TopMenuComponent } from './top-menu/top-menu.component';
 import { BREschemaComponent } from './breschema/breschema.component';
 import { TabslistComponent } from './components/tabslist/tabslist.component';
 import { TabsdetailComponent } from './components/tabsdetail/tabsdetail.component';
+import { WorkflowComponent } from './components/workflow-list/workflow.component';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { TabsdetailComponent } from './components/tabsdetail/tabsdetail.componen
     BREschemaComponent,
     TabslistComponent,
     TabsdetailComponent,
+    WorkflowComponent
   ],
   imports: [
     BrowserModule,
