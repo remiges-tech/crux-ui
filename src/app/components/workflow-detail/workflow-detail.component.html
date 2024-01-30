@@ -1,7 +1,8 @@
-<div class="card no-border">
-    <div class="card-body">
-        <div class="container">
-            <div *ngFor="let rule of ruleDetails?.ruleset?.rules">
+<div class="container">
+    <div *ngFor="let rule of ruleDetails?.ruleset?.rules">
+        <div class="card no-border mt-4">
+            <div class="card-body">
+                <h4 class="mb-4 heading-color">Rule Patterns</h4>
                 <div *ngFor="let pattern of rule?.rulepattern">
                     <div class="row pattern-row">
                         <div class="col-md-4">
@@ -18,6 +19,23 @@
                         <div class="col-12">
                             <p class="description fs-5">{{ pattern?.longdesc }}</p>
                         </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <h4 class="mb-4 heading-color">Rule Actions</h4>
+                    <div class=" fs-20 mb-2">
+                        <b>Tasks:</b>
+                        <span class="badge bg-primary mx-2 fs-10" *ngFor="let task of rule.ruleactions.tasks">{{ task
+                            }}</span>
+                    </div>
+                    <div class=" mt-2 fs-20">
+                        <b>Properties:</b>
+                        <span *ngFor="let properties of rule.ruleactions.properties">
+                            <span class="badge bg-success mx-2 fs-10"
+                                *ngFor="let property of properties | keyvalue">{{property.key}} - {{
+                                property.value }}</span>
+                        </span>
                     </div>
                 </div>
             </div>

@@ -3,6 +3,7 @@ export interface SchemaList{
     slice:number,
     class:string,
     applong: string,
+    slicedesc:string
 }
 
 export interface SchemaDetails{
@@ -20,6 +21,11 @@ export interface SchemaDetails{
 export interface AppInfo {
     discription: string;
     value: string;
+  }
+
+  export interface SliceInfo {
+    discription: string;
+    value:  number;
   }
 
 export interface RulesetsList{

@@ -23,7 +23,7 @@
                 <div class="col-3 ml-3">
                     <ng-select class="dropdown" (change)="getClassList()" id="slice" [(ngModel)]="selectedData.slice"
                         placeholder="--Select Slice--">
-                        <ng-option *ngFor="let slice of sliceList" [value]="slice">{{slice}}</ng-option>
+                        <ng-option *ngFor="let slice of sliceList" [value]="slice.value">{{slice.discription}}</ng-option>
                     </ng-select>
                 </div>
             </div>

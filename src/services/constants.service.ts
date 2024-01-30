@@ -14,6 +14,6 @@ export const OperatorsUnicode = {
   gt : '&#62;',
   le : '&#8804;',
   lt : '&#60;',
-  eq : '&#61;',
+  eq : '&#61;&#61;',
   ne : '&#8800;',
 }

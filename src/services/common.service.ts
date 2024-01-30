@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { AppInfo, SchemaList } from 'src/models/common-interfaces';
+import { AppInfo, SchemaList, SliceInfo } from 'src/models/common-interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -32,9 +32,17 @@ export class CommonService {
     return unique;
 }
 
-getSliceNumbersForSelectedApp(list:SchemaList[],app:string):any[]{
+getSliceNumbersForSelectedApp(list:SchemaList[],app:string):SliceInfo[]{
     const data = list.filter((item:SchemaList) => item.app.toUpperCase() == app.toUpperCase()) ?? null
-    return [...new Set(data.map((item:SchemaList) => item.slice))];
+    let sliceList = [...data.map((item:SchemaList) => {
+        return {discription:`${item.slicedesc} (${item.slice})` , value:item.slice}
+    })]
+
+    const unique = sliceList.filter((Apps, index) => {
+        return index === sliceList.findIndex(fil => Apps.value === fil.value);
+    });
+
+    return unique;
 }
 
 getClassNameForSelectedSchemaData(list:SchemaList[],app:string, slice:number){
