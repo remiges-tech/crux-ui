@@ -6,11 +6,12 @@
     <button #workflowsTab class="nav-link fw-600 fs-20" id="rulesets-tab" data-bs-toggle="tab"
       data-bs-target="#rulesets" type="button" role="tab" aria-controls="rulesets"
       aria-selected="true">Workflows</button>
-      <!-- Dynamic Tabs for rulesets detail -->
-    <ng-container *ngFor="let tab of tabs">
-      <button #dynamicTab class="nav-link fw-600 fs-20" id="{{tab}}-tab" data-bs-toggle="tab" attr.data-bs-target="#{{tab}}"
-        type="button" role="tab" attr.aria-controls="{{tab}}" aria-selected="true">{{tab}}<span
-          class="btn-close ms-3" (click)="close($event, tab)"></span></button>
+    <!-- Dynamic Tabs for rulesets detail -->
+    <ng-container *ngFor="let t of tabs">
+      <!-- {{t | json}} -->
+      <button #dynamicTab class="nav-link fw-600 fs-20" id="{{t.tab.name}}-tab" data-bs-toggle="tab"
+        attr.data-bs-target="#{{t.tab.name}}" type="button" role="tab" attr.aria-controls="{{t.tab.name}}"
+        aria-selected="true">{{t.tab.name}}<span class="btn-close ms-3" (click)="close($event, t)"></span></button>
     </ng-container>
   </div>
 </nav>
@@ -23,16 +24,22 @@
       <!-- First Section: patternschema attributes -->
       <div class="row">
         <h3 class="heading-color">Patternschema</h3>
-        <div class="col-12 mb-4" *ngFor="let patternschema of schemaData?.patternschema.attr">
+        <div class="col-12 mb-4" *ngFor="let patternschema of schemaData?.patternschema?.attr">
           <div class="row">
             <div class="col-6 fs-20">
-              <b>{{ patternschema.name }}</b>
+              <b>{{ patternschema?.name }}</b>
             </div>
             <div class="col-6 fs-20">
               <p>{{ patternschema.valtype }}</p>
             </div>
             <span style="margin-top: -10px;">
-              <small>{{ patternschema.longdesc}}</small>
+              <small class="description">{{ patternschema.longdesc}}</small>
+            </span>
+            <div class="col-6">
+              <span class="badge bg-primary mx-2 fs-10" *ngFor="let vals of patternschema.vals">{{ vals }}</span>
+            </div>
+            <span>
+              <small class="constraint-value">{{ getConstraints(patternschema) }}</small>
             </span>
           </div>
         </div>
@@ -85,4 +92,10 @@
   </div>
 
   <!-- Dynamic tab contents -->
+  <ng-container *ngFor="let t of tabs">
+    <div class="tab-pane fade show" id="{{t.tab.name}}" role="tabpanel" aria-labelledby="rulesets-tab">
+      <app-workflow-detail [ruleDetails]="t.content">
+      </app-workflow-detail>
+    </div>
+  </ng-container>
 </div>

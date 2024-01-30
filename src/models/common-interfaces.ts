@@ -35,3 +35,18 @@ export interface RulesetsList{
     editedat: string,
     editedby: string
 }
+
+export interface RuleDetails{
+    id: number,
+    slice: number,
+    app: string,
+    class: string,
+    name: string,
+    ruleset: any,
+    is_active: boolean,
+    is_internal: boolean,
+    createdat: string,
+    createdby: string,
+    editedat: string,
+    editedby: string
+}

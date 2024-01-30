@@ -11,8 +11,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { TopMenuComponent } from './top-menu/top-menu.component';
 import { BREschemaComponent } from './breschema/breschema.component';
 import { TabslistComponent } from './components/tabslist/tabslist.component';
-import { TabsdetailComponent } from './components/tabsdetail/tabsdetail.component';
 import { WorkflowComponent } from './components/workflow-list/workflow.component';
+import { WorkflowDetailComponent } from './components/workflow-detail/workflow-detail.component';
 
 
 @NgModule({
@@ -21,8 +21,8 @@ import { WorkflowComponent } from './components/workflow-list/workflow.component
     TopMenuComponent,
     BREschemaComponent,
     TabslistComponent,
-    TabsdetailComponent,
-    WorkflowComponent
+    WorkflowComponent,
+    WorkflowDetailComponent
   ],
   imports: [
     BrowserModule,

@@ -129,6 +129,11 @@
   .heading-color{
     color: var(--primary);
   }
+
+  .description{
+    color: var(--disabled-color);
+    font-size: 20px;
+  }
   
 
   .ng-select  .ng-select-container{
@@ -149,18 +154,13 @@
   .dropdown{
     width: 250px;
   }
-  
-  //  .ng-select .ng-value {
-  //   display: -webkit-box;
-  //   -webkit-line-clamp: 2;
-  //   -webkit-box-orient: vertical;
-  //   overflow: hidden !important;
-  //   text-overflow: ellipsis !important;
-  //   white-space: initial !important;
-  // }
 
   .fs-20{
     font-size: 20px;
+  }
+
+  .fs-40{
+    font-size: 40px;
   }
   
   .fw-600{
@@ -179,6 +179,10 @@
 
 .fs-22{
     font-size: 22px;
+}
+
+.nav-link{
+  color: var(--primary);
 }
 
 .card, .card-header{

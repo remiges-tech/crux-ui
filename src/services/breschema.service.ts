@@ -88,4 +88,30 @@ export class BREschemaService {
       });
     }
   }
+
+  getBREWorkflowDetails(obj: any): any {
+    try {
+      let dataObj = {
+        method: 'get',
+        api_url: environment.apiUrl + Enums.CONSTANTS.BRERulesets_GET_API,
+        local_json_file: '',
+        param_data: obj,
+        mapcol: false,
+      };
+      let resp = this._httpService.fetchData(dataObj);
+      this._commonService.log({
+        fileName: this.fileName,
+        functionName: 'getBREWorkflowDetails',
+        msg: resp
+      });
+      return resp;
+    } catch (error) {
+      alert(error)
+      this._commonService.log({
+        fileName: this.fileName,
+        functionName: 'getBREWorkflowDetails',
+        msg: error
+      });
+    }
+  }
 }
