@@ -8,7 +8,6 @@
       aria-selected="true">Workflows</button>
     <!-- Dynamic Tabs for rulesets detail -->
     <ng-container *ngFor="let t of tabs">
-      <!-- {{t | json}} -->
       <button #dynamicTab class="nav-link fw-600 fs-20" id="{{t.tab.name}}-tab" data-bs-toggle="tab"
         attr.data-bs-target="#{{t.tab.name}}" type="button" role="tab" attr.aria-controls="{{t.tab.name}}"
         aria-selected="true">{{t.tab.name}}<span class="btn-close ms-3" (click)="close($event, t)"></span></button>
@@ -23,10 +22,9 @@
     <div class="container">
       <!-- First Section: patternschema attributes -->
       <div class="row">
-        <h3 class="heading-color">Patternschema</h3>
         <div class="col-12 mb-4" *ngFor="let patternschema of schemaData?.patternschema?.attr">
-          <div class="row">
-            <div class="col-6 fs-20">
+          <div class="row align-item-center">
+            <div class="col-6 fs-30 mb-2">
               <b>{{ patternschema?.name }}</b>
             </div>
             <div class="col-6 fs-20">
@@ -47,7 +45,6 @@
       <hr>
       <!-- Second Section: Actionschema details -->
       <div class="row">
-        <h4 class="mb-4 heading-color">Actionschema</h4>
         <div class=" fs-20 mb-2">
           <b>Tasks:</b>
           <span class="badge bg-primary mx-2 fs-10" *ngFor="let task of schemaData?.actionschema.tasks">{{ task
@@ -62,23 +59,31 @@
       <hr>
       <!--MetaData fields-->
       <div class="row">
-        <div class="col-6">
-          <h4 class="heading-color">createdat:</h4>
-          <p>{{schemaData?.createdat}}</p>
+        <div class="col-md-6">
+          <div class="d-flex align-items-center">
+            <p class="heading-color me-2">Created at:</p>
+            <p>{{ schemaData?.createdat | date }}</p>
+          </div>
         </div>
-        <div class="col-6">
-          <h4 class="heading-color">createdby:</h4>
-          <p>{{schemaData?.createdby}}</p>
+        <div class="col-md-6">
+          <div class="d-flex align-items-center">
+            <p class="heading-color me-2">Created by:</p>
+            <p>{{ schemaData?.createdby }}</p>
+          </div>
         </div>
-        <div class="col-6">
-          <h4 class="heading-color">editedat:</h4>
-          <p>{{schemaData?.editedat}}</p>
+        <div class="col-md-6">
+          <div class="d-flex align-items-center">
+            <p class="heading-color me-2">Edited at:</p>
+            <p>{{ schemaData?.editedat | date }}</p>
+          </div>
         </div>
-        <div class="col-6">
-          <h4 class="heading-color">editedby:</h4>
-          <p>{{schemaData?.editedby}}</p>
+        <div class="col-md-6">
+          <div class="d-flex align-items-center">
+            <p class="heading-color me-2">Edited by:</p>
+            <p>{{ schemaData?.editedby }}</p>
+          </div>
         </div>
-      </div>
+      </div>      
     </div>
   </div>
   <!-- Rulesets Tab content -->

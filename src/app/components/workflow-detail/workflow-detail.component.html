@@ -2,28 +2,21 @@
     <div *ngFor="let rule of ruleDetails?.ruleset?.rules">
         <div class="card no-border mt-4">
             <div class="card-body">
-                <h4 class="mb-4 heading-color">Rule Patterns</h4>
                 <div *ngFor="let pattern of rule?.rulepattern">
                     <div class="row pattern-row">
-                        <div class="col-md-4">
-                            <p class="fs-5 fw-bold">{{ pattern?.attrname }}</p>
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-2 m-0 p-0">
+                            <label id="ruleDescription" data-toggle="tooltip" data-placement="bottom"
+                            title="{{pattern?.longdesc}}"><p class="fs-5 fw-bold pointer">{{ pattern?.attrname }}</p></label>
+                        </div>                     
+                        <div class="col-md-1 m-0 p-0">
                             <p [innerHTML]="OperatorsUnicode[pattern?.op]" class="fs-5"></p>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-2 m-0 p-0">
                             <p class="fs-5">{{ pattern?.attrval }}</p>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <p class="description fs-5">{{ pattern?.longdesc }}</p>
-                        </div>
-                    </div>
                 </div>
-
                 <div class="row">
-                    <h4 class="mb-4 heading-color">Rule Actions</h4>
                     <div class=" fs-20 mb-2">
                         <b>Tasks:</b>
                         <span class="badge bg-primary mx-2 fs-10" *ngFor="let task of rule.ruleactions.tasks">{{ task

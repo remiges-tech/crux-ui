@@ -34,6 +34,7 @@ export interface RulesetsList{
     app: string,
     class: string,
     name: string,
+    longdesc: string,
     is_active: boolean,
     is_internal: boolean,
     createdat: string,

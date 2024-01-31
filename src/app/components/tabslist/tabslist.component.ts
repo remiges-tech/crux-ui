@@ -105,16 +105,16 @@ export class TabslistComponent {
 	getConstraints(patternschema: any): string {
 		let constraints = '';
 		if ('valmin' in patternschema) {
-			constraints += `Min Value: ${patternschema.valmin}`;
+			constraints += `Min  ${patternschema.valmin}`;
 		}
 		if ('valmax' in patternschema) {
-			constraints += `${constraints ? ' - ' : ''}Max Value: ${patternschema.valmax}`;
+			constraints += `${constraints ? ' - ' : ''}Max  ${patternschema.valmax}`;
 		}
 		if ('lenmin' in patternschema) {
-			constraints += `${constraints ? ' - ' : ''}Min Length: ${patternschema.lenmin}`;
+			constraints += `${constraints ? ' - ' : ''}Min  ${patternschema.lenmin}`;
 		}
 		if ('lenmax' in patternschema) {
-			constraints += `${constraints ? ' - ' : ''}Max Length: ${patternschema.lenmax}`;
+			constraints += `${constraints ? ' - ' : ''}Max  ${patternschema.lenmax}`;
 		}
 		return constraints || (patternschema.vals ? '' : 'No constraints');
 	}

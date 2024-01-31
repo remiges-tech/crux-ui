@@ -16,6 +16,11 @@ import { RulesetsList } from 'src/models/common-interfaces';
             <button class="btn fs-22 m-2" type="button" (click)="openWorkflowDetail(workflow!)">&#8658;</button>
           </div>
         </div>
+        <div class="row" style="margin-top: -10px;">
+          <div class="col">
+            <small [ngClass]="workflow?.is_active ? 'active' : 'not-active'">{{ workflow?.longdesc}}</small>
+          </div>
+        </div>
       </div>
       <div *ngIf="isShowMetaData" class="card-body">
         <div class="row">
