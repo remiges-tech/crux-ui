@@ -24,17 +24,14 @@ import { RulesetsList } from 'src/models/common-interfaces';
       </div>
       <div *ngIf="isShowMetaData" class="card-body">
         <div class="row">
-          <div class="col-6">
-            <h4 class="heading-color">createdat:</h4><p>{{workflow?.createdat}}</p>
-          </div>
-          <div class="col-6">
-            <h4 class="heading-color">createdby:</h4><p>{{workflow?.createdby}}</p>
-          </div>
-          <div class="col-6">
-            <h4 class="heading-color">editedat:</h4><p>{{workflow?.editedat}}</p>
-          </div>
-          <div class="col-6">
-            <h4 class="heading-color">editedby:</h4><p>{{workflow?.editedby}}</p>
+          <div class="col"></div>
+          <div class="col-auto">
+            <div class="d-flex align-items-center">
+              <p class="heading-color me-2">Created by <span class="text-color">{{ workflow?.createdby }}</span> at <span class="text-color">{{ workflow?.createdat | date }}</span></p>
+            </div>
+            <div class="d-flex align-items-center">
+            <p class="heading-color me-2">Edited by <span class="text-color">{{ workflow?.editedby }}</span> at <span class="text-color">{{ workflow?.editedat | date }}</span></p>
+            </div>
           </div>
         </div>
       </div>

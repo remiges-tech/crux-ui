@@ -2,33 +2,39 @@
     <div *ngFor="let rule of ruleDetails?.ruleset?.rules">
         <div class="card no-border mt-4">
             <div class="card-body">
-                <div *ngFor="let pattern of rule?.rulepattern">
-                    <div class="row pattern-row">
-                        <div class="col-md-2 m-0 p-0">
-                            <label id="ruleDescription" data-toggle="tooltip" data-placement="bottom"
-                            title="{{pattern?.longdesc}}"><p class="fs-5 fw-bold pointer">{{ pattern?.attrname }}</p></label>
-                        </div>                     
-                        <div class="col-md-1 m-0 p-0">
-                            <p [innerHTML]="OperatorsUnicode[pattern?.op]" class="fs-5"></p>
-                        </div>
-                        <div class="col-md-2 m-0 p-0">
-                            <p class="fs-5">{{ pattern?.attrval }}</p>
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
-                    <div class=" fs-20 mb-2">
-                        <b>Tasks:</b>
-                        <span class="badge bg-primary mx-2 fs-10" *ngFor="let task of rule.ruleactions.tasks">{{ task
-                            }}</span>
+                    <div class="col-md-6 col-sm-12">
+                        <div *ngFor="let pattern of rule?.rulepattern">
+                            <label id="ruleDescription" data-toggle="tooltip" data-placement="bottom"
+                                    title="{{pattern?.longdesc}}"><p class="fs-5 fw-bold pointer">{{ pattern?.attrname }} <span [innerHTML]="OperatorsUnicode[pattern?.op]" class="fs-5"></span> {{ pattern?.attrval }}</label>
+                            <!-- <div class="row pattern-row">
+                                <div class="col-md-2 m-0 p-0">
+                                    <label id="ruleDescription" data-toggle="tooltip" data-placement="bottom"
+                                    title="{{pattern?.longdesc}}"><p class="fs-5 fw-bold pointer">{{ pattern?.attrname }}</p></label>
+                                </div>                     
+                                <div class="col-md-1 m-0 p-0">
+                                    <p [innerHTML]="OperatorsUnicode[pattern?.op]" class="fs-5"></p>
+                                </div>
+                                <div class="col-md-2 m-0 p-0">
+                                    <p class="fs-5">{{ pattern?.attrval }}</p>
+                                </div>
+                            </div> -->
+                        </div>
                     </div>
-                    <div class=" mt-2 fs-20">
-                        <b>Properties:</b>
-                        <span *ngFor="let properties of rule.ruleactions.properties">
-                            <span class="badge bg-success mx-2 fs-10"
-                                *ngFor="let property of properties | keyvalue">{{property.key}} - {{
-                                property.value }}</span>
-                        </span>
+                    <div class="col-sm-12 col-md-6">
+                        <div class="fs-20 mb-2">
+                            <b>Tasks:</b>
+                            <span class="badge bg-primary mx-2 fs-10" *ngFor="let task of rule.ruleactions.tasks">{{ task
+                                }}</span>
+                        </div>
+                        <div class="mt-2 fs-20">
+                            <b>Properties:</b>
+                            <span *ngFor="let properties of rule.ruleactions.properties">
+                                <span class="badge bg-success mx-2 fs-10"
+                                    *ngFor="let property of properties | keyvalue">{{property.key}} - {{
+                                    property.value }}</span>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
