@@ -27,10 +27,10 @@ import { RulesetsList } from 'src/models/common-interfaces';
           <div class="col"></div>
           <div class="col-auto">
             <div class="d-flex align-items-center">
-              <p class="heading-color me-2">Created by <span class="text-color">{{ workflow?.createdby }}</span> at <span class="text-color">{{ workflow?.createdat | date }}</span></p>
+              <p class="me-2"><span class="heading-color">Created by</span><span> {{ workflow?.createdby }} </span><span class="heading-color">at</span><span> {{ workflow?.createdat | date }} </span></p>
             </div>
             <div class="d-flex align-items-center">
-            <p class="heading-color me-2">Edited by <span class="text-color">{{ workflow?.editedby }}</span> at <span class="text-color">{{ workflow?.editedat | date }}</span></p>
+            <p class="me-2"><span class="heading-color">Edited by</span><span> {{ workflow?.editedby }} </span><span class="heading-color">at</span><span> {{ workflow?.editedat | date }} </span></p>
             </div>
           </div>
         </div>
@@ -42,8 +42,9 @@ export class WorkflowComponent {
   @Input({ required: true }) workflow?: RulesetsList;
   @Output() openDetail = new EventEmitter<any>();
   isShowMetaData: boolean = false;
+  
 
   openWorkflowDetail(workFlow: RulesetsList) {
     this.openDetail.emit(workFlow);
-  }
+  } 
 }

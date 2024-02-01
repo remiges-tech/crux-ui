@@ -24,63 +24,63 @@
       <div class="row">
         <div class="col-12 mb-4" *ngFor="let patternschema of schemaData?.patternschema?.attr">
           <div class="row align-item-center">
-            <div class="col-6 fs-30 mb-2">
+            <div class="col-6 fs-30 mb-2 text-color">
               <b>{{ patternschema?.name }}</b>
             </div>
-            <div class="col-6 fs-20">
+            <div class="col-6 fs-20 text-color">
               <p>{{ patternschema.valtype }}</p>
             </div>
             <span style="margin-top: -10px;">
               <small class="description">{{ patternschema.longdesc}}</small>
             </span>
-            <div class="col-6">
+            <div class="col-6 text-color">
               <span class="badge bg-primary mx-2 fs-10" *ngFor="let vals of patternschema.vals">{{ vals }}</span>
             </div>
             <span>
-              <small class="constraint-value">{{ getConstraints(patternschema) }}</small>
+              <small class="constraint-value text-color">{{ getConstraints(patternschema) }}</small>
             </span>
           </div>
         </div>
       </div>
-      <hr>
+      <hr class="text-color">
       <!-- Second Section: Actionschema details -->
       <div class="row">
-        <div class=" fs-20 mb-2">
+        <div class=" fs-20 mb-2 text-color">
           <b>Tasks:</b>
           <span class="badge bg-primary mx-2 fs-10" *ngFor="let task of schemaData?.actionschema.tasks">{{ task
             }}</span>
         </div>
-        <div class=" mt-2 fs-20">
+        <div class=" mt-2 fs-20 text-color">
           <b>Properties:</b>
           <span class="badge bg-success mx-2 fs-10" *ngFor="let property of schemaData?.actionschema.properties">{{
             property }}</span>
         </div>
       </div>
-      <hr>
+      <hr class="text-color">
       <!--MetaData fields-->
       <div class="row">
         <div class="col-md-6">
           <div class="d-flex align-items-center">
-            <p class="heading-color me-2">Created at:</p>
-            <p>{{ schemaData?.createdat | date }}</p>
+            <p class="meta-data me-2">Created at:</p>
+            <p class="text-color">{{ schemaData?.createdat | date }}</p>
           </div>
         </div>
         <div class="col-md-6">
           <div class="d-flex align-items-center">
-            <p class="heading-color me-2">Created by:</p>
-            <p>{{ schemaData?.createdby }}</p>
+            <p class="meta-data me-2">Created by:</p>
+            <p class="text-color">{{ schemaData?.createdby }}</p>
           </div>
         </div>
         <div class="col-md-6">
           <div class="d-flex align-items-center">
-            <p class="heading-color me-2">Edited at:</p>
-            <p>{{ schemaData?.editedat | date }}</p>
+            <p class="meta-data me-2">Edited at:</p>
+            <p class="text-color">{{ schemaData?.editedat | date }}</p>
           </div>
         </div>
         <div class="col-md-6">
           <div class="d-flex align-items-center">
-            <p class="heading-color me-2">Edited by:</p>
-            <p>{{ schemaData?.editedby }}</p>
+            <p class="meta-data me-2">Edited by:</p>
+            <p class="text-color">{{ schemaData?.editedby }}</p>
           </div>
         </div>
       </div>      

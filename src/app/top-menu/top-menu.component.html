@@ -6,6 +6,12 @@
         </h2>
         <span class="h2 mb-0 text-light">Crux</span>
       </div>
+      <div class="mx-3">
+        <button class="btn" id="themeBtn" (click)="changeTheme()">
+          <i *ngIf="isDarkTheme" class="fa-regular fa-sun"></i>
+          <i *ngIf="!isDarkTheme" class="fa-solid fa-moon"></i>
+        </button>
+      </div>
     </div>
   </nav>
   

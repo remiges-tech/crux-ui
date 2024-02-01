@@ -3,7 +3,7 @@
         <div class="col-8">
             <div class="d-flex flex-column flex-md-row">
                 <div class="col-3">
-                    <label class="fs-20 fw-600 ml-3">Application</label>
+                    <label class="fs-20 fw-600 ml-3 text-color">Application</label>
                 </div>
                 <div class="col-3">
                     <ng-select class="dropdown" (change)="getSliceList()" id="app" [(ngModel)]="selectedData.app"
@@ -18,7 +18,7 @@
         <div class="col-8">
             <div *ngIf="sliceList" class="d-flex flex-column flex-md-row">
                 <div class="col-3">
-                    <label class="fs-20 fw-600 ml-3">Slice</label>
+                    <label class="fs-20 fw-600 ml-3 text-color">Slice</label>
                 </div>
                 <div class="col-3 ml-3">
                     <ng-select class="dropdown" (change)="getClassList()" id="slice" [(ngModel)]="selectedData.slice"
@@ -33,7 +33,7 @@
         <div class="col-8">
             <div *ngIf="classList" class="d-flex flex-column flex-md-row">
                 <div class="col-3">
-                    <label class="fs-20 fw-600 ml-3">Workflow Process</label>
+                    <label class="fs-20 fw-600 ml-3 text-color">Workflow Process</label>
                 </div>
                 <div class="col-3">
                     <ng-select (change)="getSchemaDetails()" class="dropdown" [(ngModel)]="selectedData.class"
@@ -46,6 +46,6 @@
     </div>
 
     <div class="container mt-3">
-        <app-tabslist *ngIf="schemaData" [schemaData]="schemaData"></app-tabslist>
+        <app-tabslist *ngIf="schemaData" [schemaData]="schemaData" ></app-tabslist>
     </div>
 </div>

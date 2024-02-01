@@ -1,34 +1,34 @@
-export interface SchemaList{
-    app:string,
-    slice:number,
-    class:string,
+export interface SchemaList {
+    app: string,
+    slice: number,
+    class: string,
     applong: string,
-    slicedesc:string
+    slicedesc: string
 }
 
-export interface SchemaDetails{
-    slice:number,
-    app:string,
-    class:string,
-    patternschema:any,
-    actionschema:any,
-    createdat:string,
-    createdby:string,
-    editedat:string,
-    editedby:string
+export interface SchemaDetails {
+    slice: number,
+    app: string,
+    class: string,
+    patternschema: any,
+    actionschema: any,
+    createdat: string,
+    createdby: string,
+    editedat: string,
+    editedby: string
 }
 
 export interface AppInfo {
     discription: string;
     value: string;
-  }
+}
 
-  export interface SliceInfo {
+export interface SliceInfo {
     discription: string;
-    value:  number;
-  }
+    value: number;
+}
 
-export interface RulesetsList{
+export interface RulesetsList {
     id: number,
     slice: number,
     app: string,
@@ -43,7 +43,7 @@ export interface RulesetsList{
     editedby: string
 }
 
-export interface RuleDetails{
+export interface RuleDetails {
     id: number,
     slice: number,
     app: string,

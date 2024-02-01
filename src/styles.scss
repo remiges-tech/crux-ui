@@ -2,14 +2,26 @@
 @import 'bootstrap/scss/bootstrap';
 @import "~@ng-select/ng-select/themes/default.theme.css";
 @import 'ngx-toastr/toastr';
+@import '~@fortawesome/fontawesome-free/css/all.css';
 
 :root {
     --primary: #3f859c;
+    --meta-data:  #3f859c;
     --primary-text: #fff;
     --white: #fff;
-    --background: #f7f7f7;
+    --background: #f9f9f9;
     --text-color: #000;
     --disabled-color: #777;
+  }
+  
+  [data-theme="dark"] {
+    --primary: rgb(16,74,161);
+    --meta-data: #7fc9ff;
+    --primary-text: #ffffff;
+    --white: #fff;
+    --background: #303030;
+    --text-color: #fff;
+    --disabled-color: #fff;
   }
 
 
@@ -117,9 +129,23 @@
     margin: 0;
     font-family: "GothamBook", sans-serif;
   }
+
+  .fa-sun{
+    font-size: 2rem;
+    color: var(--white);
+  }
+  
+  .fa-moon{
+    font-size: 2rem;
+    color: var(--white);
+  }
   
   .text-color{
     color: var(--text-color);
+  }
+
+  .meta-data-color{
+    color: var(--meta-data-color)
   }
   
   .top-menu{
@@ -128,6 +154,10 @@
 
   .heading-color{
     color: var(--primary);
+  }
+
+  .meta-data{
+    color: var(--meta-data);
   }
 
   .description{
@@ -190,8 +220,10 @@
 }
 
 .nav-link{
-  color: var(--primary);
+  color: var(--meta-data);
 }
+
+
 
 .card, .card-header{
   background-color: #fff;
@@ -202,3 +234,4 @@
   display: flex;
   align-items: center;
 }
+

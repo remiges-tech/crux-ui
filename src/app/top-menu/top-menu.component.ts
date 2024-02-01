@@ -6,5 +6,18 @@ import { Component } from '@angular/core';
   styleUrls: ['./top-menu.component.scss']
 })
 export class TopMenuComponent {
-
+  isDarkTheme:any;
+  
+  changeTheme(){
+    let theme = localStorage.getItem('THEME') || 'light';
+    if(theme == 'dark'){
+      this.isDarkTheme = false;
+      localStorage.setItem('THEME','light')
+      document.documentElement.setAttribute('data-theme','light')
+    }else{
+      this.isDarkTheme = true;
+      localStorage.setItem('THEME','dark')
+      document.documentElement.setAttribute('data-theme','dark')
+    }
+  }
 }
