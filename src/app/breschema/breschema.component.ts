@@ -2,6 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppInfo, SchemaDetails, SchemaList, SliceInfo } from 'src/models/common-interfaces';
+import { SchemaDetailResp, SchemaListResp } from 'src/models/request-response-inteface';
 import { BREschemaService } from 'src/services/breschema.service';
 import { CommonService } from 'src/services/common.service';
 import { CONSTANTS } from 'src/services/constants.service';
@@ -18,6 +19,7 @@ export class BREschemaComponent {
   private _schemaService = inject(BREschemaService);
   private _commonService = inject(CommonService);
   private _toastr = inject(ToastrService);
+  isShowBottomSection:boolean= false;
   schemasList?: SchemaList[];
   appList?: AppInfo[];
   sliceList?: SliceInfo[];
@@ -35,8 +37,12 @@ export class BREschemaComponent {
 
   getSchemaList() {
     try {
-      this._schemaService.getBRESchemaList().subscribe((res: any) => {
+      this._schemaService.getBRESchemaList().subscribe((res: SchemaListResp) => {
         if (res?.status == CONSTANTS.SUCCESS) {
+          if(res?.data?.schemas == null || res?.data?.schemas == undefined || res?.data?.schemas?.length == 0){
+            this._toastr.error(CONSTANTS.DATA_NOT_FOUND, CONSTANTS.ERROR);
+            return 
+          }
           this.schemasList = res?.data?.schemas;
           this.appList = this._commonService.getAppNamesFromList(res?.data?.schemas);
         } else {
@@ -64,7 +70,8 @@ export class BREschemaComponent {
 
   getClassList() {
     this.classList = undefined;
-    this.schemaData = undefined
+    this.schemaData = undefined;
+    this.isShowBottomSection = false;
     if (this.schemasList && this.selectedData.app && this.selectedData.slice) {
       this.selectedData.class = null
       this.classList = this._commonService.getClassNameForSelectedSchemaData(this.schemasList, this.selectedData.app, this.selectedData.slice)
@@ -73,6 +80,7 @@ export class BREschemaComponent {
 
   getSchemaDetails() {
     this.schemaData = undefined
+    this.isShowBottomSection = false;
     if (!this.schemasList || !this.selectedData.app || !this.selectedData.slice || !this.selectedData.class) {
       return;
     }
@@ -80,8 +88,13 @@ export class BREschemaComponent {
       let data = {
         params: new HttpParams().append('app', this.selectedData.app).append('slice', this.selectedData.slice).append('class', this.selectedData.class)
       }
-      this._schemaService.getBRESchemaDetail(data).subscribe((res: any) => {
+      this.isShowBottomSection = true;
+      this._schemaService.getBRESchemaDetail(data).subscribe((res: SchemaDetailResp) => {
         if (res.status == CONSTANTS.SUCCESS) {
+          if(res.data == null || res.data == undefined || this._commonService.isObjectEmpty(res.data)){
+            this._toastr.error(CONSTANTS.DATA_NOT_FOUND, CONSTANTS.ERROR);
+            return 
+          }
           this.schemaData = res.data
         } else {
           this._toastr.error(res?.message, CONSTANTS.ERROR);
@@ -102,5 +115,6 @@ export class BREschemaComponent {
     this.sliceList = undefined;
     this.classList = undefined;
     this.schemaData = undefined;
+    this.isShowBottomSection = false;
   }
 }

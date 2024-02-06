@@ -50,4 +50,12 @@ getClassNameForSelectedSchemaData(list:SchemaList[],app:string, slice:number){
     return [...data.map((item:SchemaList) => item.class)];
 }
 
+isObjectEmpty(objectName: any) {
+    return (
+      objectName &&
+      Object.keys(objectName).length === 0 &&
+      objectName.constructor === Object
+    );
+  };
+
 }

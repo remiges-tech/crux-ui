@@ -1,8 +1,11 @@
 export enum CONSTANTS {
   SUCCESS = 'success',
   FAILED = 'failed',
-  ERROR = 'error',
-  WARNING = 'warning',
+  ERROR = 'Error',
+  WARNING = 'Warning',
+  DATA_NOT_FOUND = 'Data not found!',
+  SCHEMA_DETAILS_DATA_NOT_FOUND = 'Details for the selected schema not found.',
+  WORKFLOW_LIST_DATA_NOT_FOUND = 'No Workflow list present.',
   BRESchema_LIST_API = '/bre-schema-list',
   BRESchema_GET_API = '/bre-schema-get',
   BRERulesets_LIST_API = '/bre-rulesets-list',

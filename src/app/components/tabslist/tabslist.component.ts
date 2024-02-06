@@ -2,6 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { RulesetsList, SchemaDetails } from 'src/models/common-interfaces';
+import { RuleSetDetailResp, RuleSetListResp } from 'src/models/request-response-inteface';
 import { BREschemaService } from 'src/services/breschema.service';
 import { CommonService } from 'src/services/common.service';
 import { CONSTANTS } from 'src/services/constants.service';
@@ -13,6 +14,7 @@ import { CONSTANTS } from 'src/services/constants.service';
 })
 export class TabslistComponent {
 	fileName = 'TabslistComponent';
+	constants = CONSTANTS;
 	@ViewChild('workflowsTab') defaultTab: ElementRef | undefined;
 	@ViewChildren('dynamicTab') Tabs: QueryList<any> | undefined;
 	@Input({ required: true }) schemaData?: SchemaDetails
@@ -21,8 +23,6 @@ export class TabslistComponent {
 	private _toastr = inject(ToastrService);
 	WorksFlows: RulesetsList[] = [];
 	tabs: any[] = [];
-
-	constructor() { }
 
 	ngOnInit() {
 		this.getRulesetsList();
@@ -46,16 +46,12 @@ export class TabslistComponent {
 			let data = {
 				params: new HttpParams().append('app', event.app).append('slice', event.slice).append('class', event.class).append('name', event.name)
 			}
-			this._schemaService.getBREWorkflowDetails(data).subscribe((res: any) => {
+			this._schemaService.getBREWorkflowDetails(data).subscribe((res: RuleSetDetailResp) => {
 				if (res.status == CONSTANTS.SUCCESS) {
 					this.autoDirectTab(event)
-					let tabAlreadyExist = this.tabs.find(tab => tab.tab.name === event.name);
+					let tabAlreadyExist = this.tabs.find(tab => tab.content.name === event.name);
 					if (!tabAlreadyExist) {
 						this.tabs.push({
-							tab: {
-								id: event.id,
-								name: event.name,
-							},
 							content: res.data
 						})
 						setTimeout(() => {
@@ -80,7 +76,7 @@ export class TabslistComponent {
 	// Function to get the list of all rulesets
 	getRulesetsList() {
 		try {
-			this._schemaService.getBREWorkflowList().subscribe((res: any) => {
+			this._schemaService.getBREWorkflowList().subscribe((res: RuleSetListResp) => {
 				if (res?.status == CONSTANTS.SUCCESS) {
 					this.WorksFlows = res?.data?.rulesets;
 				} else {
@@ -121,13 +117,12 @@ export class TabslistComponent {
 
 	autoDirectTab(event: any) {
 		this.tabs.forEach((tab: any) => {
-			if (tab.tab.name == event.name) {
+			if (tab.content.name == event.name) {
 				this.Tabs?.forEach((tab: any) => {
 					if (tab.nativeElement.id == `${event.name}-tab`) {
 						tab.nativeElement.click()
 					}
 				})
-				return;
 			}
 		})
 	}

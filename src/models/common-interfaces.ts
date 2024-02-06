@@ -49,7 +49,7 @@ export interface RuleDetails {
     app: string,
     class: string,
     name: string,
-    ruleset: any,
+    ruleset: Ruleset,
     is_active: boolean,
     is_internal: boolean,
     createdat: string,
@@ -57,3 +57,57 @@ export interface RuleDetails {
     editedat: string,
     editedby: string
 }
+
+export interface Ruleset{
+    id: number,
+    class: string,
+    setname: string,
+    rules: Rule[]
+}
+
+export interface Rule {
+	rulepattern: RulePatternTerm[]
+	ruleactions: RuleActions
+}
+
+export interface RTree {
+	rulePattern: RulePatternTerm[]
+	ruleActions: RuleActions
+    ruleset: RuleDetails
+}
+
+export interface RulePatternTerm {
+	attrName: string
+	op:       string
+	attrVal:  any
+}
+
+export interface RuleActions {
+	tasks:      string[]
+	properties: Property[]
+	thencall:   string
+	elsecall:   string
+	willReturn: boolean
+	willExit:   boolean
+}
+
+type Property = {
+  [key: string]: string
+}
+    
+export type RulesetMap = {
+    [key: string]: RuleDetails
+}
+
+// rsMap = new RulesetMap
+// function buildRuleSetMap {
+    // r = get ruleset 
+    // rsMap.Add("r.Name", r)
+    // if r.thencall exists 
+    //      thenruleset = r.actions.thencall
+    //      thenr = get thenruleset
+    //      buildRuleSetMap(thenr)
+    // endif
+// }
+
+
