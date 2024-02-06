@@ -13,6 +13,10 @@ import { BREschemaComponent } from './breschema/breschema.component';
 import { TabslistComponent } from './components/tabslist/tabslist.component';
 import { WorkflowComponent } from './components/workflow-list/workflow.component';
 import { WorkflowDetailComponent } from './components/workflow-detail/workflow-detail.component';
+import { RuleMethod1Component } from './rulesets/rule-method1/rule-method1.component';
+import { RuleMethod3Component } from './rulesets/rule-method3/rule-method3.component';
+import { RuleMethod2Component } from './rulesets/rule-method2/rule-method2.component';
+
 
 
 @NgModule({
@@ -22,7 +26,10 @@ import { WorkflowDetailComponent } from './components/workflow-detail/workflow-d
     BREschemaComponent,
     TabslistComponent,
     WorkflowComponent,
-    WorkflowDetailComponent
+    WorkflowDetailComponent,
+    RuleMethod1Component,
+    RuleMethod3Component,
+    RuleMethod2Component,
   ],
   imports: [
     BrowserModule,

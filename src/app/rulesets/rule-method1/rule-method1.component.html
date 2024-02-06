@@ -1,0 +1,28 @@
+<div class="row mt-2 child" [ngClass]="childHovered  ? 'hovered' : ''"
+(mouseenter)="childHovered = true; parentHovered = false" (mouseleave)="childHovered = false; parentHovered = true">
+    <div class="col-md-6 col-sm-12">
+        <div class="row">
+            <div class="col-2">
+                <h5>match</h5>
+            </div>
+            <div class="col-10">
+                <div class="card px-2">
+                    <span>cat = textbook, mrp > 5000, ageinstock > 90...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6">
+        <div class="row">
+            <div class="col-1">
+                <h5>do</h5>
+            </div>
+            <div class="col-11 ">
+                <div class="card px-2">
+                    <div><b>NextStep: <span class="h6">christmassale... </span></b><b>NextStep Tag: <span
+                                class="h6">shipby-fedex</span></b></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,15 +1,11 @@
-import { Component, Input } from '@angular/core';
-import { RuleDetails } from 'src/models/common-interfaces';
-import { OperatorsUnicode } from 'src/services/constants.service';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-workflow-detail',
-  templateUrl: './workflow-detail.component.html',
-  styleUrls: ['./workflow-detail.component.scss']
+  selector: 'app-rule-method2',
+  templateUrl: './rule-method2.component.html',
+  styleUrls: ['./rule-method2.component.scss']
 })
-export class WorkflowDetailComponent {
-  @Input({ required: true }) ruleDetails?: RuleDetails;
-  OperatorsUnicode: any = OperatorsUnicode;
+export class RuleMethod2Component {
 
   parentHovered: boolean = false;
   childHovered: boolean = false;
@@ -29,5 +25,4 @@ export class WorkflowDetailComponent {
     this.parentHovered = !state
     this.childHovered = state;
   }
-
 }

@@ -1,4 +1,4 @@
-<div class="container">
+<!-- <div class="container">
     <div *ngFor="let rule of ruleDetails?.ruleset?.rules">
         <div class="card no-border mt-4">
             <div class="card-body">
@@ -7,7 +7,7 @@
                         <div *ngFor="let pattern of rule?.rulepattern">
                             <label id="ruleDescription" data-toggle="tooltip" data-placement="bottom"
                                     title="{{pattern?.longdesc}}"><p class="fs-5 fw-bold pointer">{{ pattern?.attrname }} <span [innerHTML]="OperatorsUnicode[pattern?.op]" class="fs-5"></span> {{ pattern?.attrval }}</label>
-                            <!-- <div class="row pattern-row">
+                            <div class="row pattern-row">
                                 <div class="col-md-2 m-0 p-0">
                                     <label id="ruleDescription" data-toggle="tooltip" data-placement="bottom"
                                     title="{{pattern?.longdesc}}"><p class="fs-5 fw-bold pointer">{{ pattern?.attrname }}</p></label>
@@ -18,7 +18,7 @@
                                 <div class="col-md-2 m-0 p-0">
                                     <p class="fs-5">{{ pattern?.attrval }}</p>
                                 </div>
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-6">
@@ -40,4 +40,26 @@
             </div>
         </div>
     </div>
+</div> -->
+
+
+<div class="container">
+    <!--Rule1-->
+<ng-container *ngFor="let rule of ruleDetails?.ruleset?.rules">
+    <ng-container *ngIf="!rule?.ruleactions?.thencall && !rule?.ruleactions?.elsecall">
+        <app-rule-method1></app-rule-method1>
+    </ng-container>
+    <ng-container *ngIf="rule?.ruleactions?.thencall || rule?.ruleactions?.elsecall">
+        <app-rule-method2></app-rule-method2>
+        </ng-container>
+</ng-container>
+    <!--Rule 2-->
+
+    <!--Rule 3 method-->
+    <ng-container *ngIf==="!ruleDetails?.ruleset?.rules.some(rule => rule?.ruleactions?.thencall || rule?.ruleactions?.elsecall)">
+        <app-rule-method3></app-rule-method3>
+    </ng-container>
 </div>
+
+
+

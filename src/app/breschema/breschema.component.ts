@@ -103,5 +103,4 @@ export class BREschemaComponent {
     this.classList = undefined;
     this.schemaData = undefined;
   }
-
 }

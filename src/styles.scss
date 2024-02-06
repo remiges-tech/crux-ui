@@ -224,7 +224,6 @@
 }
 
 
-
 .card, .card-header{
   background-color: #fff;
   border: none;
@@ -233,5 +232,20 @@
 .vertically-center{
   display: flex;
   align-items: center;
+}
+
+.if-block {
+  background-color: #fff;
+}
+
+.child {
+  background-color: #fff;
+}
+
+.hovered{
+  background-color: lightgray;
+  .card{
+      background-color: lightgray;
+  }
 }
 
