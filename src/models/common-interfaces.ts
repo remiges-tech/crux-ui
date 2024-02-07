@@ -73,13 +73,14 @@ export interface Rule {
 export interface RTree {
 	rulePattern: RulePatternTerm[]
 	ruleActions: RuleActions
-    ruleset: RuleDetails
+    thenRuleset?: RTree[]
+    elseRuleset?: RTree[]
 }
 
 export interface RulePatternTerm {
-	attrName: string
+	attrname: string
 	op:       string
-	attrVal:  any
+	attrval:  any
 }
 
 export interface RuleActions {
@@ -87,8 +88,8 @@ export interface RuleActions {
 	properties: Property[]
 	thencall:   string
 	elsecall:   string
-	willReturn: boolean
-	willExit:   boolean
+	return: boolean
+	exit:   boolean
 }
 
 type Property = {

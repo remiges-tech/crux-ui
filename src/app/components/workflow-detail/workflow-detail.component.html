@@ -43,23 +43,8 @@
 </div> -->
 
 
-<div class="container">
-    <!--Rule1-->
-<ng-container *ngFor="let rule of ruleDetails?.ruleset?.rules">
-    <ng-container *ngIf="!rule?.ruleactions?.thencall && !rule?.ruleactions?.elsecall">
-        <app-rule-method1></app-rule-method1>
-    </ng-container>
-    <ng-container *ngIf="rule?.ruleactions?.thencall || rule?.ruleactions?.elsecall">
-        <app-rule-method2></app-rule-method2>
-        </ng-container>
+<ng-container *ngFor="let Rule of Data">
+    <app-rule-method2 [Rule]="Rule"></app-rule-method2>
 </ng-container>
-    <!--Rule 2-->
-
-    <!--Rule 3 method-->
-    <ng-container *ngIf==="!ruleDetails?.ruleset?.rules.some(rule => rule?.ruleactions?.thencall || rule?.ruleactions?.elsecall)">
-        <app-rule-method3></app-rule-method3>
-    </ng-container>
-</div>
-
 
 

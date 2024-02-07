@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { forEach } from 'cypress/types/lodash';
+import { RTree, RulePatternTerm } from 'src/models/common-interfaces';
+import { OperatorsUnicode } from 'src/services/constants.service';
 
 @Component({
   selector: 'app-rule-method2',
@@ -6,7 +9,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./rule-method2.component.scss']
 })
 export class RuleMethod2Component {
-
+  @Input({required:true}) Rule?:RTree; 
+  OperatorsUnicode: any = OperatorsUnicode;
   parentHovered: boolean = false;
   childHovered: boolean = false;
   child1: boolean = false;
@@ -24,5 +28,18 @@ export class RuleMethod2Component {
   toggleChildHover(state: boolean) {
     this.parentHovered = !state
     this.childHovered = state;
+  }
+
+  getMatchList(patterns: RulePatternTerm[]){
+    let count = 0;
+    let updatedPattern:RulePatternTerm[]= [];
+    patterns.forEach((pattern: RulePatternTerm) => {
+      if(count <= 1){
+        updatedPattern.push(pattern);
+      }
+      count++;
+    })
+
+    return updatedPattern;
   }
 }

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { RTree } from 'src/models/common-interfaces';
 
 @Component({
   selector: 'app-rule-method1',
@@ -6,6 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./rule-method1.component.scss']
 })
 export class RuleMethod1Component {
+  @Input({required:true}) Rule?:RTree;
   parentHovered: boolean = false;
   childHovered: boolean = false;
 
