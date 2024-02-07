@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { AppInfo, SchemaList, SliceInfo } from 'src/models/common-interfaces';
+import { AppInfo, RulePatternTerm, SchemaList, SliceInfo } from 'src/models/common-interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -57,5 +57,18 @@ isObjectEmpty(objectName: any) {
       objectName.constructor === Object
     );
   };
+
+  getMatchListService(patterns: RulePatternTerm[]){
+    let count = 0;
+    let updatedPattern:RulePatternTerm[]= [];
+    patterns.forEach((pattern: RulePatternTerm) => {
+      if(count <= 1){
+        updatedPattern.push(pattern);
+      }
+      count++;
+    })
+
+    return updatedPattern;
+  }
 
 }

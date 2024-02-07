@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { forEach } from 'cypress/types/lodash';
 import { RTree, RulePatternTerm } from 'src/models/common-interfaces';
+import { CommonService } from 'src/services/common.service';
 import { OperatorsUnicode } from 'src/services/constants.service';
 
 @Component({
@@ -10,6 +11,7 @@ import { OperatorsUnicode } from 'src/services/constants.service';
 })
 export class RuleMethod2Component {
   @Input({required:true}) Rule?:RTree; 
+  private _commonService = inject(CommonService);
   OperatorsUnicode: any = OperatorsUnicode;
   parentHovered: boolean = false;
   childHovered: boolean = false;
@@ -31,15 +33,6 @@ export class RuleMethod2Component {
   }
 
   getMatchList(patterns: RulePatternTerm[]){
-    let count = 0;
-    let updatedPattern:RulePatternTerm[]= [];
-    patterns.forEach((pattern: RulePatternTerm) => {
-      if(count <= 1){
-        updatedPattern.push(pattern);
-      }
-      count++;
-    })
-
-    return updatedPattern;
-  }
+    return this._commonService.getMatchListService(patterns);
+   }
 }

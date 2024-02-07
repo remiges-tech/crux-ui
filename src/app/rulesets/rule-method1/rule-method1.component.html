@@ -1,14 +1,15 @@
 <div class="row mt-2 child" [ngClass]="childHovered  ? 'hovered' : ''"
-(mouseenter)="childHovered = true; parentHovered = false" (mouseleave)="childHovered = false; parentHovered = true">
+    (mouseenter)="childHovered = true; parentHovered = false" (mouseleave)="childHovered = false; parentHovered = true">
     <div class="col-md-6 col-sm-12">
         <div class="row">
             <div class="col-2">
                 <h5>match</h5>
             </div>
             <div class="col-10">
-                <div class="card px-2">
-                    <span>cat = textbook, mrp > 5000 ...</span>
-                </div>
+                <span *ngFor="let pattern of getMatchList(Rule?.rulePattern!), let isLast = last">
+                    {{ pattern.attrname }} <span [innerHTML]="OperatorsUnicode[pattern.op]" class="fs-5"></span> {{
+                    pattern.attrval }} {{isLast ? '...' : ','}}
+                </span>
             </div>
         </div>
     </div>
@@ -19,8 +20,15 @@
             </div>
             <div class="col-11 ">
                 <div class="card px-2">
-                    <div><b>NextStep: <span class="h6">christmassale... </span></b><b>NextStep Tag: <span
-                                class="h6">shipby-fedex</span></b></div>
+                    <div>
+                        <b>{{Rule && Rule.ruleActions.tasks.length > 1 ? 'NextSteps' : 'NextStep'}}: <span
+                                class="h6">{{Rule && Rule.ruleActions.tasks[0]}}...</span>&nbsp;</b>
+                        <span >
+                            <b>NextStep Tags: <span *ngFor="let property of Rule?.ruleActions?.properties"> <span *ngFor="let prop of property | keyvalue" class="h6">{{prop.key}} - {{prop.value
+                                    }}</span></span></b>
+                            &nbsp;
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>

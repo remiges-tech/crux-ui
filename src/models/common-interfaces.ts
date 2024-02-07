@@ -86,17 +86,17 @@ export interface RulePatternTerm {
 export interface RuleActions {
 	tasks:      string[]
 	properties: Property[]
-	thencall:   string
-	elsecall:   string
-	return: boolean
-	exit:   boolean
+	thencall?:   string
+	elsecall?:   string
+	return?: boolean
+	exit?:   boolean
 }
 
-type Property = {
+interface Property {
   [key: string]: string
 }
     
-export type RulesetMap = {
+export interface RulesetMap {
     [key: string]: RuleDetails
 }
 

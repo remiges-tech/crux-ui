@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { RTree } from 'src/models/common-interfaces';
+import { Component, Input, inject } from '@angular/core';
+import { RTree, RulePatternTerm } from 'src/models/common-interfaces';
+import { CommonService } from 'src/services/common.service';
+import { OperatorsUnicode } from 'src/services/constants.service';
 
 @Component({
   selector: 'app-rule-method1',
@@ -8,8 +10,11 @@ import { RTree } from 'src/models/common-interfaces';
 })
 export class RuleMethod1Component {
   @Input({required:true}) Rule?:RTree;
+  OperatorsUnicode: any = OperatorsUnicode;
   parentHovered: boolean = false;
   childHovered: boolean = false;
+  
+  private _commonService = inject(CommonService);
 
   toggleParentHover(state: boolean) {
     this.parentHovered = state;
@@ -18,6 +23,10 @@ export class RuleMethod1Component {
   toggleChildHover(state: boolean) {
     this.parentHovered = !state
     this.childHovered = state;
+  }
+  
+  getMatchList(patterns: RulePatternTerm[]){
+   return this._commonService.getMatchListService(patterns);
   }
 
 }
