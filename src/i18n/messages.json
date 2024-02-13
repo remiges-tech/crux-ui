@@ -1,0 +1,26 @@
+{
+  "locale": "en-US",
+  "translations": {
+    "App": "Application",
+    "placeholderApp": "--Select App--",
+    "Slice": "Slice",
+    "placeholderSlice": "--Select Slice--",
+    "WorkflowProcess": "Workflow Process",
+    "placeholderWorkflow": "--Select Class--",
+    "Schema": "Schema",
+    "Workflows": "Workflows",
+    "Createdby": "Created by",
+    "at": "at",
+    "Editedby": "Edited by",
+    "match": "match",
+    "do": "do",
+    "if": "if",
+    "then": "then",
+    "else": "else",
+    "endif": "endif",
+    "ifnot": "if not",
+    "call": "call",
+    "remigesLogo": "Remiges Business Icon",
+    "cruxHeading": "Crux"
+  }
+}

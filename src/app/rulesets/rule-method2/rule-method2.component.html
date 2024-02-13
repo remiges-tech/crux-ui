@@ -4,7 +4,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-2">
-                        <h5>{{ Rule?.thenRuleset ? 'if' : 'if not' }}</h5>
+                        <h5 i18n="@@if">if</h5>
                     </div>
                     <div class="col-10 pad-0">
                         <div class="card px-2" [ngClass]="parentHovered ? 'hovered' : ''" (mouseenter)="toggleParentHover(true)" (mouseleave)="toggleParentHover(false)">
@@ -20,7 +20,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-2">
-                        <h5>then</h5>
+                        <h5 i18n="@@then">then</h5>
                     </div>
                 </div>
             </div>
@@ -35,7 +35,7 @@
         (mouseenter)="child2 = true; parentHovered = false" (mouseleave)="child2 = false; parentHovered = true">
             <div class="row">
                 <div class="col-2">
-                    <h5>else</h5>
+                    <h5 i18n="@@else">else</h5>
                 </div>
             </div>
             <div class="else-child indent-3"  [ngClass]="child3 ||child2 || parentHovered ? 'hovered' : ''"
@@ -49,7 +49,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-4">
-                        <h5>endif</h5>
+                        <h5 i18n="@@endif">endif</h5>
                     </div>
                 </div>
             </div>
@@ -62,7 +62,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-2">
-                        <h5>if</h5>
+                        <h5 i18n="@@if">if</h5>
                     </div>
                     <div class="col-10 pad-0">
                         <div class="card px-2" [ngClass]="parentHovered ? 'hovered' : ''" (mouseenter)="toggleParentHover(true)" (mouseleave)="toggleParentHover(false)">
@@ -80,7 +80,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-2">
-                        <h5>then</h5>
+                        <h5 i18n="@@then">then</h5>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-4">
-                        <h5>endif</h5>
+                        <h5 i18n="@@endif">endif</h5>
                     </div>
                 </div>
             </div>
@@ -108,7 +108,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-2">
-                        <h5>if not</h5>
+                        <h5 i18n="@@ifnot">if not</h5>
                     </div>
                     <div class="col-10 pad-0">
                         <div class="card px-2" [ngClass]="parentHovered ? 'hovered' : ''" (mouseenter)="toggleParentHover(true)" (mouseleave)="toggleParentHover(false)">
@@ -126,7 +126,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-2">
-                        <h5>then</h5>
+                        <h5 i18n="@@then">then</h5>
                     </div>
                 </div>
             </div>
@@ -143,7 +143,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-4">
-                        <h5>endif</h5>
+                        <h5 i18n="@@endif">endif</h5>
                     </div>
                 </div>
             </div>

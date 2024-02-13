@@ -27,10 +27,10 @@ import { RulesetsList } from 'src/models/common-interfaces';
           <div class="col"></div>
           <div class="col-auto">
             <div class="d-flex align-items-center">
-              <p class="me-2"><span class="heading-color">Created by</span><span> {{ workflow?.createdby }} </span><span class="heading-color">at</span><span> {{ workflow?.createdat | date }} </span></p>
+              <p class="me-2"><span class="heading-color" i18n="@@Createdby">Created by</span><span> {{ workflow?.createdby }} </span><span class="heading-color" i18n="@@at">at</span><span> {{ workflow?.createdat | date }} </span></p>
             </div>
             <div class="d-flex align-items-center">
-            <p class="me-2"><span class="heading-color">Edited by</span><span> {{ workflow?.editedby }} </span><span class="heading-color">at</span><span> {{ workflow?.editedat | date }} </span></p>
+            <p class="me-2"><span class="heading-color" i18n="@@Editedby">Edited by</span><span> {{ workflow?.editedby }} </span><span class="heading-color" i18n="@@at">at</span><span> {{ workflow?.editedat | date }} </span></p>
             </div>
           </div>
         </div>

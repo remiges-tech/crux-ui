@@ -2,16 +2,24 @@
     <div class="container-fluid p-2">
       <div class="d-flex align-items-center">
         <h2 class="mb-0 me-2">
-          <img alt="Remiges Business Icon" src="assets/img/logo.svg" />
+          <img alt="Remiges Business Icon" i18n-alt="@@remigesLogo" src="assets/img/logo.svg" />
         </h2>
-        <span class="h2 mb-0 text-light">Crux</span>
+        <span i18n="@@cruxHeading" class="h2 mb-0 text-light">Crux</span>
       </div>
+      <div class="d-flex">
       <div class="mx-3">
         <button class="btn" id="themeBtn" (click)="changeTheme()">
           <i *ngIf="isDarkTheme" class="fa-regular fa-sun"></i>
           <i *ngIf="!isDarkTheme" class="fa-solid fa-moon"></i>
         </button>
       </div>
+      <div class="gradient-box">
+        <select class="form-select language-select" [(ngModel)]="selectedLocale"
+          (change)="navigateToLocale(selectedLocale)">
+          <option *ngFor="let locale of locales" [value]="locale.localeCode">{{ locale.label }}</option>
+        </select>
+      </div>
+    </div>
     </div>
   </nav>
   

@@ -1,0 +1,26 @@
+{
+  "locale": "hi",
+  "translations": {
+    "App": "एप्लिकेशन",
+    "placeholderApp": "--ऐप चुनें--",
+    "Slice": "स्लाइस",
+    "placeholderSlice": "--स्लाइस चुनें--",
+    "WorkflowProcess": "वर्कफ़्लो प्रक्रिया",
+    "placeholderWorkflow": "--कक्षा चुनें--",
+    "Schema": "स्कीमा",
+    "Workflows": "वर्कफ़्लो",
+    "Createdby": "द्वारा बनाया गया",
+    "at": "पर",
+    "Editedby": "द्वारा संपादित",
+    "match": "मिलान",
+    "do": "करें",
+    "if": "यदि",
+    "then": "तो",
+    "else": "अन्यथा",
+    "endif": "समाप्त",
+    "ifnot": "अगर नहीं",
+    "call": "कॉल",
+    "remigesLogo": "रेमिज बिजनेस आइकॉन",
+    "cruxHeading": "क्रक्ष"
+  }
+}

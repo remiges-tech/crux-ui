@@ -2,10 +2,10 @@
 <nav>
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
     <button class="nav-link active fw-600 fs-20" id="schema-tab" data-bs-toggle="tab" data-bs-target="#schema"
-      type="button" role="tab" aria-controls="schema" aria-selected="true">Schema</button>
+      type="button" role="tab" aria-controls="schema" aria-selected="true" i18n="@@Schema">Schema</button>
     <button #workflowsTab class="nav-link fw-600 fs-20" id="rulesets-tab" data-bs-toggle="tab"
       data-bs-target="#rulesets" type="button" role="tab" aria-controls="rulesets"
-      aria-selected="true">Workflows</button>
+      aria-selected="true" i18n="@@Workflows">Workflows</button>
     <!-- Dynamic Tabs for rulesets detail -->
     <ng-container *ngFor="let t of tabs">
       <button #dynamicTab class="nav-link fw-600 fs-20" id="{{t.content.name}}-tab" data-bs-toggle="tab"
@@ -63,13 +63,13 @@
           <div class="col"></div>
           <div class="col-auto">
             <div class="d-flex align-items-center">
-              <p class="me-2"><span class="meta-data">Created by</span><span class="text-color"> {{
-                  schemaData.createdby }} </span><span class="meta-data">at</span><span class="text-color"> {{
+              <p class="me-2"><span class="meta-data" i18n="@@Createdby">Created by</span><span class="text-color"> {{
+                  schemaData.createdby }} </span><span class="meta-data" i18n="@@at">at</span><span class="text-color"> {{
                   schemaData.createdat | date }} </span></p>
             </div>
             <div class="d-flex align-items-center">
-              <p class="me-2"><span class="meta-data">Edited by</span><span class="text-color"> {{ schemaData.editedby
-                  }} </span><span class="meta-data">at</span><span class="text-color"> {{ schemaData.editedat | date }}
+              <p class="me-2"><span class="meta-data" i18n="@@Editedby">Edited by</span><span class="text-color"> {{ schemaData.editedby
+                  }} </span><span class="meta-data" i18n="@@at">at</span><span class="text-color"> {{ schemaData.editedat | date }}
                 </span></p>
             </div>
           </div>

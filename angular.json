@@ -10,6 +10,14 @@
           "style": "scss"
         }
       },
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "hi": {
+            "translation": "src/i18n/messages.hi.json"
+          }
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -17,6 +25,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "localize": false,
+            "i18nMissingTranslation": "error",
             "outputPath": "dist/crux-ui",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -82,7 +92,9 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "crux-ui:build"
+            "browserTarget": "crux-ui:build",
+            "format": "json",
+            "outputPath": "src/i18n"
           }
         },
         "test": {
