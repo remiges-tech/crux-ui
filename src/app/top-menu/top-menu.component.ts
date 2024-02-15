@@ -34,7 +34,6 @@ export class TopMenuComponent {
 
   currentTheme(){
     let currentTheme = localStorage.getItem('THEME') || 'light';
-
     this.isDarkTheme = currentTheme == 'dark';
     document.documentElement.setAttribute('data-theme',currentTheme)
   }

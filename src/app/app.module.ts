@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { MatDialogModule } from '@angular/material/dialog'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,6 +17,7 @@ import { WorkflowDetailComponent } from './components/workflow-detail/workflow-d
 import { RuleMethod1Component } from './rulesets/rule-method1/rule-method1.component';
 import { RuleMethod3Component } from './rulesets/rule-method3/rule-method3.component';
 import { RuleMethod2Component } from './rulesets/rule-method2/rule-method2.component';
+import { RuleModalComponent } from './rulesets/rule-modal/rule-modal.component';
 
 
 
@@ -30,6 +32,7 @@ import { RuleMethod2Component } from './rulesets/rule-method2/rule-method2.compo
     RuleMethod1Component,
     RuleMethod3Component,
     RuleMethod2Component,
+    RuleModalComponent
   ],
   imports: [
     BrowserModule,
@@ -37,6 +40,7 @@ import { RuleMethod2Component } from './rulesets/rule-method2/rule-method2.compo
     NgSelectModule, 
     FormsModule,
     HttpClientModule,
+    MatDialogModule,
     BrowserAnimationsModule, 
     ToastrModule.forRoot(), 
   ],
