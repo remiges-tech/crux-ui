@@ -15,6 +15,9 @@
         "locales": {
           "hi": {
             "translation": "src/i18n/messages.hi.json"
+          },
+          "ar": {
+            "translation": "src/i18n/messages.ar.json"
           }
         }
       },

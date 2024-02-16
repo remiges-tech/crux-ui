@@ -1,0 +1,26 @@
+{
+  "locale": "ar",
+  "translations": {
+    "App": "تطبيق",
+    "placeholderApp": "--اختر التطبيق--",
+    "Slice": "شريحة",
+    "placeholderSlice": "--اختر الشريحة--",
+    "WorkflowProcess": "عملية سير العمل",
+    "placeholderWorkflow": "--اختر الفئة--",
+    "Schema": "مخطط",
+    "Workflows": "تدفقات العمل",
+    "Createdby": "تم الإنشاء بواسطة",
+    "at": "في",
+    "Editedby": "تم التحرير بواسطة",
+    "match": "تطابق",
+    "do": "فعل",
+    "if": "إذا",
+    "then": "ثم",
+    "else": "وإلا",
+    "endif": "نهاية الشرط",
+    "ifnot": "إذا لم",
+    "call": "استدعاء",
+    "remigesLogo": "رمز الأعمال لريميجز",
+    "cruxHeading": "كروكس"
+  }
+}

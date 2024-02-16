@@ -17,6 +17,7 @@ export class TopMenuComponent {
   locales: Locale[] = [
     { localeCode: "en-US", label: "English" },
     { localeCode: "hi", label: "Hindi" },
+    { localeCode: "ar", label: "Arabic" },
   ];
 
   constructor(@Inject(LOCALE_ID) public locale: string) {}
