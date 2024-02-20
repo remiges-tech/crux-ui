@@ -8,7 +8,7 @@ import { RulesetsList } from 'src/models/common-interfaces';
       <div class="card-header">
         <div class="row justify-content-center">
           <div class="col vertically-center">
-            <h3 [ngClass]="workflow?.is_active ? 'active' : 'not-active'">{{workflow?.name}}</h3>
+            <h3 id="worflowName" [ngClass]="workflow?.is_active ? 'active' : 'not-active'">{{workflow?.name}}</h3>
           </div>
           <div class="col-auto">
             <button *ngIf="!isShowMetaData" class="btn m-2" type="button" (click)="isShowMetaData = true" >&#9660;</button>
