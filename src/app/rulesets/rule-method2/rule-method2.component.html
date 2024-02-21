@@ -4,7 +4,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-2">
-                        <h5 i18n="@@if">if</h5>
+                        <h5 i18n="@@if" (mouseenter)="toggleParentHover(true)">if</h5>
                     </div>
                     <div class="col-10 pad-0">
                         <div class="card px-2" [ngClass]="parentHovered ? 'hovered' : ''" (mouseenter)="toggleParentHover(true)" (mouseleave)="toggleParentHover(false)">
@@ -20,28 +20,28 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-2">
-                        <h5 i18n="@@then">then</h5>
+                        <h5 i18n="@@then" (mouseenter)="toggleParentHover(true)">then</h5>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="then-child indent-3" [ngClass]="child1 || parentHovered ? 'hovered' : ''"
-        (mouseenter)="child1 = true; parentHovered = false" (mouseleave)="child1 = false; parentHovered = true">
+        <div class="then-child indent-3" [ngClass]="parentHovered ? 'hovered' : ''"
+        (mouseenter)="parentHovered = false" >
             <ng-container *ngFor="let Rule of Rule?.thenRuleset">
-                <app-rule-method2 [Rule]="Rule"></app-rule-method2>
+                <app-rule-method2 [parentHovered]="parentHovered" [Rule]="Rule"></app-rule-method2>
             </ng-container>
         </div>
-        <div class="else-block" [ngClass]="child2 || parentHovered ? 'hovered' : ''"
-        (mouseenter)="child2 = true; parentHovered = false" (mouseleave)="child2 = false; parentHovered = true">
+        <div class="else-block" [ngClass]="parentHovered ? 'hovered' : ''"
+        (mouseenter)="toggleParentHover(true)" (mouseleave)="toggleParentHover(false)">
             <div class="row">
                 <div class="col-2">
-                    <h5 i18n="@@else">else</h5>
+                    <h5 i18n="@@else" (mouseenter)="toggleParentHover(true)">else</h5>
                 </div>
             </div>
-            <div class="else-child indent-3"  [ngClass]="child3 ||child2 || parentHovered ? 'hovered' : ''"
-            (mouseenter)="child3 = true; child2 = false; parentHovered = false" (mouseleave)="child3 = false ;child2 = true; parentHovered = true">
+            <div class="else-child indent-3"  [ngClass]="parentHovered ? 'hovered' : ''"
+            (mouseenter)="parentHovered = false">
                 <ng-container *ngFor="let Rule of Rule?.elseRuleset">
-                    <app-rule-method2 [Rule]="Rule"></app-rule-method2>
+                    <app-rule-method2 [parentHovered]="parentHovered" [Rule]="Rule"></app-rule-method2>
                 </ng-container>
             </div>
         </div>
@@ -49,7 +49,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-4">
-                        <h5 i18n="@@endif">endif</h5>
+                        <h5 i18n="@@endif" (mouseenter)="toggleParentHover(true)">endif</h5>
                     </div>
                 </div>
             </div>
@@ -62,7 +62,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-2">
-                        <h5 i18n="@@if">if</h5>
+                        <h5 i18n="@@if" (mouseenter)="toggleParentHover(true)">if</h5>
                     </div>
                     <div class="col-10 pad-0">
                         <div class="card px-2" [ngClass]="parentHovered ? 'hovered' : ''" (mouseenter)="toggleParentHover(true)" (mouseleave)="toggleParentHover(false)">
@@ -80,22 +80,22 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-2">
-                        <h5 i18n="@@then">then</h5>
+                        <h5 i18n="@@then" (mouseenter)="toggleParentHover(true)">then</h5>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="then-child indent-3" [ngClass]="child1 || parentHovered ? 'hovered' : ''"
-        (mouseenter)="child1 = true; parentHovered = false" (mouseleave)="child1 = false; parentHovered = true">
+        <div class="then-child indent-3" [ngClass]="parentHovered ? 'hovered' : ''"
+        (mouseenter)="parentHovered = false">
             <ng-container *ngFor="let Rule of Rule?.thenRuleset">
-                <app-rule-method2 [Rule]="Rule"></app-rule-method2>
+                <app-rule-method2 [parentHovered]="parentHovered" [Rule]="Rule"></app-rule-method2>
             </ng-container>
         </div>
         <div class="row mt-2">
             <div class="col-6">
                 <div class="row">
                     <div class="col-4">
-                        <h5 i18n="@@endif">endif</h5>
+                        <h5 i18n="@@endif" (mouseenter)="toggleParentHover(true)">endif</h5>
                     </div>
                 </div>
             </div>
@@ -108,7 +108,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-2">
-                        <h5 i18n="@@ifnot">if not</h5>
+                        <h5 i18n="@@ifnot" (mouseenter)="toggleParentHover(true)">if not</h5>
                     </div>
                     <div class="col-10 pad-0">
                         <div class="card px-2" [ngClass]="parentHovered ? 'hovered' : ''" (mouseenter)="toggleParentHover(true)" (mouseleave)="toggleParentHover(false)">
@@ -126,16 +126,16 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-2">
-                        <h5 i18n="@@then">then</h5>
+                        <h5 i18n="@@then" (mouseenter)="toggleParentHover(true)">then</h5>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="else-block" [ngClass]="child1 || parentHovered ? 'hovered' : ''"
-        (mouseenter)="child1 = true; parentHovered = false" (mouseleave)="child1 = false; parentHovered = true">
+        <div class="else-block" [ngClass]="parentHovered ? 'hovered' : ''"
+        (mouseenter)="parentHovered = false">
             <div class="else-child indent-3">
                 <ng-container *ngFor="let Rule of Rule?.elseRuleset">
-                    <app-rule-method2 [Rule]="Rule"></app-rule-method2>
+                    <app-rule-method2 [parentHovered]="parentHovered" [Rule]="Rule"></app-rule-method2>
                 </ng-container>
             </div>
         </div>
@@ -143,7 +143,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-4">
-                        <h5 i18n="@@endif">endif</h5>
+                        <h5 i18n="@@endif" (mouseenter)="toggleParentHover(true)">endif</h5>
                     </div>
                 </div>
             </div>
@@ -151,5 +151,5 @@
     </div>
 </ng-container>
 <ng-container *ngIf="!Rule?.thenRuleset && !Rule?.elseRuleset">
-    <app-rule-method1 [Rule]="Rule"></app-rule-method1>
+    <app-rule-method1 [childHovered]="parentHovered" [Rule]="Rule"></app-rule-method1>
 </ng-container>

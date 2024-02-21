@@ -12,10 +12,7 @@ export class RuleMethod2Component {
   @Input({required:true}) Rule?:RTree; 
   private _commonService = inject(CommonService);
   OperatorsUnicode: any = OperatorsUnicode;
-  parentHovered: boolean = false;
-  child1: boolean = false;
-  child2: boolean = false;
-  child3: boolean = false;
+  @Input() parentHovered: boolean = false;
  
 
   toggleParentHover(state: boolean) {

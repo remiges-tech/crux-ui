@@ -13,8 +13,7 @@ import { RuleModalComponent } from '../rule-modal/rule-modal.component';
 export class RuleMethod1Component {
   @Input({ required: true }) Rule?: RTree;
   OperatorsUnicode: any = OperatorsUnicode;
-  parentHovered: boolean = false;
-  childHovered: boolean = false;
+  @Input() childHovered: boolean = false;
 
   private _commonService = inject(CommonService);
 
@@ -27,12 +26,7 @@ export class RuleMethod1Component {
     });
   }
 
-  toggleParentHover(state: boolean) {
-    this.parentHovered = state;
-  }
-
   toggleChildHover(state: boolean) {
-    this.parentHovered = !state
     this.childHovered = state;
   }
 
