@@ -23,6 +23,7 @@ describe('Schema lists', () => {
         cy.get('#schema').contains(interception?.response?.body?.data.patternschema.attr[0].longdesc)
       }
     })
+    cy.get('#rulesets-tab').click();
   })
 
   // Error if schema details is not present
@@ -47,6 +48,5 @@ describe('Schema lists', () => {
       }
     })
   })
-
 })
    

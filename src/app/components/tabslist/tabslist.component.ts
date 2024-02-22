@@ -39,33 +39,36 @@ export class TabslistComponent {
 
 	// Function to get ruleset details for particular selected ruleset
 	// And open it in new tab
-	openRuledetailTabAndMakeAPIcall(event: RulesetsList) {
+	 openRuledetailTabAndMakeAPIcall(event: RulesetsList) {
 		if (!event.app || !event.slice || !event.class || !event.name) {
 			return;
 		}
-
 		try {
-			let tabAlreadyExist = this.tabs.find(tab => tab.content.name === event.name);
+			let tabAlreadyExist = this.tabs.find(tab => tab.name === event.name);
+			let data = this.getRuledetail(event.app, event.slice, event.class, event.name);
 			if (!tabAlreadyExist) {
-				this.tabs.push({
-					name: event.name,
-					content: this.getRuledetail(event.app, event.slice, event.class, event.name)
-				})
-
 				setTimeout(() => {
-					this.autoDirectTab(event)
-				}, 100)
+					if (data.length > 0) {
+						this.tabs.push({
+							name: event.name,
+							content: data
+						});
+					}
+				},100)	
 			}
-			console.log('Tab', this.tabs)
+			setTimeout(() => {
+				this.autoDirectTab(event);
+			}, 100);
 		} catch (err: any) {
 			this._commonService.log({
 				fileName: this.fileName,
 				functionName: 'openRuledetailTabAndMakeAPIcall',
 				err: err
-			})
+			});
 		}
 	}
-
+	
+ //function to fetch the details of a rule based on the provided parameters.
 	getRuledetail(app: string, slice: number, Sclass: string, Rname: string): RTree[] {
 		try {
 			let data = {
@@ -81,15 +84,12 @@ export class TabslistComponent {
 							rulePattern: rule.rulepattern,
 							ruleActions: rule.ruleactions
 						}
-
 						if (rule.ruleactions.thencall != null) {
 							ruleObj.thenRuleset = this.getRuledetail(app, slice, Sclass, rule.ruleactions.thencall)
 						}
-
 						if (rule.ruleactions.elsecall != null) {
 							ruleObj.elseRuleset = this.getRuledetail(app, slice, Sclass, rule.ruleactions.elsecall)
 						}
-
 						FinalRuleStruct.push(ruleObj);
 					})
 				} else {
