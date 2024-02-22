@@ -8,9 +8,9 @@
       aria-selected="true" i18n="@@Workflows">Workflows</button>
     <!-- Dynamic Tabs for rulesets detail -->
     <ng-container *ngFor="let t of tabs">
-      <button #dynamicTab class="nav-link fw-600 fs-20" id="{{t.content.name}}-tab" data-bs-toggle="tab"
-        attr.data-bs-target="#{{t.content.name}}" type="button" role="tab" attr.aria-controls="{{t.content.name}}"
-        aria-selected="true">{{t.content.name}}<span class="btn-close ms-3" (click)="close($event, t)"></span></button>
+      <button #dynamicTab class="nav-link fw-600 fs-20" id="{{t.name}}-tab" data-bs-toggle="tab"
+        attr.data-bs-target="#{{t.name}}" type="button" role="tab" attr.aria-controls="{{t.name}}"
+        aria-selected="true">{{t.name}}<span class="btn-close ms-3" (click)="close($event, t)"></span></button>
     </ng-container>
   </div>
 </nav>
@@ -92,7 +92,7 @@
         </div>
         <div *ngFor="let workflow of WorksFlows, index as i">
           <app-workflow id="{{i}}" [workflow]="workflow"
-            (openDetail)="getRuledetailAndOpeninNewTab($event)"></app-workflow>
+            (openDetail)="openRuledetailTabAndMakeAPIcall($event)"></app-workflow>
         </div>
       </div>
     </ng-container>
@@ -105,7 +105,7 @@
 
   <!-- Dynamic tab contents -->
   <ng-container *ngFor="let t of tabs">
-    <div class="tab-pane fade show" id="{{t.content.name}}" role="tabpanel" aria-labelledby="rulesets-tab">
+    <div class="tab-pane fade show" id="{{t.name}}" role="tabpanel" aria-labelledby="rulesets-tab">
       <app-workflow-detail [ruleDetails]="t.content">
       </app-workflow-detail>
     </div>

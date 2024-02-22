@@ -9,7 +9,7 @@ export enum CONSTANTS {
   BRESchema_LIST_API = '/bre-schema-list',
   BRESchema_GET_API = '/bre-schema-get',
   BRERulesets_LIST_API = '/bre-rulesets-list',
-  BRERulesets_GET_API = '/bre-rulesets-get',
+  BRERulesets_GET_API = '/bre-rulesets-get1',
 }
 
 export const OperatorsUnicode = {

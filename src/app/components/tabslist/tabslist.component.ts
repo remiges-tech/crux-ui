@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { RulesetsList, SchemaDetails } from 'src/models/common-interfaces';
+import { RTree, Rule, RulesetsList, SchemaDetails } from 'src/models/common-interfaces';
 import { RuleSetDetailResp, RuleSetListResp } from 'src/models/request-response-inteface';
 import { BREschemaService } from 'src/services/breschema.service';
 import { CommonService } from 'src/services/common.service';
@@ -23,6 +23,7 @@ export class TabslistComponent {
 	private _toastr = inject(ToastrService);
 	WorksFlows: RulesetsList[] = [];
 	tabs: any[] = [];
+	ruleData!: RTree[]
 
 	ngOnInit() {
 		this.getRulesetsList();
@@ -38,39 +39,74 @@ export class TabslistComponent {
 
 	// Function to get ruleset details for particular selected ruleset
 	// And open it in new tab
-	getRuledetailAndOpeninNewTab(event: RulesetsList) {
+	openRuledetailTabAndMakeAPIcall(event: RulesetsList) {
 		if (!event.app || !event.slice || !event.class || !event.name) {
 			return;
 		}
+
+		try {
+			let tabAlreadyExist = this.tabs.find(tab => tab.content.name === event.name);
+			if (!tabAlreadyExist) {
+				this.tabs.push({
+					name: event.name,
+					content: this.getRuledetail(event.app, event.slice, event.class, event.name)
+				})
+
+				setTimeout(() => {
+					this.autoDirectTab(event)
+				}, 100)
+			}
+			console.log('Tab', this.tabs)
+		} catch (err: any) {
+			this._commonService.log({
+				fileName: this.fileName,
+				functionName: 'openRuledetailTabAndMakeAPIcall',
+				err: err
+			})
+		}
+	}
+
+	getRuledetail(app: string, slice: number, Sclass: string, Rname: string): RTree[] {
 		try {
 			let data = {
-				params: new HttpParams().append('app', event.app).append('slice', event.slice).append('class', event.class).append('name', event.name)
+				params: new HttpParams().append('app', app).append('slice', slice).append('class', Sclass).append('name', Rname)
 			}
+			let FinalRuleStruct: RTree[] = [];
 			this._schemaService.getBREWorkflowDetails(data).subscribe((res: RuleSetDetailResp) => {
 				if (res.status == CONSTANTS.SUCCESS) {
-					this.autoDirectTab(event)
-					let tabAlreadyExist = this.tabs.find(tab => tab.content.name === event.name);
-					if (!tabAlreadyExist) {
-						this.tabs.push({
-							content: res.data
-						})
-						setTimeout(() => {
-							this.autoDirectTab(event)
-						}, 100)
-					}
+					let rules: Rule[] = res.data.ruleset.rules
+
+					rules.forEach((rule: Rule) => {
+						let ruleObj: RTree = {
+							rulePattern: rule.rulepattern,
+							ruleActions: rule.ruleactions
+						}
+
+						if (rule.ruleactions.thencall != null) {
+							ruleObj.thenRuleset = this.getRuledetail(app, slice, Sclass, rule.ruleactions.thencall)
+						}
+
+						if (rule.ruleactions.elsecall != null) {
+							ruleObj.elseRuleset = this.getRuledetail(app, slice, Sclass, rule.ruleactions.elsecall)
+						}
+
+						FinalRuleStruct.push(ruleObj);
+					})
 				} else {
 					this._toastr.error(res?.message, CONSTANTS.ERROR);
 				}
 			}, (err: any) => {
 				this._toastr.error(err, CONSTANTS.ERROR)
 			})
+			return FinalRuleStruct;
 		} catch (error) {
 			this._commonService.log({
 				fileName: this.fileName,
-				functionName: 'getRuledetailAndOpeninNewTab',
+				functionName: 'getRuledetail',
 				err: error
 			})
 		}
+		return []
 	}
 
 	// Function to get the list of all rulesets
@@ -117,7 +153,7 @@ export class TabslistComponent {
 
 	autoDirectTab(event: any) {
 		this.tabs.forEach((tab: any) => {
-			if (tab.content.name == event.name) {
+			if (tab.name == event.name) {
 				this.Tabs?.forEach((tab: any) => {
 					if (tab.nativeElement.id == `${event.name}-tab`) {
 						tab.nativeElement.click()

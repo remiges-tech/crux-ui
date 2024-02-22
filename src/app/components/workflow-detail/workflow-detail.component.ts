@@ -8,7 +8,7 @@ import { OperatorsUnicode } from 'src/services/constants.service';
   styleUrls: ['./workflow-detail.component.scss']
 })
 export class WorkflowDetailComponent {
-  @Input({ required: true }) ruleDetails?: RuleDetails;
+  @Input({ required: true }) ruleDetails?: RTree[];
   OperatorsUnicode: any = OperatorsUnicode;
 
   Data: RTree[] = [
