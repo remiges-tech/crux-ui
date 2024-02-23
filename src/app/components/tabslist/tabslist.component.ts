@@ -39,22 +39,20 @@ export class TabslistComponent {
 
 	// Function to get ruleset details for particular selected ruleset
 	// And open it in new tab
-	 openRuledetailTabAndMakeAPIcall(event: RulesetsList) {
+	async openRuledetailTabAndMakeAPIcall(event: RulesetsList) {
 		if (!event.app || !event.slice || !event.class || !event.name) {
 			return;
 		}
 		try {
 			let tabAlreadyExist = this.tabs.find(tab => tab.name === event.name);
-			let data = this.getRuledetail(event.app, event.slice, event.class, event.name);
 			if (!tabAlreadyExist) {
-				setTimeout(() => {
-					if (data.length > 0) {
-						this.tabs.push({
-							name: event.name,
-							content: data
-						});
-					}
-				},100)	
+				let data = await this.getRuledetail(event.app, event.slice, event.class, event.name);
+				if(data.length > 0){
+					this.tabs.push({
+						name: event.name,
+						content: data
+					});
+				}
 			}
 			setTimeout(() => {
 				this.autoDirectTab(event);
@@ -67,47 +65,51 @@ export class TabslistComponent {
 			});
 		}
 	}
-	
- //function to fetch the details of a rule based on the provided parameters.
-	getRuledetail(app: string, slice: number, Sclass: string, Rname: string): RTree[] {
+
+	//function to fetch the details of a rule based on the provided parameters.
+	async getRuledetail(app: string, slice: number, Sclass: string, Rname: string): Promise<RTree[]> {
 		try {
 			let data = {
 				params: new HttpParams().append('app', app).append('slice', slice).append('class', Sclass).append('name', Rname)
-			}
-			let FinalRuleStruct: RTree[] = [];
-			this._schemaService.getBREWorkflowDetails(data).subscribe((res: RuleSetDetailResp) => {
-				if (res.status == CONSTANTS.SUCCESS) {
-					let rules: Rule[] = res.data.ruleset.rules
+			};
 
-					rules.forEach((rule: Rule) => {
-						let ruleObj: RTree = {
-							rulePattern: rule.rulepattern,
-							ruleActions: rule.ruleactions
-						}
-						if (rule.ruleactions.thencall != null) {
-							ruleObj.thenRuleset = this.getRuledetail(app, slice, Sclass, rule.ruleactions.thencall)
-						}
-						if (rule.ruleactions.elsecall != null) {
-							ruleObj.elseRuleset = this.getRuledetail(app, slice, Sclass, rule.ruleactions.elsecall)
-						}
-						FinalRuleStruct.push(ruleObj);
-					})
-				} else {
-					this._toastr.error(res?.message, CONSTANTS.ERROR);
+			const res: RuleSetDetailResp = await this._schemaService.getBREWorkflowDetails(data).toPromise();
+
+			if (res.status === CONSTANTS.SUCCESS) {
+				let rules: Rule[] = res.data.ruleset.rules;
+				let FinalRuleStruct: RTree[] = [];
+
+				for (const rule of rules) {
+					let ruleObj: RTree = {
+						rulePattern: rule.rulepattern,
+						ruleActions: rule.ruleactions
+					};
+
+					if (rule.ruleactions.thencall != null) {
+						ruleObj.thenRuleset = await this.getRuledetail(app, slice, Sclass, rule.ruleactions.thencall);
+					}
+					if (rule.ruleactions.elsecall != null) {
+						ruleObj.elseRuleset = await this.getRuledetail(app, slice, Sclass, rule.ruleactions.elsecall);
+					}
+
+					FinalRuleStruct.push(ruleObj);
 				}
-			}, (err: any) => {
-				this._toastr.error(err, CONSTANTS.ERROR)
-			})
-			return FinalRuleStruct;
+
+				return FinalRuleStruct;
+			} else {
+				this._toastr.error(res?.message, CONSTANTS.ERROR);
+				return [];
+			}
 		} catch (error) {
 			this._commonService.log({
 				fileName: this.fileName,
 				functionName: 'getRuledetail',
 				err: error
-			})
+			});
+			return [];
 		}
-		return []
 	}
+
 
 	// Function to get the list of all rulesets
 	getRulesetsList() {

@@ -30,7 +30,9 @@ export class HttpService {
     }
 
     handleError(error: HttpErrorResponse) {
-        if (error.status === 400) {
+        if(error.status === 0){
+            return throwError(() => new Error('Connection Refused!'))
+        }else if (error.status === 400) {
             return throwError(() => new Error('Bad Request.'));
         } else if (error.status === 401) {
             return throwError(() => new Error('Unauthorised User.'));
