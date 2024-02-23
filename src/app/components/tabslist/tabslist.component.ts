@@ -44,6 +44,7 @@ export class TabslistComponent {
 			return;
 		}
 		try {
+			this._commonService.showLoader();
 			let tabAlreadyExist = this.tabs.find(tab => tab.name === event.name);
 			if (!tabAlreadyExist) {
 				let data = await this.getRuledetail(event.app, event.slice, event.class, event.name);
@@ -53,6 +54,7 @@ export class TabslistComponent {
 						content: data
 					});
 				}
+				this._commonService.hideLoader()
 			}
 			setTimeout(() => {
 				this.autoDirectTab(event);
@@ -69,6 +71,7 @@ export class TabslistComponent {
 	//function to fetch the details of a rule based on the provided parameters.
 	async getRuledetail(app: string, slice: number, Sclass: string, Rname: string): Promise<RTree[]> {
 		try {
+			this._commonService.showLoader();
 			let data = {
 				params: new HttpParams().append('app', app).append('slice', slice).append('class', Sclass).append('name', Rname)
 			};
@@ -94,9 +97,10 @@ export class TabslistComponent {
 
 					FinalRuleStruct.push(ruleObj);
 				}
-
+                this._commonService.hideLoader();
 				return FinalRuleStruct;
 			} else {
+				this._commonService.hideLoader();
 				this._toastr.error(res?.message, CONSTANTS.ERROR);
 				return [];
 			}
@@ -114,11 +118,14 @@ export class TabslistComponent {
 	// Function to get the list of all rulesets
 	getRulesetsList() {
 		try {
+			this._commonService.showLoader();
 			this._schemaService.getBREWorkflowList().subscribe((res: RuleSetListResp) => {
 				if (res?.status == CONSTANTS.SUCCESS) {
 					this.WorksFlows = res?.data?.rulesets;
+					this._commonService.hideLoader();
 				} else {
 					this._toastr.error(res?.message, CONSTANTS.ERROR);
+					this._commonService.hideLoader();
 				}
 			}, (err: any) => {
 				this._toastr.error(err, CONSTANTS.ERROR)
