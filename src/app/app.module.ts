@@ -18,6 +18,11 @@ import { RuleMethod1Component } from './rulesets/rule-method1/rule-method1.compo
 import { RuleMethod3Component } from './rulesets/rule-method3/rule-method3.component';
 import { RuleMethod2Component } from './rulesets/rule-method2/rule-method2.component';
 import { RuleModalComponent } from './rulesets/rule-modal/rule-modal.component';
+import { LoaderComponent } from './components/loader/loader.component';
+
+
+
+
 
 
 
@@ -32,7 +37,8 @@ import { RuleModalComponent } from './rulesets/rule-modal/rule-modal.component';
     RuleMethod1Component,
     RuleMethod3Component,
     RuleMethod2Component,
-    RuleModalComponent
+    RuleModalComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,

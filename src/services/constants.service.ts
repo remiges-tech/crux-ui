@@ -6,6 +6,7 @@ export enum CONSTANTS {
   DATA_NOT_FOUND = 'Data not found!',
   SCHEMA_DETAILS_DATA_NOT_FOUND = 'Details for the selected schema not found.',
   WORKFLOW_LIST_DATA_NOT_FOUND = 'No Workflow list present.',
+  PLEASE_WAIT_PROCESSING_YOUR_DATA = 'Please wait, processing your data',
   BRESchema_LIST_API = '/bre-schema-list',
   BRESchema_GET_API = '/bre-schema-get',
   BRERulesets_LIST_API = '/bre-rulesets-list',

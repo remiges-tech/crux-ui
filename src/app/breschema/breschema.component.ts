@@ -37,6 +37,7 @@ export class BREschemaComponent {
 
   getSchemaList() {
     try {
+      this._commonService.showLoader();
       this._schemaService.getBRESchemaList().subscribe((res: SchemaListResp) => {
         if (res?.status == CONSTANTS.SUCCESS) {
           if(res?.data?.schemas == null || res?.data?.schemas == undefined || res?.data?.schemas?.length == 0){
@@ -45,8 +46,10 @@ export class BREschemaComponent {
           }
           this.schemasList = res?.data?.schemas;
           this.appList = this._commonService.getAppNamesFromList(res?.data?.schemas);
+          this._commonService.hideLoader();
         } else {
           this._toastr.error(res?.message, CONSTANTS.ERROR);
+          this._commonService.hideLoader();
         }
       }, (err: any) => {
         this._toastr.error(err, CONSTANTS.ERROR)
@@ -89,6 +92,7 @@ export class BREschemaComponent {
         params: new HttpParams().append('app', this.selectedData.app).append('slice', this.selectedData.slice).append('class', this.selectedData.class)
       }
       this.isShowBottomSection = true;
+      this._commonService.showLoader()
       this._schemaService.getBRESchemaDetail(data).subscribe((res: SchemaDetailResp) => {
         if (res.status == CONSTANTS.SUCCESS) {
           if(res.data == null || res.data == undefined || this._commonService.isObjectEmpty(res.data)){
@@ -96,8 +100,10 @@ export class BREschemaComponent {
             return 
           }
           this.schemaData = res.data
+          this._commonService.hideLoader();
         } else {
           this._toastr.error(res?.message, CONSTANTS.ERROR);
+          this._commonService.hideLoader();
         }
       }, (err: any) => {
         this._toastr.error(err, CONSTANTS.ERROR)

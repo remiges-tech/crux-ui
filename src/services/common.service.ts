@@ -7,6 +7,7 @@ import { AppInfo, RulePatternTerm, SchemaList, SliceInfo } from 'src/models/comm
 })
 export class CommonService {
   private production: boolean = false;
+  isLoading: boolean = false;
   subject = new Subject<any>();
 
   log(value: any, type?: string) {
@@ -67,8 +68,15 @@ isObjectEmpty(objectName: any) {
       }
       count++;
     })
-
     return updatedPattern;
+  }
+
+  showLoader(){
+    this.isLoading = true;
+  }
+
+  hideLoader(){
+    this.isLoading = false;
   }
 
 }
