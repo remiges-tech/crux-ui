@@ -14,17 +14,10 @@ import { BREschemaComponent } from './breschema/breschema.component';
 import { TabslistComponent } from './components/tabslist/tabslist.component';
 import { WorkflowComponent } from './components/workflow-list/workflow.component';
 import { WorkflowDetailComponent } from './components/workflow-detail/workflow-detail.component';
-import { RuleMethod1Component } from './rulesets/rule-method1/rule-method1.component';
-import { RuleMethod3Component } from './rulesets/rule-method3/rule-method3.component';
-import { RuleMethod2Component } from './rulesets/rule-method2/rule-method2.component';
+import { DoMatchComponent } from './rulesets/do-match/do-match.component';
+import { ThenElseCallComponent } from './rulesets/then-else-call/then-else-call.component';
 import { RuleModalComponent } from './rulesets/rule-modal/rule-modal.component';
 import { LoaderComponent } from './components/loader/loader.component';
-
-
-
-
-
-
 
 @NgModule({
   declarations: [
@@ -34,11 +27,10 @@ import { LoaderComponent } from './components/loader/loader.component';
     TabslistComponent,
     WorkflowComponent,
     WorkflowDetailComponent,
-    RuleMethod1Component,
-    RuleMethod3Component,
-    RuleMethod2Component,
+    DoMatchComponent,
+    ThenElseCallComponent,
     RuleModalComponent,
-    LoaderComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,

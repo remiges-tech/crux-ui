@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RuleMethod2Component } from './rule-method2.component';
+import { RuleMethod2Component } from './then-else-call.component';
 
 describe('RuleMethod2Component', () => {
   let component: RuleMethod2Component;

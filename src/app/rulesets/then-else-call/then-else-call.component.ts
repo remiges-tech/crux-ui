@@ -4,11 +4,11 @@ import { CommonService } from 'src/services/common.service';
 import { OperatorsUnicode } from 'src/services/constants.service';
 
 @Component({
-  selector: 'app-rule-method2',
-  templateUrl: './rule-method2.component.html',
-  styleUrls: ['./rule-method2.component.scss']
+  selector: 'app-then-else-call',
+  templateUrl: './then-else-call.component.html',
+  styleUrls: ['./then-else-call.component.scss']
 })
-export class RuleMethod2Component {
+export class ThenElseCallComponent {
   @Input({required:true}) Rule?:RTree; 
   private _commonService = inject(CommonService);
   OperatorsUnicode: any = OperatorsUnicode;

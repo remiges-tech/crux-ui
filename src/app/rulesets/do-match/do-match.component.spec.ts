@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RuleMethod1Component } from './rule-method1.component';
+import { RuleMethod1Component } from './do-match.component';
 
 describe('RuleMethod1Component', () => {
   let component: RuleMethod1Component;

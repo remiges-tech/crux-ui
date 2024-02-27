@@ -6,11 +6,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { RuleModalComponent } from '../rule-modal/rule-modal.component';
 
 @Component({
-  selector: 'app-rule-method1',
-  templateUrl: './rule-method1.component.html',
-  styleUrls: ['./rule-method1.component.scss']
+  selector: 'app-do-match',
+  templateUrl: './do-match.component.html',
+  styleUrls: ['./do-match.component.scss']
 })
-export class RuleMethod1Component {
+export class DoMatchComponent {
   @Input({ required: true }) Rule?: RTree;
   OperatorsUnicode: any = OperatorsUnicode;
   @Input() childHovered: boolean = false;

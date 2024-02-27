@@ -99,16 +99,3 @@ interface Property {
 export interface RulesetMap {
     [key: string]: RuleDetails
 }
-
-// rsMap = new RulesetMap
-// function buildRuleSetMap {
-    // r = get ruleset 
-    // rsMap.Add("r.Name", r)
-    // if r.thencall exists 
-    //      thenruleset = r.actions.thencall
-    //      thenr = get thenruleset
-    //      buildRuleSetMap(thenr)
-    // endif
-// }
-
-

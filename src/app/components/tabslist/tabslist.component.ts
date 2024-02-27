@@ -68,7 +68,7 @@ export class TabslistComponent {
 		}
 	}
 
-	//function to fetch the details of a rule based on the provided parameters.
+	// Function to recurrsively fetch the details of a rule based on the provided parameters and create a data structure.
 	async getRuledetail(app: string, slice: number, Sclass: string, Rname: string): Promise<RTree[]> {
 		try {
 			this._commonService.showLoader();
@@ -89,9 +89,11 @@ export class TabslistComponent {
 					};
 
 					if (rule.ruleactions.thencall != null) {
+						// recursive call when the response data contains thencall
 						ruleObj.thenRuleset = await this.getRuledetail(app, slice, Sclass, rule.ruleactions.thencall);
 					}
 					if (rule.ruleactions.elsecall != null) {
+						// recursive call when the response data contains elsecall
 						ruleObj.elseRuleset = await this.getRuledetail(app, slice, Sclass, rule.ruleactions.elsecall);
 					}
 
@@ -104,7 +106,8 @@ export class TabslistComponent {
 				this._toastr.error(res?.message, CONSTANTS.ERROR);
 				return [];
 			}
-		} catch (error) {
+		} catch (error:any) {
+			this._toastr.error(error, CONSTANTS.ERROR)
 			this._commonService.log({
 				fileName: this.fileName,
 				functionName: 'getRuledetail',
