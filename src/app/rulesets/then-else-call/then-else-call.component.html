@@ -1,16 +1,16 @@
 <ng-container *ngIf="Rule?.thenRuleset && Rule?.elseRuleset">
     <div class="if-block" [ngClass]="parentHovered ? 'hovered' : ''" (mouseenter)="toggleParentHover(true)" (mouseleave)="toggleParentHover(false)">
-        <div class="row mt-2">
+        <div class="row mt-2" (click)="openRuleModal()">
             <div class="col-6">
                 <div class="row">
                     <div class="col-2">
-                        <h5 i18n="@@if" (mouseenter)="toggleParentHover(true)">if</h5>
+                        <h5 i18n="@@if" (mouseenter)="toggleParentHover(true)" class="bold">if</h5>
                     </div>
                     <div class="col-10 pad-0">
                         <div class="card px-2" [ngClass]="parentHovered ? 'hovered' : ''" (mouseenter)="toggleParentHover(true)" (mouseleave)="toggleParentHover(false)">
-                            <span>
+                            <span class="h6">
                                 <span *ngFor="let pattern of getMatchList(Rule?.rulePattern!), let isLast = last" >
-                                    {{ pattern.attrname }} <span [innerHTML]="OperatorsUnicode[pattern.op]" class="fs-5"></span> {{ pattern.attrval }} {{isLast ? '...' : ','}}
+                                    {{ pattern.attrname }} <span [innerHTML]="OperatorsUnicode[pattern.op]" ></span> {{ pattern.attrval }} {{isLast ? '...' : ','}}
                                 </span>
                             </span>
                         </div>
@@ -20,7 +20,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-2">
-                        <h5 i18n="@@then" (mouseenter)="toggleParentHover(true)">then</h5>
+                        <h5 i18n="@@then" (mouseenter)="toggleParentHover(true)" class="bold">then</h5>
                     </div>
                 </div>
             </div>
@@ -35,7 +35,7 @@
         (mouseenter)="toggleParentHover(true)" (mouseleave)="toggleParentHover(false)">
             <div class="row">
                 <div class="col-2">
-                    <h5 i18n="@@else" (mouseenter)="toggleParentHover(true)">else</h5>
+                    <h5 i18n="@@else" (mouseenter)="toggleParentHover(true)" class="bold">else</h5>
                 </div>
             </div>
             <div class="else-child indent-3"  [ngClass]="parentHovered ? 'hovered' : ''"
@@ -49,7 +49,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-4">
-                        <h5 i18n="@@endif" (mouseenter)="toggleParentHover(true)">endif</h5>
+                        <h5 i18n="@@endif" (mouseenter)="toggleParentHover(true)" class="bold" (click)="openRuleModal()">endif</h5>
                     </div>
                 </div>
             </div>
@@ -58,11 +58,11 @@
 </ng-container>
 <ng-container *ngIf="Rule?.thenRuleset && !Rule?.elseRuleset">
     <div class="if-block" [ngClass]="parentHovered ? 'hovered' : ''" (mouseenter)="toggleParentHover(true)" (mouseleave)="toggleParentHover(false)">
-        <div class="row mt-2">
+        <div class="row mt-2" (click)="openRuleModal()">
             <div class="col-6">
                 <div class="row">
                     <div class="col-2">
-                        <h5 i18n="@@if" (mouseenter)="toggleParentHover(true)">if</h5>
+                        <h5 i18n="@@if" (mouseenter)="toggleParentHover(true)" class="bold">if</h5>
                     </div>
                     <div class="col-10 pad-0">
                         <div class="card px-2" [ngClass]="parentHovered ? 'hovered' : ''" (mouseenter)="toggleParentHover(true)" (mouseleave)="toggleParentHover(false)">
@@ -80,7 +80,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-2">
-                        <h5 i18n="@@then" (mouseenter)="toggleParentHover(true)">then</h5>
+                        <h5 i18n="@@then" (mouseenter)="toggleParentHover(true)" class="bold">then</h5>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-4">
-                        <h5 i18n="@@endif" (mouseenter)="toggleParentHover(true)">endif</h5>
+                        <h5 i18n="@@endif" (mouseenter)="toggleParentHover(true)" class="bold" (click)="openRuleModal()">endif</h5>
                     </div>
                 </div>
             </div>
@@ -104,16 +104,16 @@
 </ng-container>
 <ng-container *ngIf="!Rule?.thenRuleset && Rule?.elseRuleset">
     <div class="if-block" [ngClass]="parentHovered ? 'hovered' : ''" (mouseenter)="toggleParentHover(true)" (mouseleave)="toggleParentHover(false)">
-        <div class="row mt-2">
+        <div class="row mt-2" (click)="openRuleModal()">
             <div class="col-6">
                 <div class="row">
                     <div class="col-2">
-                        <h5 i18n="@@ifnot" (mouseenter)="toggleParentHover(true)">if not</h5>
+                        <h5 i18n="@@ifnot" (mouseenter)="toggleParentHover(true)" class="bold">if not</h5>
                     </div>
                     <div class="col-10 pad-0">
                         <div class="card px-2" [ngClass]="parentHovered ? 'hovered' : ''" (mouseenter)="toggleParentHover(true)" (mouseleave)="toggleParentHover(false)">
                             <span>
-                                <span>
+                                <span class="h6">
                                     <span *ngFor="let pattern of getMatchList(Rule?.rulePattern!), let isLast = last" >
                                         {{ pattern.attrname }} <span [innerHTML]="OperatorsUnicode[pattern.op]" class="fs-5"></span> {{ pattern.attrval }} {{isLast ? '...' : ','}}
                                     </span>
@@ -126,7 +126,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-2">
-                        <h5 i18n="@@then" (mouseenter)="toggleParentHover(true)">then</h5>
+                        <h5 i18n="@@then" (mouseenter)="toggleParentHover(true)" class="bold">then</h5>
                     </div>
                 </div>
             </div>
@@ -143,7 +143,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-4">
-                        <h5 i18n="@@endif" (mouseenter)="toggleParentHover(true)">endif</h5>
+                        <h5 i18n="@@endif" (mouseenter)="toggleParentHover(true)" class="bold" (click)="openRuleModal()">endif</h5>
                     </div>
                 </div>
             </div>
