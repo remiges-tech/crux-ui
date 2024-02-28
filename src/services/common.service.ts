@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { AppInfo, RulePatternTerm, SchemaList, SliceInfo } from 'src/models/common-interfaces';
+import { App, AppInfo, AppsList, RealmSliceList, RulePatternTerm, SchemaList, SliceInfo } from 'src/models/common-interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +49,22 @@ getSliceNumbersForSelectedApp(list:SchemaList[],app:string):SliceInfo[]{
 getClassNameForSelectedSchemaData(list:SchemaList[],app:string, slice:number){
     const data = list.filter((item:SchemaList) => item.app.toUpperCase() == app.toUpperCase() && item.slice == slice) ?? null;
     return [...data.map((item:SchemaList) => item.class)];
+}
+
+getRealmSliceList(list:RealmSliceList[]):number[]{
+  let realmList = [...list.map((item:RealmSliceList) => {
+      return item.id
+  })]
+
+  return realmList;
+}
+
+getAppsList(list:AppsList[]):App[]{
+  let realmList = [...list.map((item:AppsList) => {
+      return {name: item.name, code:item.name}
+  })]
+
+  return realmList;
 }
 
 isObjectEmpty(objectName: any) {

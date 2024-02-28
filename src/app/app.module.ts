@@ -18,6 +18,8 @@ import { DoMatchComponent } from './rulesets/do-match/do-match.component';
 import { ThenElseCallComponent } from './rulesets/then-else-call/then-else-call.component';
 import { RuleModalComponent } from './rulesets/rule-modal/rule-modal.component';
 import { LoaderComponent } from './components/loader/loader.component';
+import { ReplicateRealmsliceComponent } from './realmslice/replicate-realmslice/replicate-realmslice.component';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,8 @@ import { LoaderComponent } from './components/loader/loader.component';
     DoMatchComponent,
     ThenElseCallComponent,
     RuleModalComponent,
-    LoaderComponent
+    LoaderComponent,
+    ReplicateRealmsliceComponent
   ],
   imports: [
     BrowserModule,
@@ -39,6 +42,7 @@ import { LoaderComponent } from './components/loader/loader.component';
     FormsModule,
     HttpClientModule,
     MatDialogModule,
+    MultiSelectModule,
     BrowserAnimationsModule, 
     ToastrModule.forRoot(), 
   ],

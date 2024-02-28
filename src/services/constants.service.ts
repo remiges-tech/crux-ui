@@ -11,6 +11,9 @@ export enum CONSTANTS {
   BRESchema_GET_API = '/bre-schema-get',
   BRERulesets_LIST_API = '/bre-rulesets-list',
   BRERulesets_GET_API = '/bre-rulesets-get1',
+  Realm_Slice_New_API = '/realm-slice-new',
+  Realm_Slice_LIST_API = '/realm-slice-list',
+  Realm_Slice_Apps_API = '/realm-slice-apps'
 }
 
 export const OperatorsUnicode = {

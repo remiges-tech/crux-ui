@@ -1,12 +1,13 @@
 <nav class="navbar navbar-light top-menu sticky-top">
   <div class="container-fluid p-2">
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center pointer" routerLink="/">
       <h2 class="mb-0 me-2">
         <img alt="Remiges Business Icon" i18n-alt="@@remigesLogo" src="assets/img/logo.svg" />
       </h2>
       <span i18n="@@cruxHeading" class="h2 mb-0 text-light">Crux</span>
     </div>
     <div class="d-none d-lg-flex d-xl-flex d-md-flex">
+      <!-- <button type="button" routerLink="/replicate-realmslice" class="btn btn-light p-1 m-1">Replicate Realm</button> -->
       <div class="mx-3">
         <button class="btn" id="themeBtn" (click)="changeTheme()">
           <i *ngIf="isDarkTheme" class="fa-regular fa-sun"></i>
@@ -47,6 +48,9 @@
         (change)="navigateToLocale(selectedLocale)">
         <option *ngFor="let locale of locales" [value]="locale.localeCode">{{ locale.label }}</option>
       </select>
+    </div>
+    <div class="mt-2">
+      <button type="button" routerLink="/replicate-realmslice" class="btn btn-light">Replicate Realm</button>
     </div>
   </div>
 </div>

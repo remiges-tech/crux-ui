@@ -1,0 +1,43 @@
+<div class="container mt-2">
+    <div class="row">
+        <div class="col-8">
+            <div class="d-flex flex-column flex-md-row">
+                <div class="col-3">
+                    <label class="fs-20 fw-600 ml-3 text-color">Realmslice</label>
+                </div>
+                <div class="col-3">
+                    <ng-select (change)="getAppsList()" [(ngModel)]="selectedData.realmSlice" class="dropdown"
+                        id="realmslice" placeholder="--Select Realmslice--">
+                        <ng-option *ngFor="let slice of sliceList" [value]="slice">{{slice}}</ng-option>
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-8">
+            <div class="d-flex flex-column flex-md-row">
+                <div class="col-3">
+                    <label class="fs-20 fw-600 ml-3 text-color">Apps</label>
+                </div>
+                <div class="col-3 ml-3">
+                    <p-multiSelect [options]="appList" [(ngModel)]="selectedData.apps" optionLabel="name"
+                        placeholder="--Select Apps--"></p-multiSelect>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-8">
+            <div class="d-flex flex-column flex-md-row">
+                <div class="col-3">
+                    <label class="fs-20 fw-600 ml-3 text-color">Description</label>
+                </div>
+                <div class="col-3 ml-3">
+                    <textarea class="description form-control" [(ngModel)]="selectedData.desc" id="description" placeholder="Type here..."></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="click" type="submit" (click)="replicateRealmSlice()">Click me</a>
+</div>

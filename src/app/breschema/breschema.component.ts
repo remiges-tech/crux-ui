@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { AppInfo, SchemaDetails, SchemaList, SliceInfo } from 'src/models/common-interfaces';
+import { AppInfo, SchemaDetails, SchemaList, SelectedData, SliceInfo } from 'src/models/common-interfaces';
 import { SchemaDetailResp, SchemaListResp } from 'src/models/request-response-inteface';
 import { BREschemaService } from 'src/services/breschema.service';
 import { CommonService } from 'src/services/common.service';
@@ -24,7 +24,7 @@ export class BREschemaComponent {
   appList?: AppInfo[];
   sliceList?: SliceInfo[];
   classList?: string[];
-  selectedData: any = {
+  selectedData: SelectedData = {
     app: null,
     slice: null,
     class: null,

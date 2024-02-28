@@ -28,6 +28,12 @@ export interface SliceInfo {
     value: number;
 }
 
+export interface SelectedData{
+    app: string | null,
+    slice: number | null,
+    class: string | null,
+}
+
 export interface RulesetsList {
     id: number,
     slice: number,
@@ -95,7 +101,22 @@ export interface RuleActions {
 interface Property {
   [key: string]: string
 }
-    
-export interface RulesetMap {
-    [key: string]: RuleDetails
+
+export interface App {
+    name: string,
+    code: string
+}
+
+export interface RealmSliceList {
+    id: number,
+    descr: string,
+    active: boolean,
+    deactivateat: string,
+    createdat: string,
+    createdby: string
+}
+
+export interface AppsList{
+    name: string,
+    descr: string
 }
