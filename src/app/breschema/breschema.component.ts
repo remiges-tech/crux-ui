@@ -1,8 +1,8 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { AppInfo, SchemaDetails, SchemaList, SelectedData, SliceInfo } from 'src/models/common-interfaces';
-import { SchemaDetailResp, SchemaListResp } from 'src/models/request-response-inteface';
+import { AppInfo, RulesetsList, SchemaDetails, SchemaList, SelectedData, SliceInfo } from 'src/models/common-interfaces';
+import { RuleSetListResp, SchemaDetailResp, SchemaListResp } from 'src/models/request-response-inteface';
 import { BREschemaService } from 'src/services/breschema.service';
 import { CommonService } from 'src/services/common.service';
 import { CONSTANTS } from 'src/services/constants.service';
@@ -30,6 +30,7 @@ export class BREschemaComponent {
     class: null,
   }
   schemaData?: SchemaDetails;
+	WorksFlows?: RulesetsList[] = [];
 
   ngOnInit() {
     this.getSchemaList();
@@ -81,6 +82,11 @@ export class BREschemaComponent {
     }
   }
 
+  getDetails(){
+    this.getSchemaDetails();
+    this.getRulesetsList()
+  }
+
   getSchemaDetails() {
     this.schemaData = undefined
     this.isShowBottomSection = false;
@@ -116,6 +122,36 @@ export class BREschemaComponent {
       })
     }
   }
+
+  getRulesetsList() {
+    this.WorksFlows = undefined
+		if (!this.schemasList || !this.selectedData.app || !this.selectedData.slice || !this.selectedData.class) {
+			return;
+		  }
+		try {
+			let data = {
+				params: new HttpParams().append('app', this.selectedData.app).append('slice', this.selectedData.slice).append('class', this.selectedData.class)
+			  }
+			this._commonService.showLoader();
+			this._schemaService.getBREWorkflowList(data).subscribe((res: RuleSetListResp) => {
+				if (res?.status == CONSTANTS.SUCCESS) {
+					this.WorksFlows = res?.data?.rulesets;
+					this._commonService.hideLoader();
+				} else {
+					this._toastr.error(res?.message, CONSTANTS.ERROR);
+					this._commonService.hideLoader();
+				}
+			}, (err: any) => {
+				this._toastr.error(err, CONSTANTS.ERROR)
+			})
+		} catch (error) {
+			this._commonService.log({
+				fileName: this.fileName,
+				functionName: 'getRulesetsList',
+				err: error
+			})
+		}
+	}
 
   clearCache() {
     this.sliceList = undefined;

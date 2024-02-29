@@ -64,13 +64,13 @@ export class BREschemaService {
     }
   }
 
-  getBREWorkflowList(): any {
+  getBREWorkflowList(payload:any): any {
     try {
       let dataObj = {
         method: 'get',
         api_url: environment.apiUrl + Enums.CONSTANTS.BRERulesets_LIST_API,
         local_json_file: '',
-        param_data: {},
+        param_data: payload,
         mapcol: false,
       };
       let resp = this._httpService.fetchData(dataObj);
