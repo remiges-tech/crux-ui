@@ -20,6 +20,8 @@ import { RuleModalComponent } from './rulesets/rule-modal/rule-modal.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { ReplicateRealmsliceComponent } from './realmslice/replicate-realmslice/replicate-realmslice.component';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
     ThenElseCallComponent,
     RuleModalComponent,
     LoaderComponent,
-    ReplicateRealmsliceComponent
+    ReplicateRealmsliceComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,7 @@
 <ng-container *ngIf="Rule?.thenRuleset && Rule?.elseRuleset">
     <div class="if-block" [ngClass]="parentHovered ? 'hovered' : ''" (mouseenter)="toggleParentHover(true)" (mouseleave)="toggleParentHover(false)">
         <div class="row mt-2" (click)="openRuleModal()">
-            <div class="col-6">
+            <div class="col-4">
                 <div class="row">
                     <div class="col-2">
                         <h5 i18n="@@if" (mouseenter)="toggleParentHover(true)" class="bold">if</h5>
@@ -17,7 +17,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-8">
                 <div class="row">
                     <div class="col-2">
                         <h5 i18n="@@then" (mouseenter)="toggleParentHover(true)" class="bold">then</h5>
@@ -105,12 +105,12 @@
 <ng-container *ngIf="!Rule?.thenRuleset && Rule?.elseRuleset">
     <div class="if-block" [ngClass]="parentHovered ? 'hovered' : ''" (mouseenter)="toggleParentHover(true)" (mouseleave)="toggleParentHover(false)">
         <div class="row mt-2" (click)="openRuleModal()">
-            <div class="col-6">
+            <div class="col-4">
                 <div class="row">
-                    <div class="col-2">
+                    <div class="col-3">
                         <h5 i18n="@@ifnot" (mouseenter)="toggleParentHover(true)" class="bold">if not</h5>
                     </div>
-                    <div class="col-10 pad-0">
+                    <div class="col-9 pad-0">
                         <div class="card px-2" [ngClass]="parentHovered ? 'hovered' : ''" (mouseenter)="toggleParentHover(true)" (mouseleave)="toggleParentHover(false)">
                             <span>
                                 <span class="h6">
@@ -123,7 +123,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-8">
                 <div class="row">
                     <div class="col-2">
                         <h5 i18n="@@then" (mouseenter)="toggleParentHover(true)" class="bold">then</h5>
