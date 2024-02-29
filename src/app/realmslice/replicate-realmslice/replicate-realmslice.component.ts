@@ -70,6 +70,7 @@ export class ReplicateRealmsliceComponent implements OnInit {
   }
 
   getAppsList(){
+    this.appList = []
     this.selectedData.apps = null
     if (!this.sliceList || !this.selectedData.realmSlice) {
       return;
@@ -124,7 +125,7 @@ export class ReplicateRealmsliceComponent implements OnInit {
       this._realmService.postRealmSliceNew(data).subscribe((res: ReplicateRealmResp) => {
         if (res?.status == CONSTANTS.SUCCESS) {
           this._commonService.hideLoader();
-          this._toastr.success(`Replicated ReamlSlice id : ${res.data.id}`,CONSTANTS.SUCCESS)
+          this._toastr.success(`ReamlSlice id : ${res.data.id}`,CONSTANTS.SUCCESS)
         } else {
           this._toastr.error(res?.message, CONSTANTS.ERROR);
           this._commonService.hideLoader();
@@ -141,6 +142,17 @@ export class ReplicateRealmsliceComponent implements OnInit {
         err: error
       })
     }
+  }
+
+  resetForm(){
+    this.selectedData = {
+      realmSlice: null,
+      apps: null,
+      desc: null,
+    }
+    this.sliceList = []
+    this.appList = []
+    this.ngOnInit()
   }
 
 }

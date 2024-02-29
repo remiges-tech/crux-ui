@@ -14,7 +14,7 @@
             </div>
         </div>
     </div>
-    <div class="row mt-2">
+    <div *ngIf="appList.length > 1" class="row mt-2">
         <div class="col-8">
             <div class="d-flex flex-column flex-md-row">
                 <div class="col-3">
@@ -39,5 +39,15 @@
             </div>
         </div>
     </div>
-    <a class="click" type="submit" (click)="replicateRealmSlice()">Click me</a>
+
+    <div class="container">
+    </div>
+    <div class="mt-4 d-flex justify-content-left">
+        <div class="m-2">
+            <a class="click" type="reset" (click)="resetForm()">Reset</a>
+        </div>
+        <div class="m-2">
+            <a class="click" type="submit" (click)="replicateRealmSlice()">{{selectedData.realmSlice != null ? 'Replicate Realm' : 'Create new Realm'}}</a>
+        </div>
+    </div>
 </div>
