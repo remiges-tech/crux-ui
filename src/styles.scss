@@ -409,3 +409,17 @@ margin-right: auto;
 width: 50%;
 cursor: pointer;
 }
+
+.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+  opacity: 1;
+  display: none !important;
+}
+
+// .close{
+//   outline: none;
+//   color: #000;
+//   background: none;
+//   font-size: 1.5rem;
+//   font-weight: bolder;
+//   border: none;
+// }
