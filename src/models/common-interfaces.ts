@@ -49,13 +49,13 @@ export interface RulesetsList {
     editedby: string
 }
 
-export interface RuleDetails {
+export interface RuleSet {
     id: number,
     slice: number,
     app: string,
     class: string,
     name: string,
-    ruleset: Ruleset,
+    rules: Rule[],
     is_active: boolean,
     is_internal: boolean,
     createdat: string,
@@ -64,23 +64,21 @@ export interface RuleDetails {
     editedby: string
 }
 
-export interface Ruleset{
-    id: number,
-    class: string,
-    setname: string,
-    rules: Rule[]
-}
-
 export interface Rule {
 	rulepattern: RulePatternTerm[]
 	ruleactions: RuleActions
 }
 
 export interface RTree {
+    setname: string
 	rulePattern: RulePatternTerm[]
 	ruleActions: RuleActions
     thenRuleset?: RTree[]
     elseRuleset?: RTree[]
+}
+
+export interface RTreeRulesets {
+    [setname: string]: RuleSet 
 }
 
 export interface RulePatternTerm {

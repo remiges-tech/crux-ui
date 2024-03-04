@@ -18,6 +18,11 @@ interface ReplicatedRealmPayload{
   descr? : string
 }
 
+interface SliceList{
+  discription: string,
+  value: number
+}
+
 @Component({
   selector: 'app-replicate-realmslice',
   templateUrl: './replicate-realmslice.component.html',
@@ -28,7 +33,7 @@ export class ReplicateRealmsliceComponent implements OnInit {
   private _realmService = inject(RealmsliceService);
   private _commonService = inject(CommonService);
   private _toastr = inject(ToastrService);
-  sliceList: number[] = [];
+  sliceList: SliceList[] = [];
   appList: App[] = [];
   selectedData : SelectedDataReplicatedRealm = {
     realmSlice : null,
@@ -107,11 +112,16 @@ export class ReplicateRealmsliceComponent implements OnInit {
   }
 
   replicateRealmSlice(){
+    if(this.selectedData.realmSlice){
+      if(!this.selectedData.apps || this.selectedData.apps.length == 0){
+        return;
+      }
+    }
     
     try {
       let data:ReplicatedRealmPayload = {}
 
-      if(this.selectedData.realmSlice){
+      if(this.selectedData.realmSlice ){
         data['copyof'] = this.selectedData.realmSlice
       }
       if(this.selectedData.apps){
@@ -142,6 +152,16 @@ export class ReplicateRealmsliceComponent implements OnInit {
         err: error
       })
     }
+  }
+
+  isDisable(){
+    if(this.selectedData.realmSlice){
+      if(!this.selectedData.apps || this.selectedData.apps.length == 0){
+        return true;
+      }
+    }
+
+    return false;
   }
 
   resetForm(){

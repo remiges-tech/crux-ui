@@ -51,9 +51,9 @@ getClassNameForSelectedSchemaData(list:SchemaList[],app:string, slice:number){
     return [...data.map((item:SchemaList) => item.class)];
 }
 
-getRealmSliceList(list:RealmSliceList[]):number[]{
+getRealmSliceList(list:RealmSliceList[]):any[]{
   let realmList = [...list.map((item:RealmSliceList) => {
-      return item.id
+      return {discription:`${item.descr} (${item.id})` , value:item.id}
   })]
 
   return realmList;

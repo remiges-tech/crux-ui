@@ -1,7 +1,6 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { RTree } from 'src/models/common-interfaces';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA , MatDialogRef } from '@angular/material/dialog';
+import { RTree, RuleSet } from 'src/models/common-interfaces';
 import { OperatorsUnicode } from 'src/services/constants.service';
 
 @Component({
@@ -10,7 +9,8 @@ import { OperatorsUnicode } from 'src/services/constants.service';
     <div class="modal-dialog modal-md modal-dialog-centered" style="padding: 20px 10px;"  role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title fw-bold" id="ruleModalLabel">Ruleset Details</h5>
+                <h5 class="modal-title fw-bold" id="ruleModalLabel">Rule Details</h5>
+                <h6 style="color: #777" class="modal-title" id="ruleModalLabel">{{getRulesetName()}}</h6>
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
@@ -60,13 +60,22 @@ import { OperatorsUnicode } from 'src/services/constants.service';
 })
 export class RuleModalComponent {
     Rule?: RTree;
+    Ruleset?: RuleSet;
     OperatorsUnicode: any = OperatorsUnicode;
     constructor(@Inject(MAT_DIALOG_DATA) public data:
-        { Rule: RTree },
+        { Rule: RTree, Ruleset: RuleSet },
         private dialog: MatDialogRef<RuleModalComponent>) {
         if (data) {
             this.Rule = data.Rule
+            this.Ruleset = data.Ruleset
         }
+    }
+
+    getRulesetName() {
+        if (this.Ruleset == undefined || this.Rule == undefined) {
+            return ''
+        }
+        return this.Ruleset.name
     }
 
     closeModal() {

@@ -1,4 +1,4 @@
-import { AppsList, RealmSliceList, RuleDetails, RulesetsList, SchemaDetails, SchemaList } from "./common-interfaces";
+import { AppsList, RealmSliceList, RuleSet, RulesetsList, SchemaDetails, SchemaList } from "./common-interfaces";
 
 export interface SchemaListResp{
     data: {
@@ -26,7 +26,7 @@ export interface RuleSetListResp{
 }
 
 export interface RuleSetDetailResp{
-    data: RuleDetails,
+    data: RuleSet,
     status: string,
     statusCode: number,
     message: string

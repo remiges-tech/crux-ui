@@ -1,11 +1,17 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { RTree, Rule, RulesetsList, SchemaDetails } from 'src/models/common-interfaces';
-import { RuleSetDetailResp, RuleSetListResp } from 'src/models/request-response-inteface';
+import { RTree, RTreeRulesets, Rule, RulesetsList, SchemaDetails } from 'src/models/common-interfaces';
+import { RuleSetDetailResp } from 'src/models/request-response-inteface';
 import { BREschemaService } from 'src/services/breschema.service';
 import { CommonService } from 'src/services/common.service';
 import { CONSTANTS } from 'src/services/constants.service';
+
+interface Tabs {
+	name: string,
+	RTree: RTree[],
+	RTreeRulesets: RTreeRulesets
+}
 
 @Component({
 	selector: 'app-tabslist',
@@ -18,19 +24,16 @@ export class TabslistComponent {
 	@ViewChild('workflowsTab') defaultTab: ElementRef | undefined;
 	@ViewChildren('dynamicTab') Tabs: QueryList<any> | undefined;
 	@Input({ required: true }) schemaData?: SchemaDetails
-	@Input({required: true}) WorksFlows?: RulesetsList[] = [];
+	@Input({ required: true }) WorksFlows?: RulesetsList[] = [];
 	private _schemaService = inject(BREschemaService);
 	private _commonService = inject(CommonService);
 	private _toastr = inject(ToastrService);
-	tabs: any[] = [];
-
-	ngOnInit() {
-		
-	}
+	tabs: Tabs[] = [];
+	FinalRulesetsList: RTreeRulesets = {}
 
 	// Function to close dynamic Tab
-	close(event: MouseEvent, toRemove: number) {
-		this.tabs = this.tabs.filter((id) => id !== toRemove);
+	close(event: MouseEvent, toRemove: Tabs) {
+		this.tabs = this.tabs.filter((id:Tabs) => id !== toRemove);
 		this.defaultTab?.nativeElement.click();
 		event.preventDefault();
 		event.stopImmediatePropagation();
@@ -38,28 +41,31 @@ export class TabslistComponent {
 
 	// Function to get ruleset details for particular selected ruleset
 	// And open it in new tab
-	async openRuledetailTabAndMakeAPIcall(event: RulesetsList) {
-		if (!event.app || !event.slice || !event.class || !event.name) {
+	async openRuledetailTabAndMakeAPIcall(ruleset: RulesetsList) {
+		if (!ruleset.app || !ruleset.slice || !ruleset.class || !ruleset.name) {
 			return;
 		}
 		try {
-			this._commonService.showLoader();
-			let tabAlreadyExist = this.tabs.find(tab => tab.name === event.name);
+			let tabAlreadyExist = this.tabs.find(tab => tab.name === ruleset.name);
 			if (!tabAlreadyExist) {
-				const data = await this.getRuledetail(event.app, event.slice, event.class, event.name);
+				const data = await this.getRuledetail(ruleset.app, ruleset.slice, ruleset.class, ruleset.name);
 				if (data instanceof Error) {
-					throw data; 
+					throw data;
 				}
 				else if (data.length > 0) {
 					this.tabs.push({
-						name: event.name,
-						content: data
+						name: ruleset.name,
+						RTree: data,
+						RTreeRulesets: this.FinalRulesetsList
 					});
+
+					console.log("RTree: ", data)
+					console.log('RtreeList', this.FinalRulesetsList)
 				}
 				this._commonService.hideLoader()
 			}
 			setTimeout(() => {
-				this.autoDirectTab(event);
+				this.autoDirectTab(ruleset);
 			}, 100);
 		} catch (err: any) {
 			this._commonService.hideLoader()
@@ -82,11 +88,16 @@ export class TabslistComponent {
 			const res: RuleSetDetailResp = await this._schemaService.getBREWorkflowDetails(data).toPromise();
 
 			if (res.status === CONSTANTS.SUCCESS) {
-				let rules: Rule[] = res.data.ruleset.rules;
+				let rules: Rule[] = res.data.rules;
 				let FinalRuleStruct: RTree[] = [];
 
+				if(!this.FinalRulesetsList[res.data.name]){
+					this.FinalRulesetsList[res.data.name] = res.data;
+				}
+				
 				for (const rule of rules) {
 					let ruleObj: RTree = {
+						setname: res.data.name,
 						rulePattern: rule.rulepattern,
 						ruleActions: rule.ruleactions
 					};

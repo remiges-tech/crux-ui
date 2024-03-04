@@ -19,7 +19,6 @@ export class BREschemaComponent {
   private _schemaService = inject(BREschemaService);
   private _commonService = inject(CommonService);
   private _toastr = inject(ToastrService);
-  isShowBottomSection:boolean= false;
   schemasList?: SchemaList[];
   appList?: AppInfo[];
   sliceList?: SliceInfo[];
@@ -30,7 +29,7 @@ export class BREschemaComponent {
     class: null,
   }
   schemaData?: SchemaDetails;
-	WorksFlows?: RulesetsList[] = [];
+	WorksFlows?: RulesetsList[];
 
   ngOnInit() {
     this.getSchemaList();
@@ -66,6 +65,7 @@ export class BREschemaComponent {
 
   getSliceList() {
     this.clearCache();
+    this.clearSchemaData();
     if (this.schemasList && this.selectedData.app) {
       this.selectedData.slice = null
       this.sliceList = this._commonService.getSliceNumbersForSelectedApp(this.schemasList, this.selectedData.app)
@@ -74,8 +74,7 @@ export class BREschemaComponent {
 
   getClassList() {
     this.classList = undefined;
-    this.schemaData = undefined;
-    this.isShowBottomSection = false;
+    this.clearSchemaData();
     if (this.schemasList && this.selectedData.app && this.selectedData.slice) {
       this.selectedData.class = null
       this.classList = this._commonService.getClassNameForSelectedSchemaData(this.schemasList, this.selectedData.app, this.selectedData.slice)
@@ -83,13 +82,13 @@ export class BREschemaComponent {
   }
 
   getDetails(){
+    this.clearSchemaData();
     this.getSchemaDetails();
     this.getRulesetsList()
   }
 
   getSchemaDetails() {
     this.schemaData = undefined
-    this.isShowBottomSection = false;
     if (!this.schemasList || !this.selectedData.app || !this.selectedData.slice || !this.selectedData.class) {
       return;
     }
@@ -97,7 +96,6 @@ export class BREschemaComponent {
       let data = {
         params: new HttpParams().append('app', this.selectedData.app).append('slice', this.selectedData.slice).append('class', this.selectedData.class)
       }
-      this.isShowBottomSection = true;
       this._commonService.showLoader()
       this._schemaService.getBRESchemaDetail(data).subscribe((res: SchemaDetailResp) => {
         if (res.status == CONSTANTS.SUCCESS) {
@@ -156,7 +154,10 @@ export class BREschemaComponent {
   clearCache() {
     this.sliceList = undefined;
     this.classList = undefined;
+  }
+
+  clearSchemaData(){
     this.schemaData = undefined;
-    this.isShowBottomSection = false;
+    this.WorksFlows = undefined;
   }
 }
