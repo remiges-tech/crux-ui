@@ -32,6 +32,7 @@ export class BREschemaComponent {
 	WorksFlows?: RulesetsList[];
 
   ngOnInit() {
+    this._commonService.clearFromLocalStorage();
     this.getSchemaList();
   }
 
@@ -104,12 +105,15 @@ export class BREschemaComponent {
             return 
           }
           this.schemaData = res.data
+          this._commonService.setToLocalStorage('SCHEMADATA',res.data);
           this._commonService.hideLoader();
         } else {
+          this._commonService.removeFromLocalStorage('SCHEMADATA');
           this._toastr.error(res?.message, CONSTANTS.ERROR);
           this._commonService.hideLoader();
         }
       }, (err: any) => {
+        this._commonService.clearFromLocalStorage();
         this._toastr.error(err, CONSTANTS.ERROR)
       })
     } catch (error) {

@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { MatDialogModule } from '@angular/material/dialog'
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -46,6 +47,7 @@ import { RuleModalComponent } from './rulesets/rule-modal/rule-modal.component';
     ReactiveFormsModule,
     HttpClientModule,
     MatDialogModule,
+    DragDropModule,
     MultiSelectModule,
     BrowserAnimationsModule, 
     ToastrModule.forRoot(), 

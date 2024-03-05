@@ -415,11 +415,12 @@ cursor: pointer;
   display: none !important;
 }
 
-// .close{
-//   outline: none;
-//   color: #000;
-//   background: none;
-//   font-size: 1.5rem;
-//   font-weight: bolder;
-//   border: none;
-// }
+.close {
+  outline: none;
+  color: #000;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  font-weight: bold;
+}
+

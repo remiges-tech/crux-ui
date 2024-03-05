@@ -3,9 +3,9 @@
         <div class="modal-header justify-content-between">
             <h5 class="modal-title fw-bold" id="ruleModalLabel">Rule Details</h5>
             <h6 style="color: #777" class="modal-title" id="ruleModalLabel">{{getRulesetName()}}</h6>
-            <button type="button"  (click)="closeModal()" aria-label="Close">
+            <button type="button" class="close" (click)="closeModal()" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
-              </button>
+            </button>
         </div>
         <div class="modal-body">
             <ng-container *ngIf="!isEdit">
@@ -32,11 +32,13 @@
                         <div class="col-md-12">
                             <div class="fs-20 mb-2">
                                 <b>{{(Rule && Rule.ruleActions.tasks.length > 1) ? 'NextSteps' : 'NextStep'}}:</b>
-                                <span class="badge bg-primary mx-2 fs-10" *ngFor="let task of Rule?.ruleActions?.tasks">{{
+                                <span class="badge bg-primary mx-2 fs-10"
+                                    *ngFor="let task of Rule?.ruleActions?.tasks">{{
                                     task }}</span>
                             </div>
                             <div class="mt-4 fs-20">
-                                <b>{{(Rule && Rule.ruleActions.properties.length > 1) ? 'NextStep Tags' : 'NextStepTag'}}:</b>
+                                <b>{{(Rule && Rule.ruleActions.properties.length > 1) ? 'NextStep Tags' :
+                                    'NextStepTag'}}:</b>
                                 <span *ngFor="let properties of Rule?.ruleActions?.properties">
                                     <span class="badge bg-success mx-2 fs-10"
                                         *ngFor="let property of properties | keyvalue">{{property.key}} - {{
@@ -51,50 +53,79 @@
                 <div [formGroup]="RuleForm">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-12" formArrayName="rulePattern">
-                                <div *ngFor="let rule of rulePattern.controls,let i = index" [formGroupName]="i">
+                            <div class="col-12" formArrayName="rulePattern" cdkDropList
+                                (cdkDropListDropped)="onPatternDrop($event)">
+                                <div *ngFor="let rule of rulePattern.controls,let i = index" [formGroupName]="i"
+                                    >
                                     <div class="row mb-2">
                                         <div class="col-md-2 col-sm-5">
-                                            <input type="text" class="form-control" id="attrname" formControlName="attrname" placeholder="attrname"/>
-                                            <div *ngIf="rulePattern.controls[i].get('attrname')?.touched" class="text-danger">
-                                                <div *ngIf="rulePattern.controls[i].get('attrname')?.hasError('required')">
+                                            <input type="text" class="form-control" id="attrname"
+                                                formControlName="attrname" placeholder="attrname" />
+                                            <div *ngIf="rulePattern.controls[i].get('attrname')?.touched"
+                                                class="text-danger">
+                                                <div
+                                                    *ngIf="rulePattern.controls[i].get('attrname')?.hasError('required')">
                                                     <small>Attribute Name is required</small>
                                                 </div>
                                             </div>
-                                            <!-- <p class="fs-5">{{ rule?.attrname }}</p> -->
                                         </div>
                                         <div class="col-md-1 col-sm-2">
                                             <select formControlName="op" class="form-control" id="op">
                                                 <option value="null" disabled selected>select</option>
-                                                <option *ngFor="let op of operators; let i = index" [value]="op">
-                                                  <p [innerHTML]="OperatorsUnicode[op]" class="fs-5"></p></option>
-                                              </select>
-                                              <!-- <div *ngIf="values.controls[i].get('type')?.touched" class="text-danger">
-                                                <div *ngIf="values.controls[i].get('type')?.hasError('required')">
-                                                  <small>Field type is required</small>
-                                                </div>
-                                              </div> -->
-                                            <!-- <p [innerHTML]="OperatorsUnicode[rule.op]" class="fs-5"></p> -->
+                                                <option *ngFor="let op of getOperatorsList(i); let i = index" [value]="op">
+                                                    <p [innerHTML]="OperatorsUnicode[op]" class="fs-5"></p>
+                                                </option>
+                                            </select>
                                         </div>
                                         <div class="col-md-2 col-sm-5">
-                                            <input type="text" class="form-control" id="attrval" formControlName="attrval" placeholder="attrvalue"/>
-                                            <div *ngIf="rulePattern.controls[i].get('attrval')?.touched" class="text-danger">
-                                                <div *ngIf="rulePattern.controls[i].get('attrval')?.hasError('required')">
+                                            <ng-container *ngIf="schemaPatternDetails[i].type == 'enum'">
+                                                <select formControlName="attrval" class="form-control" id="attrval">
+                                                    <option value="null" disabled selected>select</option>
+                                                    <option *ngFor="let val of schemaPatternDetails[i].vals; let i = index" [value]="val">
+                                                        {{val}}
+                                                    </option>
+                                                </select>
+                                            </ng-container>
+                                            <ng-container *ngIf="schemaPatternDetails[i].type != 'enum'">
+                                                <input type="text" class="form-control" id="attrval"
+                                                formControlName="attrval" placeholder="attrvalue" />
+                                            </ng-container>
+                                            <div *ngIf="rulePattern.controls[i].get('attrval')?.touched"
+                                                class="text-danger">
+                                                <div
+                                                    *ngIf="rulePattern.controls[i].get('attrval')?.hasError('required')">
                                                     <small>Attribute Value is required</small>
                                                 </div>
                                             </div>
-                                            <!-- <p class="fs-5">{{ rule?.attrval }}</p> -->
                                         </div>
-                                        <div class="col-md-2 col-sm-5">
-                                            <button class="btn"  (click)="removerulePattern(i)">
-                                               <i class="fa fa-trash"></i>
-                                              </button>
+                                        <div class="col-md-1 col-sm-5">
+                                            <button class="btn" (click)="removerulePattern(i)">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
                                         </div>
+                                        <!-- <div class="col-md-2 col-sm-5">
+                                            <button class="btn" style="cursor: move;">
+                                                <i class="fa-solid fa-bars"></i>
+                                            </button>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
                             <div>
                                 <button class="btn realm" (click)="addPatterns()">Add</button>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="fs-20 mb-2">
+                                    <b>NextSteps:</b>
+                                    <p-multiSelect [options]="schemaData?.actionschema.tasks" formControlName="nextSteps"
+                                     placeholder="--Select Apps--"></p-multiSelect>
+                                    <!-- <p-multiSelect class="custom-ms" [options]="getNextStepsOptions(schemaData?.actionschema.tasks)" display="chip" formControlName="nextSteps"
+                                         defaultLabel="Select Course(s)" optionLabel="task">
+                                    </p-multiSelect> -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -105,7 +136,7 @@
             <button class="btn p-1 mt-1 realm" (click)="isEdit = !isEdit" [hidden]="isEdit">Edit
                 <i class="fa-regular fa-pen-to-square mt-2 mb-20"></i>
             </button>
-            <button class="btn p-1 mt-1 realm"  [hidden]="!isEdit">Save
+            <button class="btn p-1 mt-1 realm" (click)="isEdit = !isEdit" [hidden]="!isEdit" (click)="test()">Save
                 <i class="fa-regular fa-pen-to-square mt-2 mb-20"></i>
             </button>
             <!-- <button type="button" style="float: right;" class="btn btn-secondary" (click)="closeModal()">Close</button> -->

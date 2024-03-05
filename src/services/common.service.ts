@@ -95,4 +95,21 @@ isObjectEmpty(objectName: any) {
     this.isLoading = false;
   }
 
+  setToLocalStorage(key:string,value:any){
+    localStorage.setItem(key,JSON.stringify(value));
+  }
+
+  getFromLocalStorage(key:string){
+    let data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : {};
+  }
+
+  removeFromLocalStorage(key:string){
+    localStorage.removeItem(key);
+  }
+
+  clearFromLocalStorage(){
+    localStorage.clear();
+  }
+
 }
