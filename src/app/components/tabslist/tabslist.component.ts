@@ -58,9 +58,6 @@ export class TabslistComponent {
 						RTree: data,
 						RTreeRulesets: this.FinalRulesetsList
 					});
-
-					console.log("RTree: ", data)
-					console.log('RtreeList', this.FinalRulesetsList)
 				}
 				this._commonService.hideLoader()
 			}

@@ -29,9 +29,9 @@
                         <span class="h6"> {{Rule && Rule.ruleActions.tasks[0]}}...</span>&nbsp;
                         <span>
                             <b>{{Rule && Rule.ruleActions.tasks.length > 1 ? 'NextStep Tags' : 'NextStep Tag'}}:</b>
-                            <span *ngFor="let property of Rule?.ruleActions?.properties?.slice(0, 1)">
-                                <span *ngFor="let prop of property | keyvalue" class="h6"> {{ prop.key }} - {{
-                                    prop.value }}...</span>
+                            <span class="h6" *ngFor="let property of Rule?.ruleActions?.properties?.slice(0, 1)">
+                                {{ property.name }} - {{
+                                    property.val }}...
                             </span>
                         </span>
                     </div>

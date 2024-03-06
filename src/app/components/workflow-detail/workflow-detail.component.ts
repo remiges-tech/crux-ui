@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { RTree, RTreeRulesets } from 'src/models/common-interfaces';
+import { RTree, RTreeRulesets, SchemaDetails } from 'src/models/common-interfaces';
 import { OperatorsUnicode } from 'src/services/constants.service';
 
 @Component({
@@ -10,6 +10,7 @@ import { OperatorsUnicode } from 'src/services/constants.service';
 export class WorkflowDetailComponent {
   @Input({ required: true }) RTree?: RTree[];
   @Input({ required: true }) RTreeRulesets?: RTreeRulesets;
+  @Input({ required: true }) schemaData?: SchemaDetails;
   OperatorsUnicode: any = OperatorsUnicode;
 
 }

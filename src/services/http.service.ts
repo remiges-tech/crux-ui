@@ -11,12 +11,12 @@ export class HttpService {
     fetchData(dataObj: any): Observable<any> {
         let url = dataObj.api_url;
         let data = dataObj.param_data;
-        switch (true) {
-            case dataObj.method == 'post':
+        switch (dataObj.method) {
+            case 'post':
                 return this._httpClient.post<any>(url, data).pipe(
                     timeout(1000), catchError(this.handleError)
                 );
-            case dataObj.method == 'get':
+            case 'get':
                 return this._httpClient.get<any>(url, data).pipe(
                     timeout(1000), catchError(this.handleError)
                 );

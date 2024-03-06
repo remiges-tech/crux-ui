@@ -1,11 +1,10 @@
 import { Component, Inject } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { App, RTree, RulePatternTerm, RuleSet, SchemaDetails } from 'src/models/common-interfaces';
+import { RTree, RulePatternTerm, RuleSet, SchemaDetails, SchemaPatternAttr } from 'src/models/common-interfaces';
 import { OperatorsUnicode } from 'src/services/constants.service';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { CommonService } from 'src/services/common.service';
-interface DataInterface {
+import { checkConstraints } from 'src/customValidators/rule.contraints.service';
+export interface DataInterface {
     type: string,
     vals?: string[],
     valmin?: number,
@@ -19,80 +18,102 @@ interface DataInterface {
     styleUrls: ['./rule-modal.component.scss']
 })
 export class RuleModalComponent {
+    attrNameList: string[] = [];
     isEdit: boolean = false;
     Rule?: RTree;
     Ruleset?: RuleSet;
-    RuleForm !: FormGroup;
-    OperatorsUnicode: any = OperatorsUnicode;
+    RuleForm: FormGroup = this.formBuilder.group({
+        rulePattern: this.formBuilder.array([]),
+        nextSteps: [[]],
+        nextStepTags: this.formBuilder.array([])
+    });
+
+    OperatorsUnicode: { [key: string]: string } = OperatorsUnicode;
     operators = ['eq', 'gt', 'lt', 'ge', 'le', 'ne']
     schemaData?: SchemaDetails;
-    // nextstepList?:App[]=[];
-    schemaPatternDetails:DataInterface[]=[]
+    schemaPatternDetails: DataInterface[] = []
+
     constructor(@Inject(MAT_DIALOG_DATA) public data:
-        { Rule: RTree, Ruleset: RuleSet },
+        { Rule: RTree, Ruleset: RuleSet, schemaData: SchemaDetails },
         private dialog: MatDialogRef<RuleModalComponent>,
-        private formBuilder: FormBuilder, private _commonService: CommonService) {
-        this.schemaData = this._commonService.getFromLocalStorage('SCHEMADATA');
-        // Building a form group for a rule
-        this.RuleForm = this.formBuilder.group({
-            rulePattern: this.formBuilder.array([]),
-            nextSteps: new FormControl([]),
-            nextStepTags: this.formBuilder.array([])
-        })
+        private formBuilder: FormBuilder) {
+
         if (data) {
             this.Rule = data.Rule
-            this.Rule.rulePattern.forEach((pattern: RulePatternTerm) => {
-                this.addPatterns(pattern.attrname, pattern.op, pattern.attrval);
-            })
-
-            // this.Rule.ruleActions.tasks.concate(this.RuleForm.controls['nextSteps'].value)
             this.Ruleset = data.Ruleset
-
-            console.log(this.RuleForm.value, 'RuleForm')
+            this.schemaData = data.schemaData
+            this.patchValues();
+            this.getAttrNameList();
         }
     }
 
+    patchValues() {
+        if (this.Rule == undefined) {
+            return;
+        }
 
-    test(){
-      console.log( this.RuleForm.controls['nextSteps'].value)  
+        this.Rule.rulePattern.forEach((pattern: RulePatternTerm) => {
+            this.addPatterns(pattern.attrname, pattern.op, pattern.attrval);
+        })
+        this.RuleForm.patchValue({ nextSteps: this.Rule.ruleActions.tasks })
+    }
+
+    onAttrNameChangeHandler(selectedAttrName: any, index: number) {
+        this.schemaPatternDetails[index] = this.getTypeFromSchema(selectedAttrName.target.value)
+        this.getAttrNameList();
+    }
+
+    getAttrNameList() {
+        this.attrNameList = []
+        this.schemaData?.patternschema.attr.forEach((attribute: SchemaPatternAttr) => {
+            if (this.isAttrNameUsed(attribute.name)) {
+                return
+            }
+
+            this.attrNameList.push(attribute.name)
+        })
+    }
+
+    isAttrNameUsed(attrName: string) {
+        return this.rulePattern.controls.some((control: any) => control.get('attrname').value == attrName)
     }
 
     get rulePattern() {
         return this.RuleForm.get('rulePattern') as FormArray;
     }
 
-    get nextSteps() {
-        return this.RuleForm.get('nextSteps') as FormControl;
-    }
-
     addPatterns(attrname?: string, op?: string, attrval?: any) {
+        if (this.rulePattern.length > this.schemaData?.patternschema.attr.length! - 1) {
+            return
+        }
+
+        this.schemaPatternDetails.push(this.getTypeFromSchema(attrname ?? ''))
         const rPattern = this.formBuilder.group({
-            attrname: [{ value: attrname ?? '', disabled: !!attrname }, [Validators.required]],
-            op: [op ?? 'null', [Validators.required]],
-            attrval: [attrval ?? '', [Validators.required]],
+            attrname: [{ value: attrname ?? '', disabled: attrname ? true : false }, [Validators.required]],
+            op: [op ?? '', [Validators.required]],
+            attrval: [attrval ?? '', [Validators.required, checkConstraints(this.rulePattern.length, this.schemaPatternDetails)]]
         });
         this.rulePattern.push(rPattern)
-        this.schemaPatternDetails.push(this.getTypeFromSchema(attrname ?? ''))
+        this.getAttrNameList();
     }
 
     // Function to remove a field from the FormArray
-    removerulePattern(index: number) {
+    removeRulePattern(index: number) {
         this.rulePattern.removeAt(index);
         this.schemaPatternDetails.splice(index, 1);
+        this.getAttrNameList();
     }
 
-    
+    // onPatternDrop(event: CdkDragDrop<any[]>) {
+    //     moveItemInArray(this.rulePattern.controls, event.previousIndex, event.currentIndex);
+    // }
 
-    onPatternDrop(event: CdkDragDrop<any[]>) {
-        moveItemInArray(this.rulePattern.controls, event.previousIndex, event.currentIndex);
-    }
-
-    getTypeFromSchema(attrname:string){
-        let data:DataInterface = {
+    getTypeFromSchema(attrname: string) {
+        let data: DataInterface = {
             type: 'str'
         }
-        this.schemaData?.patternschema.attr.forEach((pattern:any) => {
-            if(pattern.name == attrname){
+        this.schemaData?.patternschema.attr.forEach((pattern: any) => {
+            if (pattern.name == attrname) {
                 data.type = pattern.valtype
                 data.vals = pattern.vals
                 data.valmin = pattern.valmin
@@ -104,36 +125,24 @@ export class RuleModalComponent {
         return data
     }
 
-    getOperatorsList(index:number){
-        if(this.schemaPatternDetails[index].type == 'enum'){
-            return ['eq','ne']
+    getOperatorsList(index: number) {
+        if (this.schemaPatternDetails[index].type == 'enum' || this.schemaPatternDetails[index].type == 'bool' || this.schemaPatternDetails[index].type == 'str') {
+            return ['eq', 'ne']
         }
         return this.operators;
-    }
-
-    getNextStepsOptions(tasks:string[]):any{
-        let task =  [...tasks.map((item:string) => {
-            return {name: item}
-        })]
-        return task;
-    }
-
-    // getNextStepsOptions(tasks:string[]){
-    //     let task =  [...tasks.map((item:string) => {
-    //                 return {name: item}
-    //             })]
-    //             return task
-    // }
-
-    getRulesetName() {
-        if (this.Ruleset == undefined || this.Rule == undefined) {
-            return ''
-        }
-        return this.Ruleset.name
     }
 
     closeModal() {
         this.dialog.close();
     }
 
+    saveHandler() {
+        if(this.RuleForm.invalid){
+            return
+        }
+        this.rulePattern.controls.forEach(control => control.enable())
+        this.Rule!.rulePattern = this.RuleForm.value.rulePattern
+        this.rulePattern.controls.forEach(control => control.get('attrname')?.disable())
+        this.isEdit = false;
+    }
 }

@@ -23,11 +23,6 @@ export class BREschemaService {
         mapcol: false,
       };
       let resp = this._httpService.fetchData(dataObj);
-      this._commonService.log({
-        fileName: this.fileName,
-        functionName: 'getBRESchemaList',
-        msg: resp
-      });
       return resp;
     } catch (error) {
       this._commonService.log({
@@ -48,11 +43,6 @@ export class BREschemaService {
         mapcol: false,
       };
       let resp = this._httpService.fetchData(dataObj);
-      this._commonService.log({
-        fileName: this.fileName,
-        functionName: 'getBRESchemaDetail',
-        msg: resp
-      });
       return resp;
     } catch (error) {
       alert(error)
@@ -74,11 +64,6 @@ export class BREschemaService {
         mapcol: false,
       };
       let resp = this._httpService.fetchData(dataObj);
-      this._commonService.log({
-        fileName: this.fileName,
-        functionName: 'getBREWorkflowList',
-        msg: resp
-      });
       return resp;
     } catch (error) {
       this._commonService.log({
@@ -99,11 +84,6 @@ export class BREschemaService {
         mapcol: false,
       };
       let resp = this._httpService.fetchData(dataObj);
-      this._commonService.log({
-        fileName: this.fileName,
-        functionName: 'getBREWorkflowDetails',
-        msg: resp
-      });
       return resp;
     } catch (error) {
       alert(error)

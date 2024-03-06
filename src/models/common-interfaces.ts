@@ -10,12 +10,35 @@ export interface SchemaDetails {
     slice: number,
     app: string,
     class: string,
-    patternschema: any,
-    actionschema: any,
+    patternschema: SchemaPattern,
+    actionschema: SchemaAction,
     createdat: string,
     createdby: string,
     editedat: string,
     editedby: string
+}
+
+export interface SchemaPattern{
+    class: string,
+    attr: SchemaPatternAttr[]
+}
+
+export interface SchemaPatternAttr{
+    name: string,
+    shortdesc: string,
+    longdesc: string,
+    valtype: string,
+    vals?: string[],
+    valmin?: number
+    valmax?: number
+    lenmin?: number
+    lenmax?: number
+}
+
+export interface SchemaAction{
+    class: string,
+    tasks: string[],
+    properties: string[]
 }
 
 export interface AppInfo {
@@ -96,9 +119,14 @@ export interface RuleActions {
 	exit?:   boolean
 }
 
+// interface Property {
+//   [key: string]: string
+// }
+
 interface Property {
-  [key: string]: string
-}
+    name: string,
+    val: string
+  }
 
 export interface App {
     name: string,

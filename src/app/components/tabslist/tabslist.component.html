@@ -47,13 +47,13 @@
         <!-- Second Section: Actionschema details -->
         <div class="row">
           <div class=" fs-20 mb-2 text-color">
-            <b>{{schemaData.actionschema?.tasks.length > 1 ? 'NextSteps' : 'NextStep'}}:</b>
-            <span class="badge bg-primary mx-2 fs-10" *ngFor="let task of schemaData.actionschema.tasks">{{ task
+            <b>{{schemaData.actionschema.tasks.length > 1 ? 'NextSteps' : 'NextStep'}}:</b>
+            <span class="badge bg-primary mx-2 fs-10" *ngFor="let task of schemaData?.actionschema?.tasks">{{ task
               }}</span>
           </div>
           <div class=" mt-2 fs-20 text-color">
-            <b>{{schemaData.actionschema?.properties.length > 1 ? 'NextStep Tags' : 'NextStep Tag'}}:</b>
-            <span class="badge bg-success mx-2 fs-10" *ngFor="let property of schemaData.actionschema.properties">{{
+            <b>{{schemaData.actionschema.properties.length > 1 ? 'NextStep Tags' : 'NextStep Tag'}}:</b>
+            <span class="badge bg-success mx-2 fs-10" *ngFor="let property of schemaData?.actionschema?.properties">{{
               property }}</span>
           </div>
         </div>
@@ -106,7 +106,7 @@
   <!-- Dynamic tab contents -->
   <ng-container *ngFor="let t of tabs">
     <div class="tab-pane fade show" id="{{t.name}}" role="tabpanel" aria-labelledby="rulesets-tab">
-      <app-workflow-detail [RTree]="t.RTree" [RTreeRulesets]="t.RTreeRulesets">
+      <app-workflow-detail [RTree]="t.RTree" [RTreeRulesets]="t.RTreeRulesets" [schemaData]="schemaData">
       </app-workflow-detail>
     </div>
   </ng-container>

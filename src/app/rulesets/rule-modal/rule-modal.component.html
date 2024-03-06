@@ -1,8 +1,9 @@
+<div class="overlay"></div>
 <div class="modal-dialog modal-md modal-dialog-centered" style="padding: 20px 10px;" role="document">
     <div class="modal-content">
         <div class="modal-header justify-content-between">
             <h5 class="modal-title fw-bold" id="ruleModalLabel">Rule Details</h5>
-            <h6 style="color: #777" class="modal-title" id="ruleModalLabel">{{getRulesetName()}}</h6>
+            <h6 style="color: #777" class="modal-title" id="ruleModalLabel">{{this.Ruleset?.name}}</h6>
             <button type="button" class="close" (click)="closeModal()" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -39,80 +40,107 @@
                             <div class="mt-4 fs-20">
                                 <b>{{(Rule && Rule.ruleActions.properties.length > 1) ? 'NextStep Tags' :
                                     'NextStepTag'}}:</b>
-                                <span *ngFor="let properties of Rule?.ruleActions?.properties">
-                                    <span class="badge bg-success mx-2 fs-10"
-                                        *ngFor="let property of properties | keyvalue">{{property.key}} - {{
-                                        property.value }}</span>
+                                <span class="badge bg-success mx-2 fs-10"
+                                    *ngFor="let property of Rule?.ruleActions?.properties">
+                                    {{property.name}} - {{
+                                    property.val }}
                                 </span>
                             </div>
                         </div>
                     </div>
                 </div>
             </ng-container>
+
+            <!-- Edit Rules -->
             <ng-container *ngIf="isEdit">
                 <div [formGroup]="RuleForm">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-12" formArrayName="rulePattern" cdkDropList
-                                (cdkDropListDropped)="onPatternDrop($event)">
-                                <div *ngFor="let rule of rulePattern.controls,let i = index" [formGroupName]="i"
-                                    >
+                            <div class="col-12" formArrayName="rulePattern">
+                                <div *ngFor="let rule of rulePattern.controls,let i = index" [formGroupName]="i">
                                     <div class="row mb-2">
                                         <div class="col-md-2 col-sm-5">
-                                            <input type="text" class="form-control" id="attrname"
-                                                formControlName="attrname" placeholder="attrname" />
+                                            <select (change)="onAttrNameChangeHandler($event,i)"
+                                                formControlName="attrname" class="form-control" id="{{i}}-attrName">
+                                                <option [value]="rulePattern.controls[i].get('attrname')?.value">
+                                                    {{rulePattern.controls[i].get('attrname')?.value}}</option>
+                                                <option *ngFor="let attrName of attrNameList; let i = index"
+                                                    [value]="attrName">
+                                                    {{attrName}}
+                                                </option>
+                                            </select>
                                             <div *ngIf="rulePattern.controls[i].get('attrname')?.touched"
                                                 class="text-danger">
                                                 <div
                                                     *ngIf="rulePattern.controls[i].get('attrname')?.hasError('required')">
-                                                    <small>Attribute Name is required</small>
+                                                    <small>Name is required</small>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-1 col-sm-2">
-                                            <select formControlName="op" class="form-control" id="op">
-                                                <option value="null" disabled selected>select</option>
-                                                <option *ngFor="let op of getOperatorsList(i); let i = index" [value]="op">
+                                            <select formControlName="op" class="form-control" id="{{i}}-op">
+                                                <option *ngFor="let op of getOperatorsList(i); let i = index"
+                                                    [value]="op">
                                                     <p [innerHTML]="OperatorsUnicode[op]" class="fs-5"></p>
                                                 </option>
                                             </select>
+                                            <div *ngIf="rulePattern.controls[i].get('op')?.touched" class="text-danger">
+                                                <div *ngIf="rulePattern.controls[i].get('op')?.hasError('required')">
+                                                    <small>Required</small>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-md-2 col-sm-5">
-                                            <ng-container *ngIf="schemaPatternDetails[i].type == 'enum'">
-                                                <select formControlName="attrval" class="form-control" id="attrval">
-                                                    <option value="null" disabled selected>select</option>
-                                                    <option *ngFor="let val of schemaPatternDetails[i].vals; let i = index" [value]="val">
-                                                        {{val}}
-                                                    </option>
-                                                </select>
-                                            </ng-container>
-                                            <ng-container *ngIf="schemaPatternDetails[i].type != 'enum'">
-                                                <input type="text" class="form-control" id="attrval"
-                                                formControlName="attrval" placeholder="attrvalue" />
+                                            <ng-container [ngSwitch]="schemaPatternDetails[i].type">
+                                                <!-- Input for type Bool -->
+                                                <ng-container *ngSwitchCase="'bool'">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" role="switch"
+                                                            id="{{i}}-attrval" formControlName="attrval">
+                                                    </div>
+                                                </ng-container>
+                                                <!-- Input for type enum -->
+                                                <ng-container *ngSwitchCase="'enum'">
+                                                    <select formControlName="attrval" class="form-control"
+                                                        id="{{i}}-attrval">
+                                                        <option value="null" disabled selected>select</option>
+                                                        <option
+                                                            *ngFor="let val of schemaPatternDetails[i].vals; let i = index"
+                                                            [value]="val">
+                                                            {{val}}
+                                                        </option>
+                                                    </select>
+                                                </ng-container>
+                                                <!-- Input for rest of the type -->
+                                                <ng-container *ngSwitchDefault>
+                                                    <input
+                                                        [type]="schemaPatternDetails[i].type == 'int' ? 'number' : 'text'"
+                                                        class="form-control" id="{{i}}-attrval"
+                                                        formControlName="attrval" placeholder="attrvalue" />
+                                                </ng-container>
                                             </ng-container>
                                             <div *ngIf="rulePattern.controls[i].get('attrval')?.touched"
                                                 class="text-danger">
                                                 <div
                                                     *ngIf="rulePattern.controls[i].get('attrval')?.hasError('required')">
-                                                    <small>Attribute Value is required</small>
+                                                    <small>Value is required</small>
+                                                </div>
+                                                <div
+                                                    *ngIf="rulePattern.controls[i].get('attrval')?.hasError('ConstraintsError')">
+                                                    <small>{{rulePattern.controls[i].get('attrval')?.errors!['message'] }}</small>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-1 col-sm-5">
-                                            <button class="btn" (click)="removerulePattern(i)">
+                                            <button class="btn" (click)="removeRulePattern(i)">
                                                 <i class="fa fa-trash"></i>
                                             </button>
                                         </div>
-                                        <!-- <div class="col-md-2 col-sm-5">
-                                            <button class="btn" style="cursor: move;">
-                                                <i class="fa-solid fa-bars"></i>
-                                            </button>
-                                        </div> -->
                                     </div>
                                 </div>
                             </div>
                             <div>
-                                <button class="btn realm" (click)="addPatterns()">Add</button>
+                                <button class="btn realm add-btn" [disabled]="this.rulePattern.length > this.schemaData?.patternschema?.attr?.length!-1" (click)="addPatterns()">Add</button>
                             </div>
                         </div>
                         <hr>
@@ -120,11 +148,8 @@
                             <div class="col-md-12">
                                 <div class="fs-20 mb-2">
                                     <b>NextSteps:</b>
-                                    <p-multiSelect [options]="schemaData?.actionschema.tasks" formControlName="nextSteps"
-                                     placeholder="--Select Apps--"></p-multiSelect>
-                                    <!-- <p-multiSelect class="custom-ms" [options]="getNextStepsOptions(schemaData?.actionschema.tasks)" display="chip" formControlName="nextSteps"
-                                         defaultLabel="Select Course(s)" optionLabel="task">
-                                    </p-multiSelect> -->
+                                    <p-multiSelect class="w-100" [options]="schemaData?.actionschema?.tasks"
+                                        formControlName="nextSteps" placeholder="--Select Apps--"></p-multiSelect>
                                 </div>
                             </div>
                         </div>
@@ -136,10 +161,9 @@
             <button class="btn p-1 mt-1 realm" (click)="isEdit = !isEdit" [hidden]="isEdit">Edit
                 <i class="fa-regular fa-pen-to-square mt-2 mb-20"></i>
             </button>
-            <button class="btn p-1 mt-1 realm" (click)="isEdit = !isEdit" [hidden]="!isEdit" (click)="test()">Save
+            <button class="btn p-1 mt-1 realm" [disabled]="RuleForm.invalid" (click)="saveHandler()" [hidden]="!isEdit">Save
                 <i class="fa-regular fa-pen-to-square mt-2 mb-20"></i>
             </button>
-            <!-- <button type="button" style="float: right;" class="btn btn-secondary" (click)="closeModal()">Close</button> -->
         </div>
     </div>
 </div>

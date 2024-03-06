@@ -1,9 +1,7 @@
 import { Component, Input, inject } from '@angular/core';
-import { RTree, RTreeRulesets, RulePatternTerm } from 'src/models/common-interfaces';
+import { RTree, RTreeRulesets, RulePatternTerm, SchemaDetails } from 'src/models/common-interfaces';
 import { CommonService } from 'src/services/common.service';
 import { OperatorsUnicode } from 'src/services/constants.service';
-import { MatDialog } from '@angular/material/dialog';
-import { RuleModalComponent } from '../rule-modal/rule-modal.component';
 
 @Component({
   selector: 'app-do-match',
@@ -13,22 +11,16 @@ import { RuleModalComponent } from '../rule-modal/rule-modal.component';
 export class DoMatchComponent {
   @Input({ required: true }) Rule?: RTree;
   @Input({ required: true }) rulesets?: RTreeRulesets;
+  @Input({ required: true }) schemaData?: SchemaDetails;
   OperatorsUnicode: any = OperatorsUnicode;
   @Input() childHovered: boolean = false;
 
   private _commonService = inject(CommonService);
 
-  constructor(private dialog: MatDialog) { }
+  constructor() { }
 
   openRuleModal(): void {
-    if(this.Rule == undefined){
-      return;
-    }
-    let ruleset = this.rulesets ? this.rulesets[this.Rule.setname] : null;
-    this.dialog.open(RuleModalComponent, {
-      width: '80%',
-      data: { Rule: this.Rule, Ruleset: ruleset}
-    });
+    this._commonService.openRuleModal(this.Rule!, this.rulesets!,this.schemaData!)
   }
 
   toggleChildHover(state: boolean) {
