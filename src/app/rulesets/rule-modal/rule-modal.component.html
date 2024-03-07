@@ -62,10 +62,10 @@
                                         <div class="col-md-2 col-sm-5">
                                             <select (change)="onAttrNameChangeHandler($event,i)"
                                                 formControlName="attrname" class="form-control" id="{{i}}-attrName">
-                                                <option [value]="rulePattern.controls[i].get('attrname')?.value">
-                                                    {{rulePattern.controls[i].get('attrname')?.value}}</option>
-                                                <option *ngFor="let attrName of attrNameList; let i = index"
-                                                    [value]="attrName">
+                                                <option disabled value="">
+                                                    Select
+                                                </option>
+                                                <option *ngFor="let attrName of attrNameList" [value]="attrName">
                                                     {{attrName}}
                                                 </option>
                                             </select>
@@ -79,8 +79,10 @@
                                         </div>
                                         <div class="col-md-1 col-sm-2">
                                             <select formControlName="op" class="form-control" id="{{i}}-op">
-                                                <option *ngFor="let op of getOperatorsList(i); let i = index"
-                                                    [value]="op">
+                                                <option disabled value="">
+                                                    Select
+                                                </option>
+                                                <option *ngFor="let op of getOperatorsList(i)" [value]="op">
                                                     <p [innerHTML]="OperatorsUnicode[op]" class="fs-5"></p>
                                                 </option>
                                             </select>
@@ -91,7 +93,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-2 col-sm-5">
-                                            <ng-container [ngSwitch]="schemaPatternDetails[i].type">
+                                            <ng-container [ngSwitch]="schemaPatternDetails[i].valtype">
                                                 <!-- Input for type Bool -->
                                                 <ng-container *ngSwitchCase="'bool'">
                                                     <div class="form-check form-switch">
@@ -103,9 +105,10 @@
                                                 <ng-container *ngSwitchCase="'enum'">
                                                     <select formControlName="attrval" class="form-control"
                                                         id="{{i}}-attrval">
-                                                        <option value="null" disabled selected>select</option>
-                                                        <option
-                                                            *ngFor="let val of schemaPatternDetails[i].vals; let i = index"
+                                                        <option disabled value="">
+                                                            Select
+                                                        </option>
+                                                        <option *ngFor="let val of schemaPatternDetails[i].vals"
                                                             [value]="val">
                                                             {{val}}
                                                         </option>
@@ -114,7 +117,7 @@
                                                 <!-- Input for rest of the type -->
                                                 <ng-container *ngSwitchDefault>
                                                     <input
-                                                        [type]="schemaPatternDetails[i].type == 'int' ? 'number' : 'text'"
+                                                        [type]="schemaPatternDetails[i].valtype == 'int' ? 'number' : 'text'"
                                                         class="form-control" id="{{i}}-attrval"
                                                         formControlName="attrval" placeholder="attrvalue" />
                                                 </ng-container>
@@ -127,7 +130,8 @@
                                                 </div>
                                                 <div
                                                     *ngIf="rulePattern.controls[i].get('attrval')?.hasError('ConstraintsError')">
-                                                    <small>{{rulePattern.controls[i].get('attrval')?.errors!['message'] }}</small>
+                                                    <small>{{rulePattern.controls[i].get('attrval')?.errors!['message']
+                                                        }}</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -140,16 +144,31 @@
                                 </div>
                             </div>
                             <div>
-                                <button class="btn realm add-btn" [disabled]="this.rulePattern.length > this.schemaData?.patternschema?.attr?.length!-1" (click)="addPatterns()">Add</button>
+                                <button class="btn realm add-btn" (click)="addPatterns()">Add</button>
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="fs-20 mb-2">
-                                    <b>NextSteps:</b>
-                                    <p-multiSelect class="w-100" [options]="schemaData?.actionschema?.tasks"
-                                        formControlName="nextSteps" placeholder="--Select Apps--"></p-multiSelect>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <b class="m-2">{{RuleForm.get('nextSteps')?.value.length > 1 ? 'NextSteps:'
+                                                : 'NextStep:'}}</b>
+                                            <p-multiSelect [filter]="false" class="w-100" display="chip"
+                                                [options]="SchemaData?.actionschema?.tasks" formControlName="nextSteps"
+                                                placeholder="--Select next step--"></p-multiSelect>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="d-flex align-items-center">
+                                                <b>Mark done: </b>
+                                            <div style="display: inline-flex;" class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" [checked]="RuleForm.get('nextSteps')?.value.includes('done')"
+                                                    (change)="markTaskDone($event.target)" role="switch" id="isdone">
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -161,7 +180,8 @@
             <button class="btn p-1 mt-1 realm" (click)="isEdit = !isEdit" [hidden]="isEdit">Edit
                 <i class="fa-regular fa-pen-to-square mt-2 mb-20"></i>
             </button>
-            <button class="btn p-1 mt-1 realm" [disabled]="RuleForm.invalid" (click)="saveHandler()" [hidden]="!isEdit">Save
+            <button class="btn p-1 mt-1 realm" [disabled]="RuleForm.invalid" (click)="saveHandler()"
+                [hidden]="!isEdit">Done
                 <i class="fa-regular fa-pen-to-square mt-2 mb-20"></i>
             </button>
         </div>

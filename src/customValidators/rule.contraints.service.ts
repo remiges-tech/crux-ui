@@ -1,7 +1,7 @@
 import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
-import { DataInterface } from 'src/app/rulesets/rule-modal/rule-modal.component';
+import { SchemaPatternAttr } from 'src/models/common-interfaces';
 
-export function checkConstraints(index:number,schemaPatternDetails:DataInterface[]): ValidatorFn {
+export function checkConstraints(index:number,schemaPatternDetails:SchemaPatternAttr[]): ValidatorFn {
     return (control:AbstractControl) : ValidationErrors | null => {
         const value = control.value;
 

@@ -99,14 +99,14 @@ export class CommonService {
     this.isLoading = false;
   }
 
-  openRuleModal(Rule: RTree, rulesets: RTreeRulesets, schemaData:SchemaDetails) {
-    if(Rule == undefined || rulesets == undefined || schemaData == undefined){
+  openRuleModal(rule: RTree, rulesets: RTreeRulesets, schemaData:SchemaDetails) {
+    if(rule == undefined || rulesets == undefined || schemaData == undefined){
       return;
     }
-    let ruleset = rulesets ? rulesets[Rule.setname] : null;
+    let ruleset = rulesets ? rulesets[rule.setname] : null;
     this.dialog.open(RuleModalComponent, {
       width: '80%',
-      data: { Rule: Rule, Ruleset: ruleset, schemaData: schemaData}
+      data: { rule: rule, Ruleset: ruleset, schemaData: schemaData}
     });
   }
 

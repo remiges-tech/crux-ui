@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { RTree, RulePatternTerm, RuleSet, SchemaDetails, SchemaPatternAttr } from 'src/models/common-interfaces';
 import { OperatorsUnicode } from 'src/services/constants.service';
 import { checkConstraints } from 'src/customValidators/rule.contraints.service';
-export interface DataInterface {
+export interface SchemaPattern {
     type: string,
     vals?: string[],
     valmin?: number,
@@ -24,24 +24,24 @@ export class RuleModalComponent {
     Ruleset?: RuleSet;
     RuleForm: FormGroup = this.formBuilder.group({
         rulePattern: this.formBuilder.array([]),
-        nextSteps: [[]],
+        nextSteps: [[], [Validators.required]],
         nextStepTags: this.formBuilder.array([])
     });
 
     OperatorsUnicode: { [key: string]: string } = OperatorsUnicode;
     operators = ['eq', 'gt', 'lt', 'ge', 'le', 'ne']
-    schemaData?: SchemaDetails;
-    schemaPatternDetails: DataInterface[] = []
+    SchemaData?: SchemaDetails;
+    schemaPatternDetails: SchemaPatternAttr[] = []
 
     constructor(@Inject(MAT_DIALOG_DATA) public data:
-        { Rule: RTree, Ruleset: RuleSet, schemaData: SchemaDetails },
+        { rule: RTree, Ruleset: RuleSet, schemaData: SchemaDetails },
         private dialog: MatDialogRef<RuleModalComponent>,
         private formBuilder: FormBuilder) {
 
         if (data) {
-            this.Rule = data.Rule
+            this.Rule = data.rule
             this.Ruleset = data.Ruleset
-            this.schemaData = data.schemaData
+            this.SchemaData = data.schemaData
             this.patchValues();
             this.getAttrNameList();
         }
@@ -55,27 +55,37 @@ export class RuleModalComponent {
         this.Rule.rulePattern.forEach((pattern: RulePatternTerm) => {
             this.addPatterns(pattern.attrname, pattern.op, pattern.attrval);
         })
-        this.RuleForm.patchValue({ nextSteps: this.Rule.ruleActions.tasks })
+        if (this.Rule.ruleActions.tasks.includes('done')) {
+            this.RuleForm.get('nextSteps')?.disable();
+            this.RuleForm.get('nextSteps')?.patchValue(['done'])
+        }else{
+            this.RuleForm.get('nextSteps')?.enable();
+            this.RuleForm.patchValue({ nextSteps: this.Rule.ruleActions.tasks })
+        }
     }
 
     onAttrNameChangeHandler(selectedAttrName: any, index: number) {
+        this.rulePattern.controls[index].patchValue({ op: '', attrval: '' })
         this.schemaPatternDetails[index] = this.getTypeFromSchema(selectedAttrName.target.value)
-        this.getAttrNameList();
+        console.log(this.rulePattern.value)
     }
 
     getAttrNameList() {
         this.attrNameList = []
-        this.schemaData?.patternschema.attr.forEach((attribute: SchemaPatternAttr) => {
-            if (this.isAttrNameUsed(attribute.name)) {
-                return
-            }
-
+        this.SchemaData?.patternschema.attr.forEach((attribute: SchemaPatternAttr) => {
             this.attrNameList.push(attribute.name)
         })
     }
 
-    isAttrNameUsed(attrName: string) {
-        return this.rulePattern.controls.some((control: any) => control.get('attrname').value == attrName)
+    markTaskDone(isChecked: any) {
+        let nextsteps = this.RuleForm.get('nextSteps')
+        if (isChecked.checked) {
+            nextsteps?.disable();
+            nextsteps?.patchValue(['done'])
+        } else {
+            nextsteps?.patchValue([])
+            nextsteps?.enable();
+        }
     }
 
     get rulePattern() {
@@ -83,25 +93,20 @@ export class RuleModalComponent {
     }
 
     addPatterns(attrname?: string, op?: string, attrval?: any) {
-        if (this.rulePattern.length > this.schemaData?.patternschema.attr.length! - 1) {
-            return
-        }
 
         this.schemaPatternDetails.push(this.getTypeFromSchema(attrname ?? ''))
         const rPattern = this.formBuilder.group({
-            attrname: [{ value: attrname ?? '', disabled: attrname ? true : false }, [Validators.required]],
+            attrname: [attrname ?? '', [Validators.required]],
             op: [op ?? '', [Validators.required]],
             attrval: [attrval ?? '', [Validators.required, checkConstraints(this.rulePattern.length, this.schemaPatternDetails)]]
         });
         this.rulePattern.push(rPattern)
-        this.getAttrNameList();
     }
 
     // Function to remove a field from the FormArray
     removeRulePattern(index: number) {
         this.rulePattern.removeAt(index);
         this.schemaPatternDetails.splice(index, 1);
-        this.getAttrNameList();
     }
 
     // onPatternDrop(event: CdkDragDrop<any[]>) {
@@ -109,12 +114,15 @@ export class RuleModalComponent {
     // }
 
     getTypeFromSchema(attrname: string) {
-        let data: DataInterface = {
-            type: 'str'
+        let data: SchemaPatternAttr = {
+            name: attrname,
+            shortdesc: '',
+            longdesc: '',
+            valtype: 'str'
         }
-        this.schemaData?.patternschema.attr.forEach((pattern: any) => {
+        this.SchemaData?.patternschema.attr.forEach((pattern: any) => {
             if (pattern.name == attrname) {
-                data.type = pattern.valtype
+                data.valtype = pattern.valtype
                 data.vals = pattern.vals
                 data.valmin = pattern.valmin
                 data.valmax = pattern.valmax
@@ -126,7 +134,7 @@ export class RuleModalComponent {
     }
 
     getOperatorsList(index: number) {
-        if (this.schemaPatternDetails[index].type == 'enum' || this.schemaPatternDetails[index].type == 'bool' || this.schemaPatternDetails[index].type == 'str') {
+        if (this.schemaPatternDetails[index].valtype == 'enum' || this.schemaPatternDetails[index].valtype == 'bool') {
             return ['eq', 'ne']
         }
         return this.operators;
@@ -137,12 +145,11 @@ export class RuleModalComponent {
     }
 
     saveHandler() {
-        if(this.RuleForm.invalid){
+        if (this.RuleForm.invalid) {
             return
         }
-        this.rulePattern.controls.forEach(control => control.enable())
         this.Rule!.rulePattern = this.RuleForm.value.rulePattern
-        this.rulePattern.controls.forEach(control => control.get('attrname')?.disable())
+        this.Rule!.ruleActions.tasks = this.RuleForm.get('nextSteps')?.value
         this.isEdit = false;
     }
 }
