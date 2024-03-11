@@ -9,6 +9,7 @@
             </button>
         </div>
         <div class="modal-body">
+            <!--Display Rule Screen-->
             <ng-container *ngIf="!isEdit">
                 <div class="container-fluid">
                     <div class="row">
@@ -50,8 +51,7 @@
                     </div>
                 </div>
             </ng-container>
-
-            <!-- Edit Rules -->
+            <!-- Edit Rule Screen -->
             <ng-container *ngIf="isEdit">
                 <div [formGroup]="RuleForm">
                     <div class="container-fluid">
@@ -75,6 +75,10 @@
                                                     *ngIf="rulePattern.controls[i].get('attrname')?.hasError('required')">
                                                     <small>Name is required</small>
                                                 </div>
+                                                <div
+                                                    *ngIf="rulePattern.controls[i].get('attrname')?.hasError('validationError')">
+                                                    <small>Validation is required</small>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-1 col-sm-2">
@@ -95,10 +99,10 @@
                                         <div class="col-md-2 col-sm-5">
                                             <ng-container [ngSwitch]="schemaPatternDetails[i].valtype">
                                                 <!-- Input for type Bool -->
-                                                <ng-container *ngSwitchCase="'bool'">
-                                                    <div class="form-check form-switch">
+                                                <ng-container *ngSwitchCase="'bool'" >
+                                                    <div class="form-check form-switch" >
                                                         <input class="form-check-input" type="checkbox" role="switch"
-                                                            id="{{i}}-attrval" formControlName="attrval">
+                                                            id="{{i}}-attrval" formControlName="attrval" >
                                                     </div>
                                                 </ng-container>
                                                 <!-- Input for type enum -->
@@ -148,6 +152,7 @@
                             </div>
                         </div>
                         <hr>
+                        <!--Edit NextStep-->
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="fs-20 mb-2">
@@ -162,12 +167,70 @@
                                         <div class="col-md-6">
                                             <div class="d-flex align-items-center">
                                                 <b>Mark done: </b>
-                                            <div style="display: inline-flex;" class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" [checked]="RuleForm.get('nextSteps')?.value.includes('done')"
-                                                    (change)="markTaskDone($event.target)" role="switch" id="isdone">
-                                            </div>
+                                                <div style="display: inline-flex;" class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        [checked]="RuleForm.get('nextSteps')?.value.includes('done')"
+                                                        (change)="markTaskDone($event.target)" role="switch"
+                                                        id="isdone">
+                                                </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Edit NextStep Tags-->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="fs-20 mb-2" formArrayName="nextStepTags">
+                                    <b class="m-2">{{RuleForm.get('nextStepTags')?.value.length > 1 ? 'NextStep Tags:'
+                                        : 'NextStep Tag:'}}</b>
+                                    <div *ngFor="let property of nextStepTags.controls,let i = index"
+                                        [formGroupName]="i">
+                                        <div class="row mb-2">
+                                            <div class="col-md-3 col-sm-5">
+                                                <select formControlName="name" class="form-control" id="{{i}}-name">
+                                                    <option disabled value="">
+                                                        Select
+                                                    </option>
+                                                    <option *ngFor="let propName of propertiesNameList" [value]="propName">
+                                                        {{propName}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="nextStepTags.controls[i].get('name')?.touched"
+                                                    class="text-danger">
+                                                    <div
+                                                        *ngIf="nextStepTags.controls[i].get('name')?.hasError('required')">
+                                                        <small>Name is required</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-5">
+                                                <select formControlName="val" class="form-control" id="{{i}}-val">
+                                                    <option disabled value="">
+                                                        Select
+                                                    </option>
+                                                    <option *ngFor="let val of RuleForm.get('nextSteps')?.value" [value]="val">
+                                                        {{val}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="nextStepTags.controls[i].get('val')?.touched"
+                                                    class="text-danger">
+                                                    <div
+                                                        *ngIf="nextStepTags.controls[i].get('val')?.hasError('required')">
+                                                        <small>Value is required</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1 col-sm-5">
+                                                <button class="btn" (click)="removeProperties(i)">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div >
+                                        <button class="btn realm add-btn" [disabled]="RuleForm.get('nextStepTags')?.value.length >= 1" (click)="addPropeties()">Add</button>
                                     </div>
                                 </div>
                             </div>

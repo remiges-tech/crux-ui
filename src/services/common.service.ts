@@ -110,4 +110,26 @@ export class CommonService {
     });
   }
 
+   // Save data to localStorage
+  saveToLocalStorage(key:string, data:string){
+    localStorage.setItem(key, JSON.stringify(data))
+  }
+
+
+  // Retrieve data from localStorage
+  getFromLocalStorage(key: string){
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
+  }
+
+  
+  removeFromLocalStorage(key: string): void {
+    localStorage.removeItem(key);
+  }
+
+  // Clear all data from localStorage
+  clearFromLocalStorage(): void {
+    localStorage.clear();
+  }
+  
 }

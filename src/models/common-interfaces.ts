@@ -123,7 +123,7 @@ export interface RuleActions {
 //   [key: string]: string
 // }
 
-interface Property {
+export interface Property {
     name: string,
     val: string
   }
