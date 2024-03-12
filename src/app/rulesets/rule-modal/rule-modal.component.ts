@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Property, RTree, RulePatternTerm, RuleSet, SchemaDetails, SchemaPatternAttr } from 'src/models/common-interfaces';
 import { OperatorsUnicode } from 'src/services/constants.service';
-import { checkAttributes, checkConstraints } from 'src/customValidators/rule.contraints.service';
+import { checkConstraints } from 'src/customValidators/rule.contraints.service';
 import { CommonService } from 'src/services/common.service';
 export interface SchemaPattern {
     type: string,
@@ -46,7 +46,7 @@ export class RuleModalComponent {
             this.Ruleset = data.Ruleset
             this.SchemaData = data.schemaData
             this.patchValues();
-            this.getAttrNameList();
+            // this.getAttrNameList();
             this.getPropertiesNameList();
         }
     }
@@ -75,22 +75,23 @@ export class RuleModalComponent {
     onAttrNameChangeHandler(selectedAttrName: any, index: number) {
         this.rulePattern.controls[index].patchValue({ op: '', attrval: '' })
         this.schemaPatternDetails[index] = this.getTypeFromSchema(selectedAttrName.target.value)
-        this.getAttrNameList()
-        // this.getTypeFromSchema(selectedAttrName.target.value).valtype=='bool'?this.rulePattern.controls[index].get('attrval')?.patchValue(false): ''
+        this.getTypeFromSchema(selectedAttrName.target.value).valtype=='bool'?this.rulePattern.controls[index].get('attrval')?.patchValue(false): ''
     }
 
-    getAttrNameList() {
-        this.attrNameList = []
+    getAttrNameList(index:number) {
+        const attrNameList:string[] = []
         this.SchemaData?.patternschema.attr.forEach((attribute: SchemaPatternAttr) => {
-            // if(attribute.valtype == 'bool' && this.checkIfValueIsAlreadyUsed(attribute.name)){
-            //     return;
-            // }
-            this.attrNameList.push(attribute.name)
+            if(attribute.valtype == 'bool' && this.checkIfValueIsAlreadyUsed(attribute.name,index)){
+                return;
+            }
+            attrNameList.push(attribute.name)
         })
+
+        return attrNameList
     }
 
-    checkIfValueIsAlreadyUsed(attributeName:string){
-        return this.rulePattern.value.some((pattern:any)=> pattern.attrname == attributeName)
+    checkIfValueIsAlreadyUsed(attributeName:string,i:number){
+        return this.rulePattern.value.some((pattern:any,index:number)=> pattern.attrname == attributeName && index != i)
     }
 
     getPropertiesNameList() {
@@ -131,9 +132,9 @@ export class RuleModalComponent {
     addPatterns(attrname?: string, op?: string, attrval?: any) {
         this.schemaPatternDetails.push(this.getTypeFromSchema(attrname ?? ''))
         const rPattern = this.formBuilder.group({
-            attrname: [attrname ?? '',[Validators.required, checkAttributes(this.rulePattern.value,this.rulePattern.length,this.SchemaData!)]],
+            attrname: [attrname ?? '',[Validators.required]],
             op: [op ?? '', [Validators.required]],
-            attrval: [attrval ?? '', [Validators.required, checkConstraints(this.rulePattern.length, this.schemaPatternDetails)]]
+            attrval: [attrval ?? '', [Validators.required, checkConstraints(this.rulePattern.length,  this.schemaPatternDetails)]]
         });
         this.rulePattern.push(rPattern)
     }
@@ -150,7 +151,7 @@ export class RuleModalComponent {
     removeRulePattern(index: number) {
         this.rulePattern.removeAt(index);
         this.schemaPatternDetails.splice(index, 1);
-        this.getAttrNameList()
+        // this.getAttrNameList()
     }
 
     removeProperties(index: number) {
@@ -170,22 +171,26 @@ export class RuleModalComponent {
         }
         this.SchemaData?.patternschema.attr.forEach((pattern: any) => {
             if (pattern.name == attrname) {
-                data.valtype = pattern.valtype
-                data.vals = pattern.vals
-                data.valmin = pattern.valmin
-                data.valmax = pattern.valmax
-                data.lenmax = pattern.lenmax
-                data.lenmin = pattern.lenmin
+                data = pattern
             }
         })
         return data
     }
 
     getOperatorsList(index: number) {
-        if (this.schemaPatternDetails[index].valtype == 'enum' || this.schemaPatternDetails[index].valtype == 'bool') {
-            return ['eq', 'ne']
+        let attrName = this.schemaPatternDetails[index].name
+        let valtype = this.schemaPatternDetails[index].valtype
+        let isUsed = this.rulePattern.value.some((pattern:any,i:number)=> pattern.attrname == attrName && pattern.op == 'eq'  && i != index)
+        if (valtype == 'enum' || valtype == 'bool') {
+            return isUsed ? ['ne'] : ['eq', 'ne']
         }
-        return this.operators;
+        return isUsed ? this.operators.filter((op:string) => op != 'eq') : this.operators;
+    }
+
+    getEnums(index:number,enums:string[]){
+        let attrName = this.schemaPatternDetails[index].name
+        const isUsed = this.rulePattern.value.filter((pattern:any,i:number)=> pattern.attrname == attrName && pattern.op == 'eq' && i != index)
+        return isUsed.length >=1 ? enums.filter((val:string) => val != isUsed[0].attrval) : enums
     }
 
     closeModal() {

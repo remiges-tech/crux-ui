@@ -53,8 +53,10 @@ export class BREschemaComponent {
         }
       }, (err: any) => {
         this._toastr.error(err, CONSTANTS.ERROR)
+        this._commonService.hideLoader();
       })
     } catch (error) {
+      this._commonService.hideLoader();
       this._commonService.log({
         fileName: this.fileName,
         functionName: 'getSchemaList',

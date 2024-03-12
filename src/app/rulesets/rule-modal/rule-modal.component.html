@@ -65,7 +65,7 @@
                                                 <option disabled value="">
                                                     Select
                                                 </option>
-                                                <option *ngFor="let attrName of attrNameList" [value]="attrName">
+                                                <option *ngFor="let attrName of getAttrNameList(i)" [value]="attrName">
                                                     {{attrName}}
                                                 </option>
                                             </select>
@@ -99,10 +99,10 @@
                                         <div class="col-md-2 col-sm-5">
                                             <ng-container [ngSwitch]="schemaPatternDetails[i].valtype">
                                                 <!-- Input for type Bool -->
-                                                <ng-container *ngSwitchCase="'bool'" >
-                                                    <div class="form-check form-switch" >
+                                                <ng-container *ngSwitchCase="'bool'">
+                                                    <div class="form-check form-switch">
                                                         <input class="form-check-input" type="checkbox" role="switch"
-                                                            id="{{i}}-attrval" formControlName="attrval" >
+                                                            id="{{i}}-attrval" formControlName="attrval">
                                                     </div>
                                                 </ng-container>
                                                 <!-- Input for type enum -->
@@ -112,7 +112,7 @@
                                                         <option disabled value="">
                                                             Select
                                                         </option>
-                                                        <option *ngFor="let val of schemaPatternDetails[i].vals"
+                                                        <option *ngFor="let val of getEnums(i,schemaPatternDetails[i].vals!)"
                                                             [value]="val">
                                                             {{val}}
                                                         </option>
@@ -193,7 +193,8 @@
                                                     <option disabled value="">
                                                         Select
                                                     </option>
-                                                    <option *ngFor="let propName of propertiesNameList" [value]="propName">
+                                                    <option *ngFor="let propName of propertiesNameList"
+                                                        [value]="propName">
                                                         {{propName}}
                                                     </option>
                                                 </select>
@@ -210,7 +211,8 @@
                                                     <option disabled value="">
                                                         Select
                                                     </option>
-                                                    <option *ngFor="let val of RuleForm.get('nextSteps')?.value" [value]="val">
+                                                    <option *ngFor="let val of SchemaData?.actionschema?.tasks"
+                                                        [value]="val">
                                                         {{val}}
                                                     </option>
                                                 </select>
@@ -229,8 +231,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div >
-                                        <button class="btn realm add-btn" [disabled]="RuleForm.get('nextStepTags')?.value.length >= 1" (click)="addPropeties()">Add</button>
+                                    <div>
+                                        <button class="btn realm add-btn" (click)="addPropeties()">Add</button>
                                     </div>
                                 </div>
                             </div>
