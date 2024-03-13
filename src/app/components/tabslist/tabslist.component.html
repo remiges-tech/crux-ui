@@ -106,7 +106,7 @@
   <!-- Dynamic tab contents -->
   <ng-container *ngFor="let t of tabs">
     <div class="tab-pane fade show" id="{{t.name}}" role="tabpanel" aria-labelledby="rulesets-tab">
-      <app-workflow-detail [RTree]="t.RTree" [RTreeRulesets]="t.RTreeRulesets" [schemaData]="schemaData">
+      <app-workflow-detail [RTree]="t.RTree" [RTreeRulesets]="t.RTreeRulesets" [schemaData]="schemaData" [WorksFlows]="WorksFlows">
       </app-workflow-detail>
     </div>
   </ng-container>

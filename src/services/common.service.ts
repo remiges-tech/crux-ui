@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { RuleModalComponent } from 'src/app/rulesets/rule-modal/rule-modal.component';
-import { App, AppInfo, AppsList, RTree, RTreeRulesets, RealmSliceList, RulePatternTerm, SchemaDetails, SchemaList, SliceInfo } from 'src/models/common-interfaces';
+import { App, AppInfo, AppsList, RTree, RTreeRulesets, RealmSliceList, RulePatternTerm, RulesetsList, SchemaDetails, SchemaList, SliceInfo } from 'src/models/common-interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -99,14 +99,14 @@ export class CommonService {
     this.isLoading = false;
   }
 
-  openRuleModal(rule: RTree, rulesets: RTreeRulesets, schemaData:SchemaDetails) {
-    if(rule == undefined || rulesets == undefined || schemaData == undefined){
+  openRuleModal(rule: RTree, rulesets: RTreeRulesets, schemaData:SchemaDetails, workFlows:RulesetsList[]) {
+    if(rule == undefined || rulesets == undefined || schemaData == undefined || workFlows ==  undefined){
       return;
     }
-    let ruleset = rulesets ? rulesets[rule.setname] : null;
+    let Ruleset = rulesets ? rulesets[rule.setname] : null;
     this.dialog.open(RuleModalComponent, {
       width: '80%',
-      data: { rule: rule, Ruleset: ruleset, schemaData: schemaData}
+      data: { rule, Ruleset, schemaData, workFlows}
     });
   }
 

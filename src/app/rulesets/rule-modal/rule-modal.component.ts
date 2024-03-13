@@ -1,7 +1,7 @@
 import { Component, Inject, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Property, RTree, RulePatternTerm, RuleSet, SchemaDetails, SchemaPatternAttr } from 'src/models/common-interfaces';
+import { Property, RTree, RulePatternTerm, RuleSet, RulesetsList, SchemaDetails, SchemaPatternAttr } from 'src/models/common-interfaces';
 import { OperatorsUnicode } from 'src/services/constants.service';
 import { checkConstraints } from 'src/customValidators/rule.contraints.service';
 import { CommonService } from 'src/services/common.service';
@@ -24,11 +24,16 @@ export class RuleModalComponent {
     isEdit: boolean = false;
     Rule?: RTree;
     Ruleset?: RuleSet;
+    workFlow?: RulesetsList[];
     private _commonService = inject(CommonService);
     RuleForm: FormGroup = this.formBuilder.group({
         rulePattern: this.formBuilder.array([]),
         nextSteps: [[], [Validators.required]],
-        nextStepTags: this.formBuilder.array([])
+        nextStepTags: this.formBuilder.array([]),
+        thenCall:[''],
+        elseCall:[''],
+        willExit: [false],
+        willReturn:[false]
     });
 
     OperatorsUnicode: { [key: string]: string } = OperatorsUnicode;
@@ -37,7 +42,7 @@ export class RuleModalComponent {
     schemaPatternDetails: SchemaPatternAttr[] = []
 
     constructor(@Inject(MAT_DIALOG_DATA) public data:
-        { rule: RTree, Ruleset: RuleSet, schemaData: SchemaDetails },
+        { rule: RTree, Ruleset: RuleSet, schemaData: SchemaDetails, workFlows: RulesetsList[] },
         private dialog: MatDialogRef<RuleModalComponent>,
         private formBuilder: FormBuilder) {
 
@@ -45,8 +50,10 @@ export class RuleModalComponent {
             this.Rule = data.rule
             this.Ruleset = data.Ruleset
             this.SchemaData = data.schemaData
+            this.workFlow = data.workFlows
             this.patchValues();
             this.getPropertiesNameList();
+            console.log(this.Ruleset)
         }
     }
 
@@ -68,6 +75,7 @@ export class RuleModalComponent {
         this.Rule.ruleActions.properties.forEach((property: Property) => {
             this.addPropeties(property.name, property.val)
         })
+        this.RuleForm.patchValue({willReturn:this.Rule.ruleActions.return,willExit:this.Rule.ruleActions.exit, thenCall:this.Rule.ruleActions.thencall, elseCall:this.Rule.ruleActions.elsecall})
     }
 
     isAttrNameUsed(attributeName: string, i: number) {
@@ -204,6 +212,10 @@ export class RuleModalComponent {
         this.Rule!.rulePattern = this.RuleForm.value.rulePattern
         this.Rule!.ruleActions.tasks = this.RuleForm.get('nextSteps')?.value
         this.Rule!.ruleActions.properties = this.nextStepTags.value
+        this.Rule!.ruleActions.thencall = this.RuleForm.get('thenCall')?.value
+        this.Rule!.ruleActions.elsecall = this.RuleForm.get('elseCall')?.value
+        this.Rule!.ruleActions.return = this.RuleForm.get('willReturn')?.value
+        this.Rule!.ruleActions.exit = this.RuleForm.get('willExit')?.value
         this.isEdit = false;
     }
 }

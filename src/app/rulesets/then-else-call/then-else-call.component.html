@@ -28,7 +28,7 @@
         <div class="then-child indent-3" [ngClass]="parentHovered ? 'hovered' : ''"
         (mouseenter)="parentHovered = false" >
             <ng-container *ngFor="let Rule of Rule?.thenRuleset">
-                <app-then-else-call [parentHovered]="parentHovered" [Rule]="Rule" [rulesets]="rulesets" [schemaData]="schemaData"></app-then-else-call>
+                <app-then-else-call [parentHovered]="parentHovered" [Rule]="Rule" [rulesets]="rulesets" [schemaData]="schemaData"  [WorksFlows]="WorksFlows"></app-then-else-call>
             </ng-container>
         </div>
         <div class="else-block" [ngClass]="parentHovered ? 'hovered' : ''"
@@ -41,7 +41,7 @@
             <div class="else-child indent-3"  [ngClass]="parentHovered ? 'hovered' : ''"
             (mouseenter)="parentHovered = false">
                 <ng-container *ngFor="let Rule of Rule?.elseRuleset">
-                    <app-then-else-call [parentHovered]="parentHovered" [Rule]="Rule" [rulesets]="rulesets" [schemaData]="schemaData"></app-then-else-call>
+                    <app-then-else-call [parentHovered]="parentHovered" [Rule]="Rule" [rulesets]="rulesets" [schemaData]="schemaData"  [WorksFlows]="WorksFlows"></app-then-else-call>
                 </ng-container>
             </div>
         </div>
@@ -88,7 +88,7 @@
         <div class="then-child indent-3" [ngClass]="parentHovered ? 'hovered' : ''"
         (mouseenter)="parentHovered = false">
             <ng-container *ngFor="let Rule of Rule?.thenRuleset">
-                <app-then-else-call [parentHovered]="parentHovered" [Rule]="Rule" [rulesets]="rulesets" [schemaData]="schemaData"></app-then-else-call>
+                <app-then-else-call [parentHovered]="parentHovered" [Rule]="Rule" [rulesets]="rulesets" [schemaData]="schemaData"  [WorksFlows]="WorksFlows"></app-then-else-call>
             </ng-container>
         </div>
         <div class="row mt-2">
@@ -135,7 +135,7 @@
         (mouseenter)="parentHovered = false">
             <div class="else-child indent-3">
                 <ng-container *ngFor="let Rule of Rule?.elseRuleset">
-                    <app-then-else-call [parentHovered]="parentHovered" [Rule]="Rule" [rulesets]="rulesets" [schemaData]="schemaData"></app-then-else-call>
+                    <app-then-else-call [parentHovered]="parentHovered" [Rule]="Rule" [rulesets]="rulesets" [schemaData]="schemaData"  [WorksFlows]="WorksFlows"></app-then-else-call>
                 </ng-container>
             </div>
         </div>
@@ -151,5 +151,5 @@
     </div>
 </ng-container>
 <ng-container *ngIf="!Rule?.thenRuleset && !Rule?.elseRuleset">
-    <app-do-match [childHovered]="parentHovered" [Rule]="Rule" [rulesets]="rulesets" [schemaData]="schemaData"></app-do-match>
+    <app-do-match [childHovered]="parentHovered" [Rule]="Rule" [rulesets]="rulesets" [schemaData]="schemaData" [WorksFlows]="WorksFlows"></app-do-match>
 </ng-container>
