@@ -46,7 +46,6 @@ export class RuleModalComponent {
             this.Ruleset = data.Ruleset
             this.SchemaData = data.schemaData
             this.patchValues();
-            // this.getAttrNameList();
             this.getPropertiesNameList();
         }
     }
@@ -62,26 +61,29 @@ export class RuleModalComponent {
         if (this.Rule.ruleActions.tasks.includes('done')) {
             this.RuleForm.get('nextSteps')?.disable();
             this.RuleForm.get('nextSteps')?.patchValue(['done'])
-        }else{
+        } else {
             this.RuleForm.get('nextSteps')?.enable();
             this.RuleForm.patchValue({ nextSteps: this.Rule.ruleActions.tasks })
         }
-        this.Rule.ruleActions.properties.forEach((property:Property) => {
+        this.Rule.ruleActions.properties.forEach((property: Property) => {
             this.addPropeties(property.name, property.val)
         })
-        // console.log(this.RuleForm.value)
     }
 
-    onAttrNameChangeHandler(selectedAttrName: any, index: number) {
-        this.rulePattern.controls[index].patchValue({ op: '', attrval: '' })
-        this.schemaPatternDetails[index] = this.getTypeFromSchema(selectedAttrName.target.value)
-        this.getTypeFromSchema(selectedAttrName.target.value).valtype=='bool'?this.rulePattern.controls[index].get('attrval')?.patchValue(false): ''
+    isAttrNameUsed(attributeName: string, i: number) {
+        return this.rulePattern.value.some((pattern: any, index: number) => pattern.attrname == attributeName && index != i)
     }
 
-    getAttrNameList(index:number) {
-        const attrNameList:string[] = []
+    isOperatorUsed(attributeName: string, op: string, i: number) {
+        return this.rulePattern.value.some((pattern: any, index: number) => pattern.attrname == attributeName && pattern.op == op && index != i)
+    }
+
+    getAttrNameList(index: number) {
+        const attrNameList: string[] = []
         this.SchemaData?.patternschema.attr.forEach((attribute: SchemaPatternAttr) => {
-            if(attribute.valtype == 'bool' && this.checkIfValueIsAlreadyUsed(attribute.name,index)){
+            if ((attribute.valtype == 'bool' || attribute.valtype == 'enum') && this.isAttrNameUsed(attribute.name, index)) {
+                return;
+            } else if (this.isOperatorUsed(attribute.name, 'eq', index)) {
                 return;
             }
             attrNameList.push(attribute.name)
@@ -90,16 +92,30 @@ export class RuleModalComponent {
         return attrNameList
     }
 
-    checkIfValueIsAlreadyUsed(attributeName:string,i:number){
-        return this.rulePattern.value.some((pattern:any,index:number)=> pattern.attrname == attributeName && index != i)
+    getOperatorsList(index: number) {
+        let attrName = this.schemaPatternDetails[index].name
+        let valtype = this.schemaPatternDetails[index].valtype
+        let isUsed = this.rulePattern.value.some((pattern: any, i: number) => pattern.attrname == attrName && pattern.op != 'eq' && i != index)
+        if (valtype == 'enum' || valtype == 'bool') {
+            return ['eq', 'ne']
+        }
+        return isUsed ? this.operators.filter((op: string) => op != 'eq' && op != 'ne') : this.operators;
     }
 
     getPropertiesNameList() {
         this.propertiesNameList = []
         this.SchemaData?.actionschema.properties.forEach((property: string) => {
-            if(property == 'done') return;
+            if (property == 'done') return;
             this.propertiesNameList.push(property)
         })
+    }
+
+    onAttrNameChangeHandler(selectedAttrName: any, index: number) {
+        this.rulePattern.controls[index].patchValue({ op: '', attrval: '' })
+        this.schemaPatternDetails[index] = this.getTypeFromSchema(selectedAttrName.target.value)
+        if (this.schemaPatternDetails[index].valtype == 'bool') {
+            this.rulePattern.controls[index].get('attrval')?.patchValue(false)
+        }
     }
 
     markTaskDone(isChecked: any) {
@@ -109,7 +125,7 @@ export class RuleModalComponent {
             nextsteps?.disable();
             nextsteps?.patchValue(['done'])
             this.propertiesNameList = ['done'];
-            nextStepTags?.patchValue([{name:'done',val:'done'}]);
+            nextStepTags?.patchValue([{ name: 'done', val: 'done' }]);
             nextStepTags?.disable();
         } else {
             nextsteps?.patchValue([])
@@ -132,14 +148,14 @@ export class RuleModalComponent {
     addPatterns(attrname?: string, op?: string, attrval?: any) {
         this.schemaPatternDetails.push(this.getTypeFromSchema(attrname ?? ''))
         const rPattern = this.formBuilder.group({
-            attrname: [attrname ?? '',[Validators.required]],
+            attrname: [attrname ?? '', [Validators.required]],
             op: [op ?? '', [Validators.required]],
-            attrval: [attrval ?? '', [Validators.required, checkConstraints(this.rulePattern.length,  this.schemaPatternDetails)]]
+            attrval: [attrval ?? '', [Validators.required, checkConstraints(this.rulePattern.length, this.schemaPatternDetails)]]
         });
         this.rulePattern.push(rPattern)
     }
 
-    addPropeties(name?: string,val?:string) {
+    addPropeties(name?: string, val?: string) {
         const rProperties = this.formBuilder.group({
             name: [name ?? '', [Validators.required]],
             val: [val ?? '', [Validators.required]]
@@ -175,22 +191,6 @@ export class RuleModalComponent {
             }
         })
         return data
-    }
-
-    getOperatorsList(index: number) {
-        let attrName = this.schemaPatternDetails[index].name
-        let valtype = this.schemaPatternDetails[index].valtype
-        let isUsed = this.rulePattern.value.some((pattern:any,i:number)=> pattern.attrname == attrName && pattern.op == 'eq'  && i != index)
-        if (valtype == 'enum' || valtype == 'bool') {
-            return isUsed ? ['ne'] : ['eq', 'ne']
-        }
-        return isUsed ? this.operators.filter((op:string) => op != 'eq') : this.operators;
-    }
-
-    getEnums(index:number,enums:string[]){
-        let attrName = this.schemaPatternDetails[index].name
-        const isUsed = this.rulePattern.value.filter((pattern:any,i:number)=> pattern.attrname == attrName && pattern.op == 'eq' && i != index)
-        return isUsed.length >=1 ? enums.filter((val:string) => val != isUsed[0].attrval) : enums
     }
 
     closeModal() {

@@ -112,7 +112,7 @@
                                                         <option disabled value="">
                                                             Select
                                                         </option>
-                                                        <option *ngFor="let val of getEnums(i,schemaPatternDetails[i].vals!)"
+                                                        <option *ngFor="let val of schemaPatternDetails[i].vals"
                                                             [value]="val">
                                                             {{val}}
                                                         </option>
