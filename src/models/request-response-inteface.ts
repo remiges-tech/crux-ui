@@ -58,3 +58,22 @@ export interface ReplicateRealmResp{
     statusCode: number,
     message: string
 }
+
+export interface ActivateRealmSliceResp{
+    data: {
+        
+    },
+    status: string,
+    statusCode: number,
+    message: string
+}
+
+export interface DeactivateRealmSliceResp{
+    data: {
+        
+    },
+    status: string,
+    statusCode: number,
+    message: string
+}
+

@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="col-md-4 p-0 m-0  ">
-            <button type="button" routerLink="/replicate-realmslice" class="btn realm d-none d-xl-block d-md-block d-lg-block" style="float: right;">Replicate Realm</button>
+            <button type="button" routerLink="/replicate-realmslice" class="btn realm d-none d-xl-block d-md-block d-lg-block" style="float: right;">Replicate Realm Slice</button>
         </div>
     </div>
     <div class="row mt-2">
@@ -23,11 +23,15 @@
                 <div class="col-3">
                     <label i18n="@@Slice" class="fs-20 fw-600 ml-3 text-color">Slice</label>
                 </div>
-                <div class="col-3 ml-3">
+                <div class="col-5 ml-3">
                     <ng-select class="dropdown" (change)="getClassList()" id="slice" [(ngModel)]="selectedData.slice"
                     i18n-placeholder="@@placeholderSlice"    placeholder="--Select Slice--">
                         <ng-option *ngFor="let slice of sliceList" [value]="slice.value">{{slice.discription}}</ng-option>
                     </ng-select>
+                </div>
+                <div class="col-3" *ngIf="selectedData.slice">
+                    <input [(ngModel)]="isRealmSliceActive" type="checkbox" (click)="activateOrDeactiveRealSlice()">&nbsp;
+                    <label class=" text-color">Activate RealmSlice</label>
                 </div>
             </div>
         </div>
@@ -47,7 +51,6 @@
             </div>
         </div>
     </div>
-
     <div class="container mt-3">
         <app-tabslist *ngIf="schemaData != undefined || WorksFlows != undefined" [schemaData]="schemaData" [WorksFlows]="WorksFlows"></app-tabslist>
     </div>

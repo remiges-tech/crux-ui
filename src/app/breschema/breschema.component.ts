@@ -1,11 +1,12 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { AppInfo, RulesetsList, SchemaDetails, SchemaList, SelectedData, SliceInfo } from 'src/models/common-interfaces';
-import { RuleSetListResp, SchemaDetailResp, SchemaListResp } from 'src/models/request-response-inteface';
+import { AppInfo, RealmSliceList, RulesetsList, SchemaDetails, SchemaList, SelectedData, SliceInfo } from 'src/models/common-interfaces';
+import { ActivateRealmSliceResp, DeactivateRealmSliceResp, ReamlSliceListResp, RuleSetListResp, SchemaDetailResp, SchemaListResp } from 'src/models/request-response-inteface';
 import { BREschemaService } from 'src/services/breschema.service';
 import { CommonService } from 'src/services/common.service';
 import { CONSTANTS } from 'src/services/constants.service';
+import { RealmsliceService } from 'src/services/realmslice.service';
 
 @Component({
   selector: 'app-breschema',
@@ -18,7 +19,9 @@ export class BREschemaComponent {
   fileName: string = 'SchemaComponent';
   private _schemaService = inject(BREschemaService);
   private _commonService = inject(CommonService);
+  private _realmService = inject(RealmsliceService);
   private _toastr = inject(ToastrService);
+  isRealmSliceActive:boolean=false;
   schemasList?: SchemaList[];
   appList?: AppInfo[];
   sliceList?: SliceInfo[];
@@ -77,6 +80,7 @@ export class BREschemaComponent {
   getClassList() {
     this.classList = undefined;
     this.clearSchemaData();
+    this.getRealmSliceList();
     if (this.schemasList && this.selectedData.app && this.selectedData.slice) {
       this.selectedData.class = null
       this.classList = this._commonService.getClassNameForSelectedSchemaData(this.schemasList, this.selectedData.app, this.selectedData.slice)
@@ -152,6 +156,66 @@ export class BREschemaComponent {
 			})
 		}
 	}
+
+  getRealmSliceList(){
+    this.isRealmSliceActive = false;
+    try {
+      this._realmService.getRealmSliceList().subscribe((res: ReamlSliceListResp) => {
+        if (res?.status == CONSTANTS.SUCCESS) {
+          this.isRealmSliceActive = res?.data?.slices.filter((slice:RealmSliceList) => slice.id == this.selectedData.slice)[0].active;
+        } else {
+          this._toastr.error(res?.message, CONSTANTS.ERROR);
+        }
+      }, (err: any) => {
+        this._toastr.error(err, CONSTANTS.ERROR)
+      })
+    } catch (error) {
+      this._commonService.log({
+        fileName: this.fileName,
+        functionName: 'getRealmsList',
+        err: error
+      })
+    }
+  }
+
+  activateOrDeactiveRealSlice(){
+    try {
+      if(this.isRealmSliceActive){
+        this._realmService.realmSliceDeactivate({id:this.selectedData.slice}).subscribe((res: DeactivateRealmSliceResp) => {
+          if (res?.status == CONSTANTS.SUCCESS) {
+            this._toastr.success(res?.message, CONSTANTS.SUCCESS);
+          } else {
+            this.isRealmSliceActive = !this.isRealmSliceActive
+            this._toastr.error(res?.message, CONSTANTS.ERROR);
+          }
+        }, (err: any) => {
+          this.isRealmSliceActive = !this.isRealmSliceActive
+          this._toastr.error(err, CONSTANTS.ERROR)
+        })
+      }else{
+        this._realmService.realmSliceActivate({id:this.selectedData.slice}).subscribe((res: ActivateRealmSliceResp) => {
+          if (res?.status == CONSTANTS.SUCCESS) {
+            this._toastr.success(res?.message, CONSTANTS.SUCCESS);
+          } else {
+            this.isRealmSliceActive = !this.isRealmSliceActive
+            this._toastr.error(res?.message, CONSTANTS.ERROR);
+          }
+        }, (err: any) => {
+          this.isRealmSliceActive = !this.isRealmSliceActive
+          this._toastr.error(err, CONSTANTS.ERROR)
+        })
+      }
+    } catch (error) {
+      this._commonService.log({
+        fileName: this.fileName,
+        functionName: 'getRealmsList',
+        err: error
+      })
+    }
+  }
+
+
+
 
   clearCache() {
     this.sliceList = undefined;
