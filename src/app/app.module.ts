@@ -20,6 +20,7 @@ import { ThenElseCallComponent } from './rulesets/then-else-call/then-else-call.
 import { LoaderComponent } from './components/loader/loader.component';
 import { ReplicateRealmsliceComponent } from './realmslice/replicate-realmslice/replicate-realmslice.component';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { CalendarModule } from 'primeng/calendar';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { RuleModalComponent } from './rulesets/rule-modal/rule-modal.component';
 
@@ -49,6 +50,7 @@ import { RuleModalComponent } from './rulesets/rule-modal/rule-modal.component';
     MatDialogModule,
     DragDropModule,
     MultiSelectModule,
+    CalendarModule,
     BrowserAnimationsModule, 
     ToastrModule.forRoot(), 
   ],

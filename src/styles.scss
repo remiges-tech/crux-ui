@@ -357,6 +357,10 @@ body {
  font-weight: bold;
 }
 
+.sticky-top {
+  z-index: 1 !important;
+}
+
 // for loader 
 .loader-overlay {
   position: fixed;
@@ -446,5 +450,23 @@ cursor: pointer;
   width:100%;
   height:100%;
   pointer-events: auto;
+}
+
+.form-control:hover{
+  border: 1px solid blue;
+}
+
+.p-datepicker{
+  height: 250px !important;
+  overflow: auto;
+}
+
+.p-button-icon-only{
+  width: 1.3rem;
+  height: 2rem !important;
+}
+
+.p-datepicker table td {
+  padding: 0 !important;
 }
 

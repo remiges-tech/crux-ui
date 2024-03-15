@@ -30,8 +30,8 @@
                     </ng-select>
                 </div>
                 <div class="col-3" *ngIf="selectedData.slice">
-                    <input [(ngModel)]="isRealmSliceActive" type="checkbox" (click)="activateOrDeactiveRealSlice()">&nbsp;
-                    <label class=" text-color">Activate RealmSlice</label>
+                    <input id="activateRealmSlice" [(ngModel)]="isRealmSliceActive" type="checkbox" (click)="activateOrDeactiveRealSlice()">&nbsp;
+                    <label for="activateRealmSlice" class=" text-color">Activate RealmSlice</label>
                 </div>
             </div>
         </div>

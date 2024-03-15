@@ -1,27 +1,31 @@
-import {AbstractControl, FormArray, FormControl, ValidationErrors, ValidatorFn} from '@angular/forms';
-import { SchemaDetails, SchemaPatternAttr } from 'src/models/common-interfaces';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { SchemaDetails } from 'src/models/common-interfaces';
 
-export function checkConstraints(index:number,schemaPatternDetails:SchemaPatternAttr[]): ValidatorFn {
-    return (control:AbstractControl) : ValidationErrors | null => {
-        
+export function checkConstraints(schemaData: SchemaDetails): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+
         const value = control.value;
-        if (!value) {
+        const formArray = control.parent;
+        if (!value || !formArray) {
             return null;
         }
-        else if(value < 0){
-            return {ConstraintsError: true, message: 'Value is negative'}
+
+        const patternDetails = schemaData.patternschema.attr.filter((pattern: any) => pattern.name == formArray.value.attrname)[0]
+
+        if (value < 0) {
+            return { ConstraintsError: true, message: 'Value is negative' }
         }
-        else if(schemaPatternDetails[index]?.valmax && value > schemaPatternDetails[index]?.valmax!){
-            return {ConstraintsError: true, message: `Value is greater then ${schemaPatternDetails[index]?.valmax}`}
-        }else if(schemaPatternDetails[index]?.valmin && value < schemaPatternDetails[index]?.valmin!){
-            return {ConstraintsError: true, message: `Value is less then ${schemaPatternDetails[index]?.valmin}`}
-        }else if(schemaPatternDetails[index]?.lenmax && value.length > schemaPatternDetails[index]?.lenmax!){
-            return {ConstraintsError: true, message: `length is greater then ${schemaPatternDetails[index]?.lenmax}`}
-        }else if(schemaPatternDetails[index]?.lenmin && value.length < schemaPatternDetails[index]?.lenmin!){
-            return {ConstraintsError: true, message: `length is less then ${schemaPatternDetails[index]?.lenmin}`}
+        else if (patternDetails?.valmax && value > patternDetails?.valmax!) {
+            return { ConstraintsError: true, message: `Value is greater then ${patternDetails?.valmax}` }
+        } else if (patternDetails?.valmin && value < patternDetails?.valmin!) {
+            return { ConstraintsError: true, message: `Value is less then ${patternDetails?.valmin}` }
+        } else if (patternDetails?.lenmax && value.length > patternDetails?.lenmax!) {
+            return { ConstraintsError: true, message: `length is greater then ${patternDetails?.lenmax}` }
+        } else if (patternDetails?.lenmin && value.length < patternDetails?.lenmin!) {
+            return { ConstraintsError: true, message: `length is less then ${patternDetails?.lenmin}` }
         }
 
-        
+
         return null;
     }
 }

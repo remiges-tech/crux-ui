@@ -22,8 +22,8 @@
                                     <div class="col-md-1">
                                         <p [innerHTML]="OperatorsUnicode[rule.op]" class="fs-5"></p>
                                     </div>
-                                    <div class="col-md-2">
-                                        <p class="fs-5">{{ rule?.attrval }}</p>
+                                    <div class="col-md-6">
+                                        <p class="fs-5">{{ getSchemaDetailsByAttrName(rule?.attrname!)?.valtype == 'ts' ?  (rule?.attrval | date:'MMM dd, YYYY, h:mm:ss a') :  rule?.attrval }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -68,27 +68,27 @@
                 <div [formGroup]="RuleForm">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-12" formArrayName="rulePattern">
-                                <div *ngFor="let rule of rulePattern.controls,let i = index" [formGroupName]="i">
+                            <div class="col-12" formArrayName="rulepattern">
+                                <div *ngFor="let rule of rulepattern.controls,let i = index" [formGroupName]="i">
                                     <div class="row mb-2">
                                         <div class="col-md-2 col-sm-5">
-                                            <select (change)="onAttrNameChangeHandler($event,i)"
+                                            <select (change)="onAttrNameChangeHandler(i)"
                                                 formControlName="attrname" class="form-control" id="{{i}}-attrName">
                                                 <option disabled value="">
                                                     Select
                                                 </option>
-                                                <option *ngFor="let attrName of getAttrNameList(i)" [value]="attrName">
+                                                <option *ngFor="let attrName of getAttributesNamesByIndex(i)" [value]="attrName">
                                                     {{attrName}}
                                                 </option>
                                             </select>
-                                            <div *ngIf="rulePattern.controls[i].get('attrname')?.touched"
+                                            <div *ngIf="rulepattern.controls[i].get('attrname')?.touched"
                                                 class="text-danger">
                                                 <div
-                                                    *ngIf="rulePattern.controls[i].get('attrname')?.hasError('required')">
+                                                    *ngIf="rulepattern.controls[i].get('attrname')?.hasError('required')">
                                                     <small>Name is required</small>
                                                 </div>
                                                 <div
-                                                    *ngIf="rulePattern.controls[i].get('attrname')?.hasError('validationError')">
+                                                    *ngIf="rulepattern.controls[i].get('attrname')?.hasError('validationError')">
                                                     <small>Validation is required</small>
                                                 </div>
                                             </div>
@@ -102,14 +102,14 @@
                                                     <p [innerHTML]="OperatorsUnicode[op]" class="fs-5"></p>
                                                 </option>
                                             </select>
-                                            <div *ngIf="rulePattern.controls[i].get('op')?.touched" class="text-danger">
-                                                <div *ngIf="rulePattern.controls[i].get('op')?.hasError('required')">
+                                            <div *ngIf="rulepattern.controls[i].get('op')?.touched" class="text-danger">
+                                                <div *ngIf="rulepattern.controls[i].get('op')?.hasError('required')">
                                                     <small>Required</small>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-2 col-sm-5">
-                                            <ng-container [ngSwitch]="schemaPatternDetails[i].valtype">
+                                            <ng-container [ngSwitch]="getSchemaDetailsByIndex(i)?.valtype">
                                                 <!-- Input for type Bool -->
                                                 <ng-container *ngSwitchCase="'bool'">
                                                     <div class="form-check form-switch">
@@ -124,35 +124,38 @@
                                                         <option disabled value="">
                                                             Select
                                                         </option>
-                                                        <option *ngFor="let val of schemaPatternDetails[i].vals"
+                                                        <option *ngFor="let val of getSchemaDetailsByIndex(i)?.vals"
                                                             [value]="val">
                                                             {{val}}
                                                         </option>
                                                     </select>
                                                 </ng-container>
+                                                <ng-container *ngSwitchCase="'ts'">
+                                                    <p-calendar formControlName="attrval" [showIcon]="true" [showTime]="true" [showSeconds]="true" appendTo="body"></p-calendar>
+                                                </ng-container>
                                                 <!-- Input for rest of the type -->
                                                 <ng-container *ngSwitchDefault>
                                                     <input
-                                                        [type]="schemaPatternDetails[i].valtype == 'int' ? 'number' : 'text'"
+                                                        [type]="getSchemaDetailsByIndex(i)?.valtype == 'int' ? 'number' : 'text'"
                                                         class="form-control" id="{{i}}-attrval"
                                                         formControlName="attrval" placeholder="attrvalue" />
                                                 </ng-container>
                                             </ng-container>
-                                            <div *ngIf="rulePattern.controls[i].get('attrval')?.touched"
+                                            <div *ngIf="rulepattern.controls[i].get('attrval')?.touched"
                                                 class="text-danger">
                                                 <div
-                                                    *ngIf="rulePattern.controls[i].get('attrval')?.hasError('required')">
+                                                    *ngIf="rulepattern.controls[i].get('attrval')?.hasError('required')">
                                                     <small>Value is required</small>
                                                 </div>
                                                 <div
-                                                    *ngIf="rulePattern.controls[i].get('attrval')?.hasError('ConstraintsError')">
-                                                    <small>{{rulePattern.controls[i].get('attrval')?.errors!['message']
+                                                    *ngIf="rulepattern.controls[i].get('attrval')?.hasError('ConstraintsError')">
+                                                    <small>{{rulepattern.controls[i].get('attrval')?.errors!['message']
                                                         }}</small>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-1 col-sm-5">
-                                            <button class="btn" (click)="removeRulePattern(i)">
+                                            <button class="btn" (click)="removeRulePatternByIndex(i)">
                                                 <i class="fa fa-trash"></i>
                                             </button>
                                         </div>
@@ -170,10 +173,10 @@
                                 <div class="fs-20 mb-2">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <b class="m-2">{{RuleForm.get('nextSteps')?.value.length > 1 ? 'NextSteps:'
+                                            <b class="m-2">{{RuleForm.get('tasks')?.value.length > 1 ? 'NextSteps:'
                                                 : 'NextStep:'}}</b>
                                             <p-multiSelect [filter]="false" class="w-100" display="chip"
-                                                [options]="SchemaData?.actionschema?.tasks" formControlName="nextSteps"
+                                                [options]="SchemaData?.actionschema?.tasks" formControlName="tasks"
                                                 placeholder="--Select next step--"></p-multiSelect>
                                         </div>
                                         <div class="col-md-6">
@@ -181,8 +184,8 @@
                                                 <b>Mark done: </b>
                                                 <div style="display: inline-flex;" class="form-check form-switch">
                                                     <input class="form-check-input" type="checkbox"
-                                                        [checked]="RuleForm.get('nextSteps')?.value.includes('done')"
-                                                        (change)="markTaskDone($event.target)" role="switch"
+                                                        formControlName="isDone"
+                                                        (change)="markTaskDone()" role="switch"
                                                         id="isdone">
                                                 </div>
                                             </div>
@@ -194,26 +197,26 @@
                         <!--Edit NextStep Tags-->
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="fs-20 mb-2" formArrayName="nextStepTags">
-                                    <b class="m-2">{{RuleForm.get('nextStepTags')?.value.length > 1 ? 'NextStep Tags:'
+                                <div class="fs-20 mb-2" formArrayName="properties">
+                                    <b class="m-2">{{RuleForm.get('properties')?.value.length > 1 ? 'NextStep Tags:'
                                         : 'NextStep Tag:'}}</b>
-                                    <div *ngFor="let property of nextStepTags.controls,let i = index"
+                                    <div *ngFor="let property of properties.controls,let i = index"
                                         [formGroupName]="i">
                                         <div class="row mb-2">
                                             <div class="col-md-3 col-sm-5">
-                                                <select formControlName="name" class="form-control" id="{{i}}-name">
+                                                <select (change)="propertyNameChangeHandler(i)" formControlName="name" class="form-control" id="{{i}}-name">
                                                     <option disabled value="">
                                                         Select
                                                     </option>
-                                                    <option *ngFor="let propName of propertiesNameList"
+                                                    <option *ngFor="let propName of SchemaData?.actionschema?.properties"
                                                         [value]="propName">
                                                         {{propName}}
                                                     </option>
                                                 </select>
-                                                <div *ngIf="nextStepTags.controls[i].get('name')?.touched"
+                                                <div *ngIf="properties.controls[i].get('name')?.touched"
                                                     class="text-danger">
                                                     <div
-                                                        *ngIf="nextStepTags.controls[i].get('name')?.hasError('required')">
+                                                        *ngIf="properties.controls[i].get('name')?.hasError('required')">
                                                         <small>Name is required</small>
                                                     </div>
                                                 </div>
@@ -228,23 +231,23 @@
                                                         {{val}}
                                                     </option>
                                                 </select>
-                                                <div *ngIf="nextStepTags.controls[i].get('val')?.touched"
+                                                <div *ngIf="properties.controls[i].get('val')?.touched"
                                                     class="text-danger">
                                                     <div
-                                                        *ngIf="nextStepTags.controls[i].get('val')?.hasError('required')">
+                                                        *ngIf="properties.controls[i].get('val')?.hasError('required')">
                                                         <small>Value is required</small>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-1 col-sm-5">
-                                                <button class="btn" (click)="removeProperties(i)">
+                                                <button [disabled]="RuleForm.get('isDone')?.value" class="btn" (click)="removePropertiesByIndex(i)">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
                                     <div>
-                                        <button class="btn realm add-btn" (click)="addPropeties()">Add</button>
+                                        <button class="btn realm add-btn" [disabled]="RuleForm.get('isDone')?.value" (click)="addPropeties()">Add</button>
                                     </div>
                                 </div>
                             </div>
@@ -286,7 +289,7 @@
                                 <div class="d-flex align-items-center">
                                     <b>Exit: </b>
                                     <div style="display: inline-flex;" class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" formControlName="willExit"
+                                        <input (change)="exitChangeHandler()" class="form-check-input" type="checkbox" formControlName="willExit"
                                             role="switch" id="willExit">
                                     </div>
                                 </div>
