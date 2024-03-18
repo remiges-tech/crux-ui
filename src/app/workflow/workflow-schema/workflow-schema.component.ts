@@ -9,13 +9,11 @@ import { CONSTANTS } from 'src/services/constants.service';
 import { RealmsliceService } from 'src/services/realmslice.service';
 
 @Component({
-  selector: 'app-breschema',
-  templateUrl: './breschema.component.html',
-  styleUrls: ['./breschema.component.scss']
+  selector: 'app-workflow-schema',
+  templateUrl: './workflow-schema.component.html',
+  styleUrls: ['./workflow-schema.component.scss']
 })
-
-
-export class BREschemaComponent {
+export class WorkflowSchemaComponent {
   fileName: string = 'SchemaComponent';
   private _schemaService = inject(BREschemaService);
   private _commonService = inject(CommonService);
@@ -183,6 +181,9 @@ export class BREschemaComponent {
       if(this.isRealmSliceActive){
         this._realmService.realmSliceDeactivate({id:this.selectedData.slice}).subscribe((res: DeactivateRealmSliceResp) => {
           if (res?.status == CONSTANTS.SUCCESS) {
+            this.clearCache();
+            this.clearSchemaData();
+            this.selectedData.app = null;
             this._toastr.success(res?.message, CONSTANTS.SUCCESS);
           } else {
             this.isRealmSliceActive = !this.isRealmSliceActive
@@ -195,6 +196,9 @@ export class BREschemaComponent {
       }else{
         this._realmService.realmSliceActivate({id:this.selectedData.slice}).subscribe((res: ActivateRealmSliceResp) => {
           if (res?.status == CONSTANTS.SUCCESS) {
+            this.clearCache();
+            this.clearSchemaData();
+            this.selectedData.app = null;
             this._toastr.success(res?.message, CONSTANTS.SUCCESS);
           } else {
             this.isRealmSliceActive = !this.isRealmSliceActive
@@ -227,3 +231,4 @@ export class BREschemaComponent {
     this.WorksFlows = undefined;
   }
 }
+

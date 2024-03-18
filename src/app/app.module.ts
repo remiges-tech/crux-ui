@@ -7,54 +7,50 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgSelectModule } from '@ng-select/ng-select';
+// import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { TopMenuComponent } from './top-menu/top-menu.component';
-import { BREschemaComponent } from './breschema/breschema.component';
-import { TabslistComponent } from './components/tabslist/tabslist.component';
-import { WorkflowComponent } from './components/workflow-list/workflow.component';
-import { WorkflowDetailComponent } from './components/workflow-detail/workflow-detail.component';
-import { DoMatchComponent } from './rulesets/do-match/do-match.component';
-import { ThenElseCallComponent } from './rulesets/then-else-call/then-else-call.component';
+import { DoMatchComponent } from './workflow/rulesets/do-match/do-match.component';
+// import { ThenElseCallComponent } from './rulesets/then-else-call/then-else-call.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { ReplicateRealmsliceComponent } from './realmslice/replicate-realmslice/replicate-realmslice.component';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CalendarModule } from 'primeng/calendar';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { RuleModalComponent } from './rulesets/rule-modal/rule-modal.component';
+import { RuleModalComponent } from './workflow/rulesets/rule-modal/rule-modal.component';
+import { WorkflowModule } from './workflow/workflow.module';
+import { DatePipe } from '@angular/common';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     TopMenuComponent,
-    BREschemaComponent,
-    TabslistComponent,
-    WorkflowComponent,
-    WorkflowDetailComponent,
-    DoMatchComponent,
-    ThenElseCallComponent,
+    // DoMatchComponent,
+    // ThenElseCallComponent,
     LoaderComponent,
-    ReplicateRealmsliceComponent,
+    // ReplicateRealmsliceComponent,
     PageNotFoundComponent,
-    RuleModalComponent
+    // RuleModalComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgSelectModule, 
+    // NgSelectModule, 
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     MatDialogModule,
     DragDropModule,
+    WorkflowModule,
     MultiSelectModule,
     CalendarModule,
+    DatePipe,
     BrowserAnimationsModule, 
     ToastrModule.forRoot(), 
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -14,12 +14,12 @@ interface Tabs {
 }
 
 @Component({
-	selector: 'app-tabslist',
-	templateUrl: './tabslist.component.html',
-	styleUrls: ['./tabslist.component.scss']
+  selector: 'app-tablist',
+  templateUrl: './tablist.component.html',
+  styleUrls: ['./tablist.component.scss']
 })
-export class TabslistComponent {
-	fileName = 'TabslistComponent';
+export class TablistComponent {
+  fileName = 'TabslistComponent';
 	constants = CONSTANTS;
 	@ViewChild('workflowsTab') defaultTab: ElementRef | undefined;
 	@ViewChildren('dynamicTab') Tabs: QueryList<any> | undefined;

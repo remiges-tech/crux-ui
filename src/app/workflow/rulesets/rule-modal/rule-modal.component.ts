@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Property, RTree, RulePatternTerm, RuleSet, RulesetsList, SchemaDetails, SchemaPatternAttr } from 'src/models/common-interfaces';
 import { OperatorsUnicode } from 'src/services/constants.service';
 import { checkConstraints } from 'src/customValidators/rule.contraints.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-rule-modal',
@@ -33,7 +34,8 @@ export class RuleModalComponent {
     constructor(@Inject(MAT_DIALOG_DATA) public data:
         { rule: RTree, Ruleset: RuleSet, schemaData: SchemaDetails, workFlows: RulesetsList[] },
         private dialog: MatDialogRef<RuleModalComponent>,
-        private formBuilder: FormBuilder) {
+        private formBuilder: FormBuilder,
+        private datePipe: DatePipe) {
 
         if (data) {
             this.Rule = data.rule
@@ -83,6 +85,7 @@ export class RuleModalComponent {
         }
 
         this.Rule.rulePattern.forEach((pattern: RulePatternTerm) => {
+            // const attrval = this.datePipe.transform(pattern.attrval, 'yyyy-MM-ddTHH:mm:ssZ');
             this.addPatterns(pattern.attrname, pattern.op, pattern.attrval);
         })
         this.RuleForm.patchValue({ tasks: this.Rule.ruleActions.tasks, willReturn: this.Rule.ruleActions.return, willExit: this.Rule.ruleActions.exit, thenCall: this.Rule.ruleActions.thencall, elseCall: this.Rule.ruleActions.elsecall })

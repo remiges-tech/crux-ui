@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RulesetsList } from 'src/models/common-interfaces';
 
 @Component({
-  selector: 'app-workflow',
+  selector: 'app-workflow-list',
   template: `
-    <div *ngIf="!workflow?.is_internal" class="card no-border mt-3">
+  <div *ngIf="!workflow?.is_internal" class="card no-border mt-3">
       <div class="card-header">
         <div class="row justify-content-center">
           <div class="col vertically-center">
@@ -36,9 +36,10 @@ import { RulesetsList } from 'src/models/common-interfaces';
         </div>
       </div>
     </div>
-  `,
+    `,
+  styleUrls: ['./workflow-list.component.scss']
 })
-export class WorkflowComponent {
+export class WorkflowListComponent {
   @Input({ required: true }) workflow?: RulesetsList;
   @Output() openDetail = new EventEmitter<any>();
   isShowMetaData: boolean = false;

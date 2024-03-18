@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
-import { RuleModalComponent } from 'src/app/rulesets/rule-modal/rule-modal.component';
+import { RuleModalComponent } from 'src/app/workflow/rulesets/rule-modal/rule-modal.component';
 import { App, AppInfo, AppsList, RTree, RTreeRulesets, RealmSliceList, RulePatternTerm, RulesetsList, SchemaDetails, SchemaList, SliceInfo } from 'src/models/common-interfaces';
 
 @Injectable({
