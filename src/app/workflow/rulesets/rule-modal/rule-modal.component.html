@@ -23,7 +23,7 @@
                                         <p [innerHTML]="OperatorsUnicode[rule.op]" class="fs-5"></p>
                                     </div>
                                     <div class="col-md-6">
-                                        <p class="fs-5">{{ getSchemaDetailsByAttrName(rule?.attrname!)?.valtype == 'ts' ?  (rule?.attrval | date:'MMM dd, YYYY, h:mm:ss a') :  rule?.attrval }}</p>
+                                        <p class="fs-5">{{ getSchemaDetailsByAttrName(rule?.attrname!)?.valtype == 'ts' ?  (rule?.attrval | date:'MMM dd, YYYY, hh:mm:ss a') :  rule?.attrval }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -71,7 +71,7 @@
                             <div class="col-12" formArrayName="rulepattern">
                                 <div *ngFor="let rule of rulepattern.controls,let i = index" [formGroupName]="i">
                                     <div class="row mb-2">
-                                        <div class="col-md-2 col-sm-5">
+                                        <div class="col-md-3 col-sm-5">
                                             <select (change)="onAttrNameChangeHandler(i)"
                                                 formControlName="attrname" class="form-control" id="{{i}}-attrName">
                                                 <option disabled value="">
@@ -108,7 +108,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-2 col-sm-5">
+                                        <div class="col-md-3 col-sm-5">
                                             <ng-container [ngSwitch]="getSchemaDetailsByIndex(i)?.valtype">
                                                 <!-- Input for type Bool -->
                                                 <ng-container *ngSwitchCase="'bool'">
@@ -172,16 +172,16 @@
                             <div class="col-md-12">
                                 <div class="fs-20 mb-2">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-8">
                                             <b class="m-2">{{RuleForm.get('tasks')?.value.length > 1 ? 'NextSteps:'
                                                 : 'NextStep:'}}</b>
                                             <p-multiSelect [filter]="false" class="w-100" display="chip"
                                                 [options]="SchemaData?.actionschema?.tasks" formControlName="tasks"
                                                 placeholder="--Select next step--"></p-multiSelect>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="d-flex align-items-center">
-                                                <b>Mark done: </b>
+                                                <b class="m-2">Mark done: </b>
                                                 <div style="display: inline-flex;" class="form-check form-switch">
                                                     <input class="form-check-input" type="checkbox"
                                                         formControlName="isDone"

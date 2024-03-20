@@ -26,3 +26,12 @@ export const OperatorsUnicode = {
   eq : '&#61;',
   ne : '&#8800;',
 }
+
+export enum AttrDataTypes {
+  typeBool = 'bool',
+  typeEnum = 'enum',
+  typeStr = 'str',
+  typeFloat = 'float',
+  typeInt = 'int',
+  typeTs = 'ts'
+}

@@ -238,7 +238,7 @@ body {
 }
 
 .w-100 .p-multiselect{
-  width: 16rem;
+  width: 26rem !important;
   height: auto !important;
 }
 
@@ -468,5 +468,13 @@ cursor: pointer;
 
 .p-datepicker table td {
   padding: 0 !important;
+}
+
+
+@media screen and (max-width:1096px) {
+  .w-100 .p-multiselect{
+    width: 16rem !important;
+    height: auto !important;
+  }
 }
 

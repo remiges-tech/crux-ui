@@ -7,37 +7,31 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-// import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { TopMenuComponent } from './top-menu/top-menu.component';
-import { DoMatchComponent } from './workflow/rulesets/do-match/do-match.component';
-// import { ThenElseCallComponent } from './rulesets/then-else-call/then-else-call.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { ReplicateRealmsliceComponent } from './realmslice/replicate-realmslice/replicate-realmslice.component';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CalendarModule } from 'primeng/calendar';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { RuleModalComponent } from './workflow/rulesets/rule-modal/rule-modal.component';
 import { WorkflowModule } from './workflow/workflow.module';
 import { DatePipe } from '@angular/common';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     TopMenuComponent,
-    // DoMatchComponent,
-    // ThenElseCallComponent,
     LoaderComponent,
-    // ReplicateRealmsliceComponent,
+    ReplicateRealmsliceComponent,
     PageNotFoundComponent,
-    // RuleModalComponent
   ],
   imports: [
+    NgSelectModule,
     BrowserModule,
     AppRoutingModule,
-    // NgSelectModule, 
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

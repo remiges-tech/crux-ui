@@ -2,10 +2,8 @@ import { Component, Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Property, RTree, RulePatternTerm, RuleSet, RulesetsList, SchemaDetails, SchemaPatternAttr } from 'src/models/common-interfaces';
-import { OperatorsUnicode } from 'src/services/constants.service';
+import { OperatorsUnicode, AttrDataTypes } from 'src/services/constants.service';
 import { checkConstraints } from 'src/customValidators/rule.contraints.service';
-import { DatePipe } from '@angular/common';
-
 @Component({
     selector: 'app-rule-modal',
     templateUrl: './rule-modal.component.html',
@@ -34,8 +32,7 @@ export class RuleModalComponent {
     constructor(@Inject(MAT_DIALOG_DATA) public data:
         { rule: RTree, Ruleset: RuleSet, schemaData: SchemaDetails, workFlows: RulesetsList[] },
         private dialog: MatDialogRef<RuleModalComponent>,
-        private formBuilder: FormBuilder,
-        private datePipe: DatePipe) {
+        private formBuilder: FormBuilder) {
 
         if (data) {
             this.Rule = data.rule
@@ -50,9 +47,34 @@ export class RuleModalComponent {
         return this.RuleForm.get('rulepattern') as FormArray;
     }
 
+    get isDone() {
+        return this.RuleForm.get('isDone')
+    }
+
     get properties() {
         return this.RuleForm.get('properties') as FormArray;
     }
+
+    get tasks() {
+        return this.RuleForm.get('tasks')
+    }
+
+    get thenCall() {
+        return this.RuleForm.get('thenCall')
+    }
+
+    get elseCall() {
+        return this.RuleForm.get('elseCall')
+    }
+
+    get willReturn() {
+        return this.RuleForm.get('willReturn')
+    }
+
+    get willExit() {
+        return this.RuleForm.get('willExit')
+    }
+
 
     addPatterns(attrname?: string, op?: string, attrval?: any) {
         const rPattern = this.formBuilder.group({
@@ -85,16 +107,16 @@ export class RuleModalComponent {
         }
 
         this.Rule.rulePattern.forEach((pattern: RulePatternTerm) => {
-            // const attrval = this.datePipe.transform(pattern.attrval, 'yyyy-MM-ddTHH:mm:ssZ');
-            this.addPatterns(pattern.attrname, pattern.op, pattern.attrval);
+            const attrval = this.getSchemaDetailsByAttrName(pattern.attrname)?.valtype == AttrDataTypes.typeTs ? new Date(pattern.attrval) : pattern.attrval
+            this.addPatterns(pattern.attrname, pattern.op, attrval);
         })
         this.RuleForm.patchValue({ tasks: this.Rule.ruleActions.tasks, willReturn: this.Rule.ruleActions.return, willExit: this.Rule.ruleActions.exit, thenCall: this.Rule.ruleActions.thencall, elseCall: this.Rule.ruleActions.elsecall })
         this.Rule.ruleActions.properties.forEach((property: Property) => {
             this.addPropeties(property.name, property.val)
             if (property.name == 'done') {
-                this.RuleForm.get('isDone')?.patchValue(true);
-                this.RuleForm.get('tasks')?.disable();
-                this.RuleForm.get('properties')?.disable();
+                this.isDone?.patchValue(true);
+                this.tasks?.disable();
+                this.properties?.disable();
             }
         })
     }
@@ -110,7 +132,7 @@ export class RuleModalComponent {
     getAttributesNamesByIndex(index: number) {
         const attrNameList: string[] = []
         this.SchemaData?.patternschema.attr.forEach((attribute: SchemaPatternAttr) => {
-            if ((attribute.valtype == 'bool' || attribute.valtype == 'enum') && this.isAttrNameUsed(attribute.name, index)) {
+            if ((attribute.valtype == AttrDataTypes.typeBool || attribute.valtype == AttrDataTypes.typeEnum) && this.isAttrNameUsed(attribute.name, index)) {
                 return;
             } else if (this.isOperatorUsed(attribute.name, 'eq', index)) {
                 return;
@@ -124,7 +146,7 @@ export class RuleModalComponent {
     getOperatorsList(index: number) {
         let schemaDetails = this.getSchemaDetailsByIndex(index)
         let isUsed = this.rulepattern.value.some((pattern: any, i: number) => pattern.attrname == schemaDetails?.name && pattern.op != 'eq' && i != index)
-        if (schemaDetails?.valtype == 'enum' || schemaDetails?.valtype == 'bool') {
+        if (schemaDetails?.valtype == AttrDataTypes.typeEnum || schemaDetails?.valtype == AttrDataTypes.typeBool) {
             return ['eq', 'ne']
         }
         return isUsed ? this.operators.filter((op: string) => op != 'eq' && op != 'ne') : this.operators;
@@ -132,7 +154,7 @@ export class RuleModalComponent {
 
     onAttrNameChangeHandler(index: number) {
         this.rulepattern.controls[index].patchValue({ op: '', attrval: '' })
-        if (this.getSchemaDetailsByIndex(index)?.valtype == 'bool') {
+        if (this.getSchemaDetailsByIndex(index)?.valtype == AttrDataTypes.typeBool) {
             this.rulepattern.controls[index].get('attrval')?.patchValue(false)
         }
     }
@@ -142,27 +164,30 @@ export class RuleModalComponent {
     }
 
     markTaskDone() {
-        let tasks = this.RuleForm.get('tasks')
-        let properties = this.RuleForm.get('properties')
-        properties?.value.forEach((index: number) => this.removePropertiesByIndex(index))
-        tasks?.patchValue([])
-        if (this.RuleForm.get('isDone')?.value) {
-            tasks?.disable();
+        this.properties?.value.forEach((index: number) => this.removePropertiesByIndex(index))
+        this.tasks?.patchValue([])
+        this.thenCall?.patchValue("")
+        this.elseCall?.patchValue("")
+        if (this.isDone?.value) {
+            this.tasks?.disable();
+            this.thenCall?.disable();
+            this.elseCall?.disable();
             this.addPropeties('done', 'true');
-            properties?.disable();
+            this.properties?.disable();
         } else {
-            properties?.enable();
-            tasks?.enable();
+            this.thenCall?.enable();
+            this.elseCall?.enable();
+            this.properties?.enable();
+            this.tasks?.enable();
         }
     }
 
     exitChangeHandler() {
-        const exit = this.RuleForm.get('willExit')?.value
-        if (exit) {
-            this.RuleForm.get('willReturn')?.patchValue(false);
-            this.RuleForm.get('willReturn')?.disable()
+        if (this.willExit?.value) {
+            this.willReturn?.patchValue(false);
+            this.willReturn?.disable()
         } else {
-            this.RuleForm.get('willReturn')?.enable()
+            this.willReturn?.enable()
         }
     }
 
@@ -180,7 +205,7 @@ export class RuleModalComponent {
     }
 
     closeModal() {
-        this.dialog.close();
+        this.dialog.close(this.Rule);
     }
 
     saveHandler() {
@@ -188,18 +213,30 @@ export class RuleModalComponent {
             return
         }
 
+        let rulePatterns: RulePatternTerm[] = [];
+
+        this.RuleForm.value.rulepattern.forEach((pattern: RulePatternTerm) => {
+            let originalPattern: RulePatternTerm = pattern
+            if (this.getSchemaDetailsByAttrName(pattern.attrname)?.valtype == AttrDataTypes.typeTs) {
+                originalPattern.attrval = new Date(pattern.attrval).toISOString()
+            }
+            rulePatterns.push(originalPattern)
+        })
+
         this.Rule = {
+            ...this.Rule,
             setname: this.Rule!.setname,
-            rulePattern: this.RuleForm.value.rulepattern,
+            rulePattern: rulePatterns,
             ruleActions: {
-                tasks: this.RuleForm.get('tasks')?.value,
+                tasks: this.tasks?.value,
                 properties: this.properties.value,
-                thencall: this.RuleForm.get('thenCall')?.value,
-                elsecall: this.RuleForm.get('elseCall')?.value,
-                return: this.RuleForm.get('willReturn')?.value,
-                exit: this.RuleForm.get('willExit')?.value
+                thencall: this.thenCall?.value,
+                elsecall: this.elseCall?.value,
+                return: this.willReturn?.value,
+                exit: this.willExit?.value
             }
         }
+
         this.isEdit = false;
     }
 }

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { WorkflowSchemaComponent } from './workflow-schema/workflow-schema.component';
 import { TablistComponent } from './tablist/tablist.component';
-import { WorkflowDetailComponent } from './workflow-detail/workflow-detail.component';
 import { WorkflowListComponent } from './workflow-list/workflow-list.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,15 +13,13 @@ import { CalendarModule } from 'primeng/calendar';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DoMatchComponent } from './rulesets/do-match/do-match.component';
 import { RuleModalComponent } from './rulesets/rule-modal/rule-modal.component';
-import { ReplicateRealmsliceComponent } from '../realmslice/replicate-realmslice/replicate-realmslice.component';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
   declarations: [
     WorkflowSchemaComponent,
-    ReplicateRealmsliceComponent,
     TablistComponent,
-    WorkflowDetailComponent,
     WorkflowListComponent,
     ThenElseCallComponent,
     DoMatchComponent,
@@ -38,6 +35,7 @@ import { ReplicateRealmsliceComponent } from '../realmslice/replicate-realmslice
     DragDropModule,
     MultiSelectModule,
     CalendarModule,
+    RouterModule,
     DatePipe,
   ]
 })
