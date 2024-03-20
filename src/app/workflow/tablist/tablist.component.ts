@@ -11,6 +11,7 @@ interface Tabs {
 	name: string,
 	RTree: RTree[],
 	RTreeRulesets: RTreeRulesets
+	RTreeStringify: string
 }
 
 @Component({
@@ -21,6 +22,7 @@ interface Tabs {
 export class TablistComponent {
   fileName = 'TabslistComponent';
 	constants = CONSTANTS;
+	showSource:boolean=false;
 	@ViewChild('workflowsTab') defaultTab: ElementRef | undefined;
 	@ViewChildren('dynamicTab') Tabs: QueryList<any> | undefined;
 	@Input({ required: true }) schemaData?: SchemaDetails
@@ -56,7 +58,8 @@ export class TablistComponent {
 					this.tabs.push({
 						name: ruleset.name,
 						RTree: data,
-						RTreeRulesets: this.FinalRulesetsList
+						RTreeRulesets: this.FinalRulesetsList,
+						RTreeStringify: JSON.stringify(data, null, 2)
 					});
 				}
 				this._commonService.hideLoader()

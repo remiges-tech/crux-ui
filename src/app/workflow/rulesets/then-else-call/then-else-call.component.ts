@@ -20,7 +20,10 @@ export class ThenElseCallComponent {
   constructor() { }
 
   openRuleModal(): void {
-    this._commonService.openRuleModal(this.Rule!, this.rulesets!,this.schemaData!, this.WorksFlows!)
+    let updatedRule = this._commonService.openRuleModal(this.Rule!, this.rulesets!,this.schemaData!, this.WorksFlows!)
+    updatedRule?.afterClosed().subscribe((res:RTree) => {
+      this.Rule = res
+    })
   }
  
   toggleParentHover(state: boolean) {
