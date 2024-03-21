@@ -151,5 +151,5 @@
     </div>
 </ng-container>
 <ng-container *ngIf="!Rule?.thenRuleset && !Rule?.elseRuleset">
-    <app-do-match [childHovered]="parentHovered" [Rule]="Rule" [rulesets]="rulesets" [schemaData]="schemaData" [WorksFlows]="WorksFlows"></app-do-match>
+    <app-do-match [childHovered]="parentHovered" [Rule]="Rule" [rulesets]="rulesets" [schemaData]="schemaData" [WorksFlows]="WorksFlows" (updateRule)="updateRule.emit($event)"></app-do-match>
 </ng-container>

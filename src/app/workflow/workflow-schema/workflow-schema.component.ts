@@ -39,7 +39,7 @@ export class WorkflowSchemaComponent {
   getSchemaList() {
     try {
       this._commonService.showLoader();
-      this._schemaService.getBRESchemaList().subscribe((res: SchemaListResp) => {
+      this._schemaService.getWorkflowSchemaList().subscribe((res: SchemaListResp) => {
         if (res?.status == CONSTANTS.SUCCESS) {
           if(res?.data?.schemas == null || res?.data?.schemas == undefined || res?.data?.schemas?.length == 0){
             this._toastr.error(CONSTANTS.DATA_NOT_FOUND, CONSTANTS.ERROR);
@@ -101,7 +101,7 @@ export class WorkflowSchemaComponent {
         params: new HttpParams().append('app', this.selectedData.app).append('slice', this.selectedData.slice).append('class', this.selectedData.class)
       }
       this._commonService.showLoader()
-      this._schemaService.getBRESchemaDetail(data).subscribe((res: SchemaDetailResp) => {
+      this._schemaService.getWorkflowSchemaDetail(data).subscribe((res: SchemaDetailResp) => {
         if (res.status == CONSTANTS.SUCCESS) {
           if(res.data == null || res.data == undefined || this._commonService.isObjectEmpty(res.data)){
             this._toastr.error(CONSTANTS.DATA_NOT_FOUND, CONSTANTS.ERROR);
@@ -135,7 +135,7 @@ export class WorkflowSchemaComponent {
 				params: new HttpParams().append('app', this.selectedData.app).append('slice', this.selectedData.slice).append('class', this.selectedData.class)
 			  }
 			this._commonService.showLoader();
-			this._schemaService.getBREWorkflowList(data).subscribe((res: RuleSetListResp) => {
+			this._schemaService.getWorkflowList(data).subscribe((res: RuleSetListResp) => {
 				if (res?.status == CONSTANTS.SUCCESS) {
 					this.WorksFlows = res?.data?.rulesets;
 					this._commonService.hideLoader();

@@ -1,9 +1,10 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Property, RTree, RulePatternTerm, RuleSet, RulesetsList, SchemaDetails, SchemaPatternAttr } from 'src/models/common-interfaces';
+import { Property, RTree, RTreeRulesets, RulePatternTerm, RuleSet, RulesetsList, SchemaDetails, SchemaPatternAttr } from 'src/models/common-interfaces';
 import { OperatorsUnicode, AttrDataTypes } from 'src/services/constants.service';
 import { checkConstraints } from 'src/customValidators/rule.contraints.service';
+import { BREschemaService } from 'src/services/breschema.service';
 @Component({
     selector: 'app-rule-modal',
     templateUrl: './rule-modal.component.html',
@@ -12,8 +13,11 @@ import { checkConstraints } from 'src/customValidators/rule.contraints.service';
 export class RuleModalComponent {
     isEdit: boolean = false;
     Rule?: RTree;
+    RulesetsList: RTreeRulesets = {}
     Ruleset?: RuleSet;
     workFlow?: RulesetsList[];
+    updatedThen?:RTree[]
+    updatedElse?:RTree[]
     RuleForm: FormGroup = this.formBuilder.group({
         rulepattern: this.formBuilder.array<{ attrname: string, op: string, attrval: string }>([]),
         tasks: [[], [Validators.required]],
@@ -28,18 +32,23 @@ export class RuleModalComponent {
     OperatorsUnicode: { [key: string]: string } = OperatorsUnicode;
     operators = ['eq', 'gt', 'lt', 'ge', 'le', 'ne']
     SchemaData?: SchemaDetails;
+	private _schemaService = inject(BREschemaService);
 
     constructor(@Inject(MAT_DIALOG_DATA) public data:
-        { rule: RTree, Ruleset: RuleSet, schemaData: SchemaDetails, workFlows: RulesetsList[] },
+        { rule: RTree, Ruleset: RuleSet, rulesetsList: RTreeRulesets, schemaData: SchemaDetails, workFlows: RulesetsList[] },
         private dialog: MatDialogRef<RuleModalComponent>,
         private formBuilder: FormBuilder) {
 
         if (data) {
             this.Rule = data.rule
+            this.updatedThen = data.rule.thenRuleset
+            this.updatedElse = data.rule.elseRuleset
+            this.RulesetsList = data.rulesetsList
             this.Ruleset = data.Ruleset
             this.SchemaData = data.schemaData
             this.workFlow = data.workFlows
             this.patchRuleValues();
+            this.exitChangeHandler();
         }
     }
 
@@ -132,11 +141,9 @@ export class RuleModalComponent {
     getAttributesNamesByIndex(index: number) {
         const attrNameList: string[] = []
         this.SchemaData?.patternschema.attr.forEach((attribute: SchemaPatternAttr) => {
-            if ((attribute.valtype == AttrDataTypes.typeBool || attribute.valtype == AttrDataTypes.typeEnum) && this.isAttrNameUsed(attribute.name, index)) {
+            if (((attribute.valtype == AttrDataTypes.typeBool || attribute.valtype == AttrDataTypes.typeEnum) && this.isAttrNameUsed(attribute.name, index)) || this.isOperatorUsed(attribute.name, 'eq', index)) {
                 return;
-            } else if (this.isOperatorUsed(attribute.name, 'eq', index)) {
-                return;
-            }
+            } 
             attrNameList.push(attribute.name)
         })
 
@@ -152,6 +159,17 @@ export class RuleModalComponent {
         return isUsed ? this.operators.filter((op: string) => op != 'eq' && op != 'ne') : this.operators;
     }
 
+    getRulesetsList(callType:string){
+        let workflowList = this.workFlow
+        if(callType == 'then'){
+            workflowList = workflowList?.filter((workflow:any) => workflow.name != this.elseCall?.value)
+        }else{
+            workflowList = workflowList?.filter((workflow:any) => workflow.name != this.thenCall?.value)
+        }
+
+        return workflowList;
+    }
+
     onAttrNameChangeHandler(index: number) {
         this.rulepattern.controls[index].patchValue({ op: '', attrval: '' })
         if (this.getSchemaDetailsByIndex(index)?.valtype == AttrDataTypes.typeBool) {
@@ -163,11 +181,13 @@ export class RuleModalComponent {
         this.properties.controls[index].patchValue({ val: '' });
     }
 
-    markTaskDone() {
+    markTaskDoneHandler() {
         this.properties?.value.forEach((index: number) => this.removePropertiesByIndex(index))
         this.tasks?.patchValue([])
         this.thenCall?.patchValue("")
+        this.updatedThen = undefined
         this.elseCall?.patchValue("")
+        this.updatedElse = undefined
         if (this.isDone?.value) {
             this.tasks?.disable();
             this.thenCall?.disable();
@@ -180,6 +200,22 @@ export class RuleModalComponent {
             this.properties?.enable();
             this.tasks?.enable();
         }
+    }
+
+    async thenChangeHandler(){
+        let data = await this._schemaService.buildRtree(this.Ruleset?.app!, this.Ruleset?.slice!, this.Ruleset?.class!, this.thenCall?.value,this.RulesetsList);
+        if (data instanceof Error) {
+            throw data;
+        }
+        this.updatedThen = data
+    }
+
+    async elseChangeHandler(){
+        let data = await this._schemaService.buildRtree(this.Ruleset?.app!, this.Ruleset?.slice!, this.Ruleset?.class!, this.elseCall?.value,this.RulesetsList);
+        if (data instanceof Error) {
+            throw data;
+        }
+        this.updatedElse = data
     }
 
     exitChangeHandler() {
@@ -224,7 +260,6 @@ export class RuleModalComponent {
         })
 
         this.Rule = {
-            ...this.Rule,
             setname: this.Rule!.setname,
             rulePattern: rulePatterns,
             ruleActions: {
@@ -234,7 +269,9 @@ export class RuleModalComponent {
                 elsecall: this.elseCall?.value,
                 return: this.willReturn?.value,
                 exit: this.willExit?.value
-            }
+            },
+            thenRuleset : this.updatedThen,
+            elseRuleset : this.updatedElse
         }
 
         this.isEdit = false;

@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { RTree, RTreeRulesets, RulePatternTerm, RulesetsList, SchemaDetails } from 'src/models/common-interfaces';
 import { CommonService } from 'src/services/common.service';
 import { OperatorsUnicode } from 'src/services/constants.service';
@@ -13,6 +13,7 @@ export class ThenElseCallComponent {
   @Input({required:true}) rulesets?:RTreeRulesets; 
   @Input({required:true}) schemaData?:SchemaDetails; 
   @Input({required:true}) WorksFlows?:RulesetsList[] = [];
+  @Output() updateRule = new EventEmitter<RTree>();
   private _commonService = inject(CommonService);
   OperatorsUnicode: any = OperatorsUnicode;
   @Input() parentHovered: boolean = false;
@@ -23,6 +24,7 @@ export class ThenElseCallComponent {
     let updatedRule = this._commonService.openRuleModal(this.Rule!, this.rulesets!,this.schemaData!, this.WorksFlows!)
     updatedRule?.afterClosed().subscribe((res:RTree) => {
       this.Rule = res
+      this.updateRule.emit(this.Rule)
     })
   }
  

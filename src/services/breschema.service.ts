@@ -3,6 +3,10 @@ import { HttpService } from './http.service';
 import * as Enums from './constants.service';
 import { CommonService } from './common.service';
 import { environment } from 'src/environments/environment.development';
+import { HttpParams } from '@angular/common/http';
+import { RTree, RTreeRulesets, Rule } from 'src/models/common-interfaces';
+import { RuleSetDetailResp } from 'src/models/request-response-inteface';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +15,10 @@ export class BREschemaService {
   fileName: string = 'SchemaService'
   _httpService = inject(HttpService);
   _commonService = inject(CommonService);
+  private _toastr = inject(ToastrService);
   constructor() { }
 
-  getBRESchemaList(): any {
+  getWorkflowSchemaList(): any {
     try {
       let dataObj = {
         method: 'get',
@@ -27,13 +32,13 @@ export class BREschemaService {
     } catch (error) {
       this._commonService.log({
         fileName: this.fileName,
-        functionName: 'getBRESchemaList',
+        functionName: 'getWorkflowSchemaList',
         msg: error
       });
     }
   }
 
-  getBRESchemaDetail(obj: any): any {
+  getWorkflowSchemaDetail(obj: any): any {
     try {
       let dataObj = {
         method: 'get',
@@ -45,16 +50,15 @@ export class BREschemaService {
       let resp = this._httpService.fetchData(dataObj);
       return resp;
     } catch (error) {
-      alert(error)
       this._commonService.log({
         fileName: this.fileName,
-        functionName: 'getBRESchemaDetail',
+        functionName: 'getWorkflowSchemaDetail',
         msg: error
       });
     }
   }
 
-  getBREWorkflowList(payload:any): any {
+  getWorkflowList(payload:any): any {
     try {
       let dataObj = {
         method: 'get',
@@ -68,13 +72,13 @@ export class BREschemaService {
     } catch (error) {
       this._commonService.log({
         fileName: this.fileName,
-        functionName: 'getBREWorkflowList',
+        functionName: 'getWorkflowList',
         msg: error
       });
     }
   }
 
-  getBREWorkflowDetails(obj: any): any {
+  getWorkflowDetails(obj: any): any {
     try {
       let dataObj = {
         method: 'get',
@@ -86,12 +90,72 @@ export class BREschemaService {
       let resp = this._httpService.fetchData(dataObj);
       return resp;
     } catch (error) {
-      alert(error)
       this._commonService.log({
         fileName: this.fileName,
-        functionName: 'getBREWorkflowDetails',
+        functionName: 'getWorkflowDetails',
         msg: error
       });
     }
   }
+
+  // Function to recurrsively fetch the details of a rule based on the provided parameters and create a RTree data structure.
+  async buildRtree(app: string, slice: number, Sclass: string, Rname: string,FinalRulesetsList:RTreeRulesets): Promise<RTree[] | Error> {
+		try {
+			this._commonService.showLoader();
+			let data = {
+				params: new HttpParams().append('app', app).append('slice', slice).append('class', Sclass).append('name', Rname)
+			};
+
+			const res: RuleSetDetailResp = await this.getWorkflowDetails(data).toPromise();
+
+			if (res.status === Enums.CONSTANTS.SUCCESS) {
+				let rules: Rule[] = res.data.rules;
+				let FinalRuleStruct: RTree[] = [];
+        
+        if(!FinalRulesetsList[res.data.name]){
+          FinalRulesetsList[res.data.name] = res.data
+        }
+				
+				for (const rule of rules) {
+					let ruleObj: RTree = {
+						setname: res.data.name,
+						rulePattern: rule.rulepattern,
+						ruleActions: rule.ruleactions
+					};
+
+					if (rule.ruleactions.thencall != null) {
+						// recursive call when the response data contains thencall
+						const thenRuleset = await this.buildRtree(app, slice, Sclass, rule.ruleactions.thencall,FinalRulesetsList);
+						if (thenRuleset instanceof Error) {
+							throw thenRuleset;
+						}
+						ruleObj.thenRuleset = thenRuleset;
+					}
+					if (rule.ruleactions.elsecall != null) {
+						// recursive call when the response data contains elsecall
+						const elseRuleset = await this.buildRtree(app, slice, Sclass, rule.ruleactions.elsecall,FinalRulesetsList);
+						if (elseRuleset instanceof Error) {
+							throw elseRuleset;
+						}
+						ruleObj.elseRuleset = elseRuleset;
+					}
+
+					FinalRuleStruct.push(ruleObj);
+				}
+				this._commonService.hideLoader();
+				return FinalRuleStruct;
+			} else {
+				this._commonService.hideLoader();
+				this._toastr.error(res?.message, Enums.CONSTANTS.ERROR);
+				return new Error(res?.message);
+			}
+		} catch (error: any) {
+			this._commonService.log({
+				fileName: this.fileName,
+				functionName: 'buildRtree',
+				err: error
+			});
+			return error;
+		}
+	}
 }

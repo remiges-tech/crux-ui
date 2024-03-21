@@ -107,13 +107,14 @@
   </div>
 
   <!-- Dynamic tab contents -->
-  <ng-container *ngFor="let t of tabs">
+  <ng-container *ngFor="let t of tabs,let tabIndex = index">
     <div class="tab-pane fade show" id="{{t.name}}" role="tabpanel" aria-labelledby="rulesets-tab">
+      <!-- <a class="click m-1 p-1 pointer" (click)="this.showSource = !this.showSource;" style="float: right;">View Source</a> -->
       <a class="click m-1 p-1 pointer" (click)="this.showSource = !this.showSource;" style="float: right;">View Source</a>
       <div *ngIf="!showSource">
-        <ng-container *ngFor="let Rule of t.RTree">
-          <app-then-else-call [Rule]="Rule" [rulesets]="t.RTreeRulesets" [schemaData]="schemaData"
-            [WorksFlows]="WorksFlows"></app-then-else-call>
+        <ng-container *ngFor="let Rule of t.RTree, let i = index">
+          <app-then-else-call [Rule]="Rule" [rulesets]="FinalRulesetsList" [schemaData]="schemaData"
+            [WorksFlows]="WorksFlows" (updateRule)="updateRtree($event,tabIndex,i)"></app-then-else-call>
         </ng-container>
       </div>
       <div *ngIf="showSource">
