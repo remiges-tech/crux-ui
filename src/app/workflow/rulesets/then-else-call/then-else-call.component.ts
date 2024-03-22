@@ -27,6 +27,22 @@ export class ThenElseCallComponent {
       this.updateRule.emit(this.Rule)
     })
   }
+
+  updateRtreeStructure(RTree:RTree){
+    this.Rule = RTree
+    this.updateRule.emit(this.Rule)
+  }
+
+
+  updateRtreeThenAndElseStructure(RTree:RTree, i:number, callType:string){
+     if(callType == 'then' && this.Rule?.thenRuleset){
+      this.Rule.thenRuleset[i] = RTree
+      this.updateRule.emit(this.Rule)
+     }else if(callType == 'else' && this.Rule?.elseRuleset){
+      this.Rule.elseRuleset[i] = RTree
+      this.updateRule.emit(this.Rule)
+     }
+  }
  
   toggleParentHover(state: boolean) {
     this.parentHovered = state;

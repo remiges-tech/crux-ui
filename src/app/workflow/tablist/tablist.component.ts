@@ -34,6 +34,7 @@ export class TablistComponent {
 		this.defaultTab?.nativeElement.click();
 		event.preventDefault();
 		event.stopImmediatePropagation();
+		this.showSource = false;
 	}
 
 	// Function to get ruleset details for particular selected ruleset
@@ -44,6 +45,7 @@ export class TablistComponent {
 		}
 		try {
 			let tabAlreadyExist = this.tabs.find(tab => tab.name === ruleset.name);
+			this.showSource = false
 			if (!tabAlreadyExist) {
 				const data = await this._schemaService.buildRtree(ruleset.app, ruleset.slice, ruleset.class, ruleset.name,this.FinalRulesetsList);
 				if (data instanceof Error) {
@@ -72,7 +74,6 @@ export class TablistComponent {
 	}
 
 	updateRtree(Rtree:RTree,tabIndex:number,i:number){
-		console.log(Rtree,'tablist')
 		this.tabs[tabIndex].RTree[i] = Rtree;
 		this.tabs[tabIndex].RTreeStringify = JSON.stringify(this.tabs[tabIndex].RTree, null, 2)
 	}

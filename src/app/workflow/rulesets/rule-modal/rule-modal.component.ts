@@ -203,6 +203,9 @@ export class RuleModalComponent {
     }
 
     async thenChangeHandler(){
+        if(!this.elseCall?.value){
+            this.elseCall?.patchValue("")
+            }
         let data = await this._schemaService.buildRtree(this.Ruleset?.app!, this.Ruleset?.slice!, this.Ruleset?.class!, this.thenCall?.value,this.RulesetsList);
         if (data instanceof Error) {
             throw data;
@@ -211,6 +214,9 @@ export class RuleModalComponent {
     }
 
     async elseChangeHandler(){
+        if(!this.thenCall?.value){
+        this.thenCall?.patchValue("")
+        }
         let data = await this._schemaService.buildRtree(this.Ruleset?.app!, this.Ruleset?.slice!, this.Ruleset?.class!, this.elseCall?.value,this.RulesetsList);
         if (data instanceof Error) {
             throw data;

@@ -9,8 +9,9 @@
     <!-- Dynamic Tabs for rulesets detail -->
     <ng-container *ngFor="let t of tabs">
       <button #dynamicTab class="nav-link fw-600 fs-20" id="{{t.name}}-tab" data-bs-toggle="tab"
-        attr.data-bs-target="#{{t.name}}" type="button" role="tab" attr.aria-controls="{{t.name}}"
-        aria-selected="true">{{t.name}}<span class="btn-close ms-3" (click)="close($event, t)"></span></button>
+        (click)="this.showSource = false" attr.data-bs-target="#{{t.name}}" type="button" role="tab"
+        attr.aria-controls="{{t.name}}" aria-selected="true">{{t.name}}<span class="btn-close ms-3"
+          (click)="close($event, t)"></span></button>
     </ng-container>
   </div>
 </nav>
@@ -110,7 +111,8 @@
   <ng-container *ngFor="let t of tabs,let tabIndex = index">
     <div class="tab-pane fade show" id="{{t.name}}" role="tabpanel" aria-labelledby="rulesets-tab">
       <!-- <a class="click m-1 p-1 pointer" (click)="this.showSource = !this.showSource;" style="float: right;">View Source</a> -->
-      <a class="click m-1 p-1 pointer" (click)="this.showSource = !this.showSource;" style="float: right;">View Source</a>
+      <a class="click m-1 p-1 pointer" (click)="this.showSource = !this.showSource;" style="float: right;">View
+        Source</a>
       <div *ngIf="!showSource">
         <ng-container *ngFor="let Rule of t.RTree, let i = index">
           <app-then-else-call [Rule]="Rule" [rulesets]="FinalRulesetsList" [schemaData]="schemaData"
