@@ -15,6 +15,7 @@ import { DoMatchComponent } from './rulesets/do-match/do-match.component';
 import { RuleModalComponent } from './rulesets/rule-modal/rule-modal.component';
 import { RouterModule } from '@angular/router';
 
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { RouterModule } from '@angular/router';
     MultiSelectModule,
     CalendarModule,
     RouterModule,
+    NgxJsonViewerModule,
     DatePipe,
   ]
 })

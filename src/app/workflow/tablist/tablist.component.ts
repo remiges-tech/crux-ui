@@ -6,19 +6,18 @@ import { CONSTANTS } from 'src/services/constants.service';
 
 interface Tabs {
 	name: string,
-	RTree: RTree[],
-	RTreeStringify: string,
+	RTree: RTree[]
 }
 
 @Component({
-  selector: 'app-tablist',
-  templateUrl: './tablist.component.html',
-  styleUrls: ['./tablist.component.scss']
+	selector: 'app-tablist',
+	templateUrl: './tablist.component.html',
+	styleUrls: ['./tablist.component.scss']
 })
 export class TablistComponent {
-  fileName = 'TabslistComponent';
+	fileName = 'TabslistComponent';
 	constants = CONSTANTS;
-	showSource:boolean=false;
+	showSource: boolean = false;
 	@ViewChild('workflowsTab') defaultTab: ElementRef | undefined;
 	@ViewChildren('dynamicTab') Tabs: QueryList<any> | undefined;
 	@Input({ required: true }) schemaData?: SchemaDetails
@@ -30,7 +29,7 @@ export class TablistComponent {
 
 	// Function to close dynamic Tab
 	close(event: MouseEvent, toRemove: Tabs) {
-		this.tabs = this.tabs.filter((id:Tabs) => id !== toRemove);
+		this.tabs = this.tabs.filter((id: Tabs) => id !== toRemove);
 		this.defaultTab?.nativeElement.click();
 		event.preventDefault();
 		event.stopImmediatePropagation();
@@ -47,15 +46,14 @@ export class TablistComponent {
 			let tabAlreadyExist = this.tabs.find(tab => tab.name === ruleset.name);
 			this.showSource = false
 			if (!tabAlreadyExist) {
-				const data = await this._schemaService.buildRtree(ruleset.app, ruleset.slice, ruleset.class, ruleset.name,this.FinalRulesetsList);
+				const data = await this._schemaService.buildRtree(ruleset.app, ruleset.slice, ruleset.class, ruleset.name, this.FinalRulesetsList);
 				if (data instanceof Error) {
 					throw data;
 				}
 				else if (data.length > 0) {
 					this.tabs.push({
 						name: ruleset.name,
-						RTree: data,
-						RTreeStringify: JSON.stringify(data, null, 2)
+						RTree: data
 					});
 				}
 				this._commonService.hideLoader()
@@ -73,9 +71,23 @@ export class TablistComponent {
 		}
 	}
 
-	updateRtree(Rtree:RTree,tabIndex:number,i:number){
+	openNewTab(data: { name: string, RTree: RTree[] }) {
+		console.log(data)
+		let tabAlreadyExist = this.tabs.find(tab => tab.name === data.name);
+		if (!tabAlreadyExist) {
+			this.tabs.push({
+				name: data.name,
+				RTree: data.RTree
+			});
+
+		}
+		setTimeout(() => {
+			this.autoDirectTab(data);
+		}, 100);
+	}
+
+	updateRtree(Rtree: RTree, tabIndex: number, i: number) {
 		this.tabs[tabIndex].RTree[i] = Rtree;
-		this.tabs[tabIndex].RTreeStringify = JSON.stringify(this.tabs[tabIndex].RTree, null, 2)
 	}
 
 	getConstraints(patternschema: any): string {
