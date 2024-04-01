@@ -141,7 +141,7 @@
 
 <!-- IF both then and else doesn't exists -->
 <ng-container *ngIf="!Rule?.thenRuleset && !Rule?.elseRuleset">
-    <app-do-match [childHovered]="parentHovered" [Rule]="Rule" [rulesets]="rulesets" [schemaData]="schemaData"
+    <app-do-match [childHovered]="parentHovered" [Rule]="Rule" [index]="index" [rulesets]="rulesets" [schemaData]="schemaData"
         [WorksFlows]="WorksFlows" (updateRule)="updateRtreeStructure($event)"></app-do-match>
 </ng-container>
 
@@ -166,7 +166,7 @@
 <!-- thenblock if is_internal = true -->
 <ng-template #thencallinternal>
     <ng-container *ngFor="let Rule of Rule?.thenRuleset, let i = index">
-        <app-then-else-call [parentHovered]="parentHovered" [Rule]="Rule" [rulesets]="rulesets"
+        <app-then-else-call [parentHovered]="parentHovered" [Rule]="Rule" [index]="i" [rulesets]="rulesets"
             [schemaData]="schemaData" [WorksFlows]="WorksFlows" (openDetail)="openWorkflowDetail($event)"
             (updateRule)="updateRtreeThenAndElseStructure($event,i,'then')"></app-then-else-call>
     </ng-container>
@@ -188,7 +188,7 @@
 <ng-template #elsecallinternal>
     <div class="else-child indent-3">
         <ng-container *ngFor="let Rule of Rule?.elseRuleset, let i = index">
-            <app-then-else-call [parentHovered]="parentHovered" [Rule]="Rule" [rulesets]="rulesets"
+            <app-then-else-call [parentHovered]="parentHovered" [Rule]="Rule" [index]="i" [rulesets]="rulesets"
                 [schemaData]="schemaData" [WorksFlows]="WorksFlows" (openDetail)="openWorkflowDetail($event)"
                 (updateRule)="updateRtreeThenAndElseStructure($event, i, 'else')"></app-then-else-call>
         </ng-container>

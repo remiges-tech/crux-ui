@@ -98,6 +98,26 @@ export class BREschemaService {
     }
   }
 
+  updateWorkflowRule(obj: any): any {
+    try {
+      let dataObj = {
+        method: 'post',
+        api_url: environment.apiUrl + Enums.CONSTANTS.BRERulesets_UPDATE_API,
+        local_json_file: '',
+        param_data: obj,
+        mapcol: false,
+      };
+      let resp = this._httpService.fetchData(dataObj);
+      return resp;
+    } catch (error) {
+      this._commonService.log({
+        fileName: this.fileName,
+        functionName: 'updateWorkflowRule',
+        msg: error
+      });
+    }
+  }
+
   // Function to recurrsively fetch the details of a rule based on the provided parameters and create a RTree data structure.
   async buildRtree(app: string, slice: number, Sclass: string, Rname: string,FinalRulesetsList:RTreeRulesets): Promise<RTree[] | Error> {
 		try {

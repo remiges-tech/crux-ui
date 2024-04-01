@@ -13,6 +13,7 @@ export class DoMatchComponent {
   @Input({ required: true }) rulesets?: RTreeRulesets;
   @Input({ required: true }) schemaData?: SchemaDetails;
   @Input({ required: true }) WorksFlows?: RulesetsList[]=[];
+  @Input({ required: true }) index?: number;
   @Output() updateRule = new EventEmitter<RTree>();
   OperatorsUnicode: any = OperatorsUnicode;
   @Input() childHovered: boolean = false;
@@ -22,7 +23,7 @@ export class DoMatchComponent {
   constructor() { }
 
   openRuleModal(): void {
-    let updatedRule = this._commonService.openRuleModal(this.Rule!, this.rulesets!,this.schemaData!, this.WorksFlows!)
+    let updatedRule = this._commonService.openRuleModal(this.Rule!, this.rulesets!,this.schemaData!, this.WorksFlows!,this.index!)
     updatedRule?.afterClosed().subscribe((res:RTree) => {
       this.Rule = res
       this.updateRule.emit(this.Rule)

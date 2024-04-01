@@ -77,3 +77,9 @@ export interface DeactivateRealmSliceResp{
     message: string
 }
 
+export interface RulesetUpdateResp{
+    status: string,
+    statusCode: number,
+    message: string
+}
+

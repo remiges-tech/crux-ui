@@ -114,7 +114,7 @@
         Source</a>
       <div *ngIf="!showSource">
         <ng-container *ngFor="let Rule of t.RTree, let i = index">
-          <app-then-else-call [Rule]="Rule" [rulesets]="FinalRulesetsList" [schemaData]="schemaData"
+          <app-then-else-call [Rule]="Rule" [index]="i" [rulesets]="FinalRulesetsList" [schemaData]="schemaData"
               [WorksFlows]="WorksFlows" (openDetail)="openNewTab($event)" (updateRule)="updateRtree($event,tabIndex,i)"></app-then-else-call>
         </ng-container>
       </div>

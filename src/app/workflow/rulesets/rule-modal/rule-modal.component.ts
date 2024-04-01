@@ -2,22 +2,30 @@ import { Component, Inject, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Property, RTree, RTreeRulesets, RulePatternTerm, RuleSet, RulesetsList, SchemaDetails, SchemaPatternAttr } from 'src/models/common-interfaces';
-import { OperatorsUnicode, AttrDataTypes } from 'src/services/constants.service';
+import { OperatorsUnicode, AttrDataTypes, CONSTANTS } from 'src/services/constants.service';
 import { checkConstraints } from 'src/customValidators/rule.contraints.service';
 import { BREschemaService } from 'src/services/breschema.service';
+import { ToastrService } from 'ngx-toastr';
+import { CommonService } from 'src/services/common.service';
+import { RulesetUpdateResp } from 'src/models/request-response-inteface';
 @Component({
     selector: 'app-rule-modal',
     templateUrl: './rule-modal.component.html',
     styleUrls: ['./rule-modal.component.scss']
 })
 export class RuleModalComponent {
+    private _schemaService = inject(BREschemaService);
+    private _toastr = inject(ToastrService);
+    private _commonService = inject(CommonService);
+    fileName = 'RuleModalComponent'
     isEdit: boolean = false;
+    index?: number;
     Rule?: RTree;
     RulesetsList: RTreeRulesets = {}
     Ruleset?: RuleSet;
     workFlow?: RulesetsList[];
-    updatedThen?:RTree[]
-    updatedElse?:RTree[]
+    updatedThen?: RTree[]
+    updatedElse?: RTree[]
     RuleForm: FormGroup = this.formBuilder.group({
         rulepattern: this.formBuilder.array<{ attrname: string, op: string, attrval: string }>([]),
         tasks: [[], [Validators.required]],
@@ -32,10 +40,9 @@ export class RuleModalComponent {
     OperatorsUnicode: { [key: string]: string } = OperatorsUnicode;
     operators = ['eq', 'gt', 'lt', 'ge', 'le', 'ne']
     SchemaData?: SchemaDetails;
-	private _schemaService = inject(BREschemaService);
 
     constructor(@Inject(MAT_DIALOG_DATA) public data:
-        { rule: RTree, Ruleset: RuleSet, rulesetsList: RTreeRulesets, schemaData: SchemaDetails, workFlows: RulesetsList[] },
+        { rule: RTree, Ruleset: RuleSet, rulesetsList: RTreeRulesets, schemaData: SchemaDetails, workFlows: RulesetsList[], index: number },
         private dialog: MatDialogRef<RuleModalComponent>,
         private formBuilder: FormBuilder) {
 
@@ -47,6 +54,7 @@ export class RuleModalComponent {
             this.Ruleset = data.Ruleset
             this.SchemaData = data.schemaData
             this.workFlow = data.workFlows
+            this.index = data.index;
             this.patchRuleValues();
             this.exitChangeHandler();
         }
@@ -143,7 +151,7 @@ export class RuleModalComponent {
         this.SchemaData?.patternschema.attr.forEach((attribute: SchemaPatternAttr) => {
             if (((attribute.valtype == AttrDataTypes.typeBool || attribute.valtype == AttrDataTypes.typeEnum) && this.isAttrNameUsed(attribute.name, index)) || this.isOperatorUsed(attribute.name, 'eq', index)) {
                 return;
-            } 
+            }
             attrNameList.push(attribute.name)
         })
 
@@ -159,12 +167,12 @@ export class RuleModalComponent {
         return isUsed ? this.operators.filter((op: string) => op != 'eq' && op != 'ne') : this.operators;
     }
 
-    getRulesetsList(callType:string){
+    getRulesetsList(callType: string) {
         let workflowList = this.workFlow
-        if(callType == 'then'){
-            workflowList = workflowList?.filter((workflow:any) => workflow.name != this.elseCall?.value)
-        }else{
-            workflowList = workflowList?.filter((workflow:any) => workflow.name != this.thenCall?.value)
+        if (callType == 'then') {
+            workflowList = workflowList?.filter((workflow: any) => workflow.name != this.elseCall?.value)
+        } else {
+            workflowList = workflowList?.filter((workflow: any) => workflow.name != this.thenCall?.value)
         }
 
         return workflowList;
@@ -202,22 +210,22 @@ export class RuleModalComponent {
         }
     }
 
-    async thenChangeHandler(){
-        if(!this.elseCall?.value){
+    async thenChangeHandler() {
+        if (!this.elseCall?.value) {
             this.elseCall?.patchValue("")
-            }
-        let data = await this._schemaService.buildRtree(this.Ruleset?.app!, this.Ruleset?.slice!, this.Ruleset?.class!, this.thenCall?.value,this.RulesetsList);
+        }
+        let data = await this._schemaService.buildRtree(this.Ruleset?.app!, this.Ruleset?.slice!, this.Ruleset?.class!, this.thenCall?.value, this.RulesetsList);
         if (data instanceof Error) {
             throw data;
         }
         this.updatedThen = data
     }
 
-    async elseChangeHandler(){
-        if(!this.thenCall?.value){
-        this.thenCall?.patchValue("")
+    async elseChangeHandler() {
+        if (!this.thenCall?.value) {
+            this.thenCall?.patchValue("")
         }
-        let data = await this._schemaService.buildRtree(this.Ruleset?.app!, this.Ruleset?.slice!, this.Ruleset?.class!, this.elseCall?.value,this.RulesetsList);
+        let data = await this._schemaService.buildRtree(this.Ruleset?.app!, this.Ruleset?.slice!, this.Ruleset?.class!, this.elseCall?.value, this.RulesetsList);
         if (data instanceof Error) {
             throw data;
         }
@@ -250,8 +258,17 @@ export class RuleModalComponent {
         this.dialog.close(this.Rule);
     }
 
+    onEditHandler() {
+        if (this.Ruleset?.is_active) {
+            this._toastr.warning(CONSTANTS.CANNOT_EDIT_RULESET_MSG, CONSTANTS.WARNING)
+            return;
+        }
+
+        this.isEdit = true;
+    }
+
     saveHandler() {
-        if (this.RuleForm.invalid) {
+        if (this.RuleForm.invalid || this.index == undefined) {
             return
         }
 
@@ -270,16 +287,56 @@ export class RuleModalComponent {
             rulePattern: rulePatterns,
             ruleActions: {
                 tasks: this.tasks?.value,
-                properties: this.properties.value,
-                thencall: this.thenCall?.value,
-                elsecall: this.elseCall?.value,
-                return: this.willReturn?.value,
-                exit: this.willExit?.value
-            },
-            thenRuleset : this.updatedThen,
-            elseRuleset : this.updatedElse
+                properties: this.properties.value
+            }
         }
 
-        this.isEdit = false;
+        if (this.thenCall?.value != undefined && this.updatedThen != undefined) {
+            this.Rule.ruleActions.thencall = this.thenCall?.value
+            this.Rule.thenRuleset = this.updatedThen
+        }
+
+        if (this.elseCall?.value != undefined && this.updatedElse != undefined) {
+            this.Rule.ruleActions.elsecall = this.elseCall?.value
+            this.Rule.elseRuleset = this.updatedElse
+        }
+
+        if (this.willReturn?.value != undefined) {
+            this.Rule.ruleActions.return = this.willReturn?.value
+        }
+
+        if (this.willExit?.value != undefined) {
+            this.Rule.ruleActions.exit = this.willExit?.value
+        }
+
+        // Separated rules from rulesets and rename it to flowrules
+        const { rules, ...updatedRuleset }: any = { ...this.Ruleset, flowrules: this.Ruleset?.rules };
+
+        // Update the current rules value
+        updatedRuleset.flowrules[this.index] = { rulePattern: this.Rule.rulePattern, ruleActions: this.Rule.ruleActions }
+
+        try {
+
+            this._commonService.showLoader()
+            this._schemaService.updateWorkflowRule(updatedRuleset).subscribe((res: RulesetUpdateResp) => {
+                if (res.status == CONSTANTS.SUCCESS) {
+                    this._toastr.success(res?.message, CONSTANTS.SUCCESS);
+                    this._commonService.hideLoader();
+                    this.isEdit = false;
+                } else {
+                    this._toastr.error(res?.message, CONSTANTS.ERROR);
+                    this._commonService.hideLoader();
+                }
+            }, (err: any) => {
+                this._toastr.error(err, CONSTANTS.ERROR)
+                this._commonService.hideLoader();
+            })
+        } catch (error) {
+            this._commonService.log({
+                fileName: this.fileName,
+                functionName: 'saveHandler',
+                err: error
+            })
+        }
     }
 }

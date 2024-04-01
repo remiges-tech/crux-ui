@@ -87,6 +87,21 @@ export interface RuleSet {
     editedby: string
 }
 
+export interface UpdateRuleSet {
+    id: number,
+    slice: number,
+    app: string,
+    class: string,
+    name: string,
+    flowrules: Rule[],
+    is_active: boolean,
+    is_internal: boolean,
+    createdat: string,
+    createdby: string,
+    editedat: string,
+    editedby: string
+}
+
 export interface Rule {
 	rulepattern: RulePatternTerm[]
 	ruleactions: RuleActions
