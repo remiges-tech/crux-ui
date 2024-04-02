@@ -34,7 +34,9 @@ export class RuleModalComponent {
         elseCall: [''],
         willExit: [false],
         willReturn: [false],
-        isDone: [false]
+        isDone: [false],
+        removeThen: [false],
+        removeElse: [false]
     });
 
     OperatorsUnicode: { [key: string]: string } = OperatorsUnicode;
@@ -66,6 +68,14 @@ export class RuleModalComponent {
 
     get isDone() {
         return this.RuleForm.get('isDone')
+    }
+
+    get removeThen() {
+        return this.RuleForm.get('removeThen')
+    }
+
+    get removeElse() {
+        return this.RuleForm.get('removeElse')
     }
 
     get properties() {
@@ -200,15 +210,42 @@ export class RuleModalComponent {
             this.tasks?.disable();
             this.thenCall?.disable();
             this.elseCall?.disable();
+            this.removeThen?.disable();
+            this.removeElse?.disable();
             this.addPropeties('done', 'true');
             this.properties?.disable();
         } else {
             this.thenCall?.enable();
             this.elseCall?.enable();
+            this.removeThen?.enable();
+            this.removeElse?.enable();
             this.properties?.enable();
             this.tasks?.enable();
         }
     }
+
+
+    toggleRemoveThenCall(){
+        if(this.removeThen?.value || this.isDone?.value){
+            this.thenCall?.patchValue("")
+            this.updatedThen = undefined;
+            this.thenCall?.disable();
+        }else{
+            this.thenCall?.enable();
+        }
+    }
+
+
+    toggleRemoveElseCall(){
+        if(this.removeElse?.value || this.isDone?.value){
+            this.elseCall?.patchValue("")
+            this.updatedElse = undefined;
+            this.elseCall?.disable();
+        }else{
+            this.elseCall?.enable();
+        }
+    }
+
 
     async thenChangeHandler() {
         if (!this.elseCall?.value) {
