@@ -23,7 +23,8 @@
                                         <p [innerHTML]="OperatorsUnicode[rule.op]" class="fs-5"></p>
                                     </div>
                                     <div class="col-md-6">
-                                        <p class="fs-5">{{ getSchemaDetailsByAttrName(rule?.attrname!)?.valtype == 'ts' ?  (rule?.attrval | date:'MMM dd, YYYY, hh:mm:ss a') :  rule?.attrval }}</p>
+                                        <p class="fs-5">{{ getSchemaDetailsByAttrName(rule?.attrname!)?.valtype == 'ts'
+                                            ? (rule?.attrval | date:'MMM dd, YYYY, hh:mm:ss a') : rule?.attrval }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -48,7 +49,7 @@
                                 </span>
                             </div>
                             <div class="fs-20 mt-4 d-flex">
-                                <div *ngIf="Rule?.ruleActions?.thencall"> 
+                                <div *ngIf="Rule?.ruleActions?.thencall">
                                     <b>thenCall:</b>
                                     <span class="badge bg-primary mx-2 fs-10">{{ Rule?.ruleActions?.thencall
                                         }}</span>
@@ -72,12 +73,13 @@
                                 <div *ngFor="let rule of rulepattern.controls,let i = index" [formGroupName]="i">
                                     <div class="row mb-2">
                                         <div class="col-md-3 col-sm-5">
-                                            <select (change)="onAttrNameChangeHandler(i)"
-                                                formControlName="attrname" class="form-control" id="{{i}}-attrName">
+                                            <select (change)="onAttrNameChangeHandler(i)" formControlName="attrname"
+                                                class="form-control" id="{{i}}-attrName">
                                                 <option disabled value="">
                                                     Select
                                                 </option>
-                                                <option *ngFor="let attrName of getAttributesNamesByIndex(i)" [value]="attrName">
+                                                <option *ngFor="let attrName of getAttributesNamesByIndex(i)"
+                                                    [value]="attrName">
                                                     {{attrName}}
                                                 </option>
                                             </select>
@@ -131,7 +133,9 @@
                                                     </select>
                                                 </ng-container>
                                                 <ng-container *ngSwitchCase="'ts'">
-                                                    <p-calendar formControlName="attrval" [showIcon]="true" [showTime]="true" [showSeconds]="true" appendTo="body"></p-calendar>
+                                                    <p-calendar formControlName="attrval" [showIcon]="true"
+                                                        [showTime]="true" [showSeconds]="true"
+                                                        appendTo="body"></p-calendar>
                                                 </ng-container>
                                                 <!-- Input for rest of the type -->
                                                 <ng-container *ngSwitchDefault>
@@ -184,9 +188,8 @@
                                                 <b class="m-2">Mark done: </b>
                                                 <div style="display: inline-flex;" class="form-check form-switch">
                                                     <input class="form-check-input" type="checkbox"
-                                                        formControlName="isDone"
-                                                        (change)="markTaskDoneHandler()" role="switch"
-                                                        id="isdone">
+                                                        formControlName="isDone" (change)="markTaskDoneHandler()"
+                                                        role="switch" id="isdone">
                                                 </div>
                                             </div>
                                         </div>
@@ -200,15 +203,16 @@
                                 <div class="fs-20 mb-2" formArrayName="properties">
                                     <b class="m-2">{{RuleForm.get('properties')?.value.length > 1 ? 'NextStep Tags:'
                                         : 'NextStep Tag:'}}</b>
-                                    <div *ngFor="let property of properties.controls,let i = index"
-                                        [formGroupName]="i">
+                                    <div *ngFor="let property of properties.controls,let i = index" [formGroupName]="i">
                                         <div class="row mb-2">
                                             <div class="col-md-3 col-sm-5">
-                                                <select (change)="propertyNameChangeHandler(i)" formControlName="name" class="form-control" id="{{i}}-name">
+                                                <select (change)="propertyNameChangeHandler(i)" formControlName="name"
+                                                    class="form-control" id="{{i}}-name">
                                                     <option disabled value="">
                                                         Select
                                                     </option>
-                                                    <option *ngFor="let propName of SchemaData?.actionschema?.properties"
+                                                    <option
+                                                        *ngFor="let propName of SchemaData?.actionschema?.properties"
                                                         [value]="propName">
                                                         {{propName}}
                                                     </option>
@@ -240,14 +244,16 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-1 col-sm-5">
-                                                <button [disabled]="RuleForm.get('isDone')?.value" class="btn" (click)="removePropertiesByIndex(i)">
+                                                <button [disabled]="RuleForm.get('isDone')?.value" class="btn"
+                                                    (click)="removePropertiesByIndex(i)">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
                                     <div>
-                                        <button class="btn realm add-btn" [disabled]="RuleForm.get('isDone')?.value" (click)="addPropeties()">Add</button>
+                                        <button class="btn realm add-btn" [disabled]="RuleForm.get('isDone')?.value"
+                                            (click)="addPropeties()">Add</button>
                                     </div>
                                 </div>
                             </div>
@@ -260,19 +266,17 @@
                                 <select (change)="thenChangeHandler()" class="form-control" formControlName="thenCall">
                                     <option disabled value="">
                                         Select </option>
-                                    <option *ngFor="let ruleset of getRulesetsList('then')" [disabled]="ruleset.name == Ruleset?.name"
-                                        [value]="ruleset.name">{{ruleset.name}}</option>
+                                    <option *ngFor="let ruleset of getRulesetsList('then')"
+                                        [disabled]="ruleset.name == Ruleset?.name" [value]="ruleset.name">
+                                        {{ruleset.name}}</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
                                 <div class="d-flex align-items-center">
                                     <b class="m-2">Remove then: </b>
                                     <div style="display: inline-flex;" class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox"
-                                            formControlName="removeThen" 
-                                            (change)="toggleRemoveThenCall()"
-                                             role="switch"
-                                            id="removeThen">
+                                        <input class="form-check-input" type="checkbox" formControlName="removeThen"
+                                            (change)="toggleRemoveThenCall()" role="switch" id="removeThen">
                                     </div>
                                 </div>
                             </div>
@@ -281,19 +285,17 @@
                                 <select (change)="elseChangeHandler()" class="form-control" formControlName="elseCall">
                                     <option disabled value="">
                                         Select </option>
-                                    <option *ngFor="let ruleset of getRulesetsList('else')" [disabled]="ruleset.name == Ruleset?.name"
-                                        [value]="ruleset.name">{{ruleset.name}}</option>
+                                    <option *ngFor="let ruleset of getRulesetsList('else')"
+                                        [disabled]="ruleset.name == Ruleset?.name" [value]="ruleset.name">
+                                        {{ruleset.name}}</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
                                 <div class="d-flex align-items-center">
                                     <b class="m-2">Remove else: </b>
                                     <div style="display: inline-flex;" class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox"
-                                            formControlName="removeElse"
-                                            (change)="toggleRemoveElseCall()"
-                                             role="switch"
-                                            id="removeElse">
+                                        <input class="form-check-input" type="checkbox" formControlName="removeElse"
+                                            (change)="toggleRemoveElseCall()" role="switch" id="removeElse">
                                     </div>
                                 </div>
                             </div>
@@ -313,8 +315,8 @@
                                 <div class="d-flex align-items-center">
                                     <b>Exit: </b>
                                     <div style="display: inline-flex;" class="form-check form-switch">
-                                        <input (change)="exitChangeHandler()" class="form-check-input" type="checkbox" formControlName="willExit"
-                                            role="switch" id="willExit">
+                                        <input (change)="exitChangeHandler()" class="form-check-input" type="checkbox"
+                                            formControlName="willExit" role="switch" id="willExit">
                                     </div>
                                 </div>
                             </div>
@@ -328,7 +330,7 @@
                 <i class="fa-regular fa-pen-to-square mt-2 mb-20"></i>
             </button>
             <button class="btn p-1 mt-1 realm" [disabled]="RuleForm.invalid" (click)="saveHandler()"
-                [hidden]="!isEdit">Done
+                [hidden]="!isEdit">{{action == 'add'? 'Add' : 'Save'}}
                 <i class="fa-regular fa-pen-to-square mt-2 mb-20"></i>
             </button>
         </div>

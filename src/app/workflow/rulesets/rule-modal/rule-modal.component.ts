@@ -19,6 +19,7 @@ export class RuleModalComponent {
     private _commonService = inject(CommonService);
     fileName = 'RuleModalComponent'
     isEdit: boolean = false;
+    action:'edit'|'add'='edit';
     index?: number;
     Rule?: RTree;
     RulesetsList: RTreeRulesets = {}
@@ -44,7 +45,7 @@ export class RuleModalComponent {
     SchemaData?: SchemaDetails;
 
     constructor(@Inject(MAT_DIALOG_DATA) public data:
-        { rule: RTree, Ruleset: RuleSet, rulesetsList: RTreeRulesets, schemaData: SchemaDetails, workFlows: RulesetsList[], index: number },
+        { rule: RTree, Ruleset: RuleSet, rulesetsList: RTreeRulesets, schemaData: SchemaDetails, workFlows: RulesetsList[], index: number,action:'edit'|'add' },
         private dialog: MatDialogRef<RuleModalComponent>,
         private formBuilder: FormBuilder) {
 
@@ -57,6 +58,10 @@ export class RuleModalComponent {
             this.SchemaData = data.schemaData
             this.workFlow = data.workFlows
             this.index = data.index;
+            this.action = data.action;
+            if(data.action == 'add'){
+                this.isEdit = true;
+            }
             this.patchRuleValues();
             this.exitChangeHandler();
         }
@@ -292,6 +297,10 @@ export class RuleModalComponent {
     }
 
     closeModal() {
+        if (this.action == 'add' && this.RuleForm.invalid) {
+            this.dialog.close();
+            return
+        }
         this.dialog.close(this.Rule);
     }
 
@@ -350,7 +359,11 @@ export class RuleModalComponent {
         const { rules, ...updatedRuleset }: any = { ...this.Ruleset, flowrules: this.Ruleset?.rules };
 
         // Update the current rules value
-        updatedRuleset.flowrules[this.index] = { rulePattern: this.Rule.rulePattern, ruleActions: this.Rule.ruleActions }
+        if(this.action == 'edit'){
+            updatedRuleset.flowrules[this.index] = { rulePattern: this.Rule.rulePattern, ruleActions: this.Rule.ruleActions }
+        }else{
+            updatedRuleset.flowrules?.push({ rulePattern: this.Rule.rulePattern, ruleActions: this.Rule.ruleActions })
+        }
 
         try {
 
