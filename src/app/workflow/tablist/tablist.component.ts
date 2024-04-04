@@ -93,7 +93,7 @@ export class TablistComponent {
 			rulePattern: [],
 			ruleActions: {
 				tasks: [],
-				properties: []
+				properties: {}
 			},
 		}
 		let updatedRule = this._commonService.openRuleModal(Rule,this.FinalRulesetsList, this.schemaData!, this.WorksFlows!,0,'add')

@@ -27,7 +27,7 @@ export class CommonService {
 
   getAppNamesFromList(list: SchemaList[]): AppInfo[] {
     let appsList = [...list.map((item: SchemaList) => {
-      return { discription: `${item.applong} (${item.app})`, value: item.app }
+      return { discription: `${item.longname} (${item.app})`, value: item.app }
     })]
 
     const unique = appsList.filter((Apps, index) => {
@@ -108,6 +108,11 @@ export class CommonService {
       width: '80%',
       data: { rule, Ruleset, rulesetsList, schemaData, workFlows,index,action}
     });
+  }
+
+  sliceObject(obj: any, start: number, end: number) {
+    const slicedEntries = Object.entries(obj).slice(start, end);
+    return Object.fromEntries(slicedEntries);
   }
   
 }

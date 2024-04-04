@@ -10,8 +10,8 @@
                     (mouseleave)="childHovered = false">
                     <span class="h6">
                         <span *ngFor="let pattern of getMatchList(Rule?.rulePattern!), let isLast = last">
-                            {{ pattern.attrname }} <span [innerHTML]="OperatorsUnicode[pattern.op]"></span>
-                            {{ pattern.attrval }} {{isLast ? '...' : ','}}
+                            {{ pattern.attr }} <span [innerHTML]="OperatorsUnicode[pattern.op]"></span>
+                            {{ pattern.val }} {{isLast ? '...' : ','}}
                         </span>
                     </span>
                 </div>
@@ -29,9 +29,9 @@
                         <span class="h6"> {{Rule && Rule.ruleActions.tasks[0]}}...</span>&nbsp;
                         <span>
                             <b>{{Rule && Rule.ruleActions.tasks.length > 1 ? 'NextStep Tags' : 'NextStep Tag'}}:</b>
-                            <span class="h6" *ngFor="let property of Rule?.ruleActions?.properties?.slice(0, 1)">
-                                {{ property.name }} - {{
-                                    property.val }}...
+                            <span class="h6" *ngFor="let property of _commonService.sliceObject(Rule?.ruleActions?.properties,0,1) | keyvalue">
+                                {{ property.key }} - {{
+                                    property.value }}...
                             </span>
                         </span>
                     </div>

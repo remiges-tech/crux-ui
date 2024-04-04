@@ -28,7 +28,7 @@ export class RuleModalComponent {
     updatedThen?: RTree[]
     updatedElse?: RTree[]
     RuleForm: FormGroup = this.formBuilder.group({
-        rulepattern: this.formBuilder.array<{ attrname: string, op: string, attrval: string }>([]),
+        rulepattern: this.formBuilder.array<{ attr: string, op: string, val: string }>([]),
         tasks: [[], [Validators.required]],
         properties: this.formBuilder.array<{ name: string, val: string }>([]),
         thenCall: [''],
@@ -110,9 +110,9 @@ export class RuleModalComponent {
 
     addPatterns(attrname?: string, op?: string, attrval?: any) {
         const rPattern = this.formBuilder.group({
-            attrname: [attrname ?? '', [Validators.required]],
+            attr: [attrname ?? '', [Validators.required]],
             op: [op ?? '', [Validators.required]],
-            attrval: [attrval ?? '', [Validators.required, checkConstraints(this.SchemaData!)]]
+            val: [attrval ?? '', [Validators.required, checkConstraints(this.SchemaData!)]]
         });
         this.rulepattern.push(rPattern)
     }
@@ -139,13 +139,13 @@ export class RuleModalComponent {
         }
 
         this.Rule.rulePattern.forEach((pattern: RulePatternTerm) => {
-            const attrval = this.getSchemaDetailsByAttrName(pattern.attrname)?.valtype == AttrDataTypes.typeTs ? new Date(pattern.attrval) : pattern.attrval
-            this.addPatterns(pattern.attrname, pattern.op, attrval);
+            const attrval = this.getSchemaDetailsByAttrName(pattern.attr)?.valtype == AttrDataTypes.typeTs ? new Date(pattern.attr) : pattern.val
+            this.addPatterns(pattern.attr, pattern.op, attrval);
         })
         this.RuleForm.patchValue({ tasks: this.Rule.ruleActions.tasks, willReturn: this.Rule.ruleActions.return, willExit: this.Rule.ruleActions.exit, thenCall: this.Rule.ruleActions.thencall, elseCall: this.Rule.ruleActions.elsecall })
-        this.Rule.ruleActions.properties.forEach((property: Property) => {
-            this.addPropeties(property.name, property.val)
-            if (property.name == 'done') {
+        Object.entries(this.Rule.ruleActions.properties).forEach(([key,value]) => {
+            this.addPropeties(key, value)
+            if (key == 'done') {
                 this.isDone?.patchValue(true);
                 this.tasks?.disable();
                 this.properties?.disable();
@@ -154,11 +154,11 @@ export class RuleModalComponent {
     }
 
     isAttrNameUsed(attributeName: string, i: number) {
-        return this.rulepattern.value.some((pattern: any, index: number) => pattern.attrname == attributeName && index != i)
+        return this.rulepattern.value.some((pattern: any, index: number) => pattern.attr == attributeName && index != i)
     }
 
     isOperatorUsed(attributeName: string, op: string, i: number) {
-        return this.rulepattern.value.some((pattern: any, index: number) => pattern.attrname == attributeName && pattern.op == op && index != i)
+        return this.rulepattern.value.some((pattern: any, index: number) => pattern.attr == attributeName && pattern.op == op && index != i)
     }
 
     getAttributesNamesByIndex(index: number) {
@@ -175,7 +175,7 @@ export class RuleModalComponent {
 
     getOperatorsList(index: number) {
         let schemaDetails = this.getSchemaDetailsByIndex(index)
-        let isUsed = this.rulepattern.value.some((pattern: any, i: number) => pattern.attrname == schemaDetails?.name && pattern.op != 'eq' && i != index)
+        let isUsed = this.rulepattern.value.some((pattern: any, i: number) => pattern.attr == schemaDetails?.name && pattern.op != 'eq' && i != index)
         if (schemaDetails?.valtype == AttrDataTypes.typeEnum || schemaDetails?.valtype == AttrDataTypes.typeBool) {
             return ['eq', 'ne']
         }
@@ -194,9 +194,9 @@ export class RuleModalComponent {
     }
 
     onAttrNameChangeHandler(index: number) {
-        this.rulepattern.controls[index].patchValue({ op: '', attrval: '' })
+        this.rulepattern.controls[index].patchValue({ op: '', val: '' })
         if (this.getSchemaDetailsByIndex(index)?.valtype == AttrDataTypes.typeBool) {
-            this.rulepattern.controls[index].get('attrval')?.patchValue(false)
+            this.rulepattern.controls[index].get('val')?.patchValue(false)
         }
     }
 
@@ -288,7 +288,7 @@ export class RuleModalComponent {
     // }
 
     getSchemaDetailsByIndex(i: number) {
-        const attrName = this.rulepattern.at(i)?.value?.attrname
+        const attrName = this.rulepattern.at(i)?.value?.attr
         return this.SchemaData?.patternschema.attr.filter((pattern: any) => pattern.name == attrName)[0] ?? null
     }
 
@@ -322,18 +322,25 @@ export class RuleModalComponent {
 
         this.RuleForm.value.rulepattern.forEach((pattern: RulePatternTerm) => {
             let originalPattern: RulePatternTerm = pattern
-            if (this.getSchemaDetailsByAttrName(pattern.attrname)?.valtype == AttrDataTypes.typeTs) {
-                originalPattern.attrval = new Date(pattern.attrval).toISOString()
+            if (this.getSchemaDetailsByAttrName(pattern.attr)?.valtype == AttrDataTypes.typeTs) {
+                originalPattern.attr = new Date(pattern.attr).toISOString()
             }
             rulePatterns.push(originalPattern)
         })
+
+        const updatedProperties:Property = this.properties.value.reduce((acc:any, curr:any) => {
+            acc[curr.name] = curr.val;
+            return acc;
+          }, {});
+
+        
 
         this.Rule = {
             setname: this.Rule!.setname,
             rulePattern: rulePatterns,
             ruleActions: {
                 tasks: this.tasks?.value,
-                properties: this.properties.value
+                properties: updatedProperties
             }
         }
 
@@ -356,13 +363,13 @@ export class RuleModalComponent {
         }
 
         // Separated rules from rulesets and rename it to flowrules
-        const { rules, ...updatedRuleset }: any = { ...this.Ruleset, flowrules: this.Ruleset?.rules };
+        const updatedRuleset = this.Ruleset!;
 
         // Update the current rules value
         if(this.action == 'edit'){
-            updatedRuleset.flowrules[this.index] = { rulePattern: this.Rule.rulePattern, ruleActions: this.Rule.ruleActions }
+            updatedRuleset.flowrules[this.index] = { rulepattern: this.Rule.rulePattern, ruleactions: this.Rule.ruleActions }
         }else{
-            updatedRuleset.flowrules?.push({ rulePattern: this.Rule.rulePattern, ruleActions: this.Rule.ruleActions })
+            updatedRuleset.flowrules?.push({ rulepattern: this.Rule.rulePattern, ruleactions: this.Rule.ruleActions })
         }
 
         try {

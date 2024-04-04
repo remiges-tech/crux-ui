@@ -129,7 +129,7 @@ export class BREschemaService {
 			const res: RuleSetDetailResp = await this.getWorkflowDetails(data).toPromise();
 
 			if (res.status === Enums.CONSTANTS.SUCCESS) {
-				let rules: Rule[] = res.data.rules;
+				let rules: Rule[] = res.data.flowrules;
 				let FinalRuleStruct: RTree[] = [];
         
         if(!FinalRulesetsList[res.data.name]){

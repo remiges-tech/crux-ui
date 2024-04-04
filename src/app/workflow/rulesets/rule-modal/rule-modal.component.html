@@ -17,14 +17,14 @@
                             <div *ngFor="let rule of Rule?.rulePattern">
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <p class="fs-5">{{ rule?.attrname }}</p>
+                                        <p class="fs-5">{{ rule?.attr }}</p>
                                     </div>
                                     <div class="col-md-1">
                                         <p [innerHTML]="OperatorsUnicode[rule.op]" class="fs-5"></p>
                                     </div>
                                     <div class="col-md-6">
-                                        <p class="fs-5">{{ getSchemaDetailsByAttrName(rule?.attrname!)?.valtype == 'ts'
-                                            ? (rule?.attrval | date:'MMM dd, YYYY, hh:mm:ss a') : rule?.attrval }}</p>
+                                        <p class="fs-5">{{ getSchemaDetailsByAttrName(rule?.attr!)?.valtype == 'ts'
+                                            ? (rule?.val | date:'MMM dd, YYYY, hh:mm:ss a') : rule?.val }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -40,12 +40,12 @@
                                     task }}</span>
                             </div>
                             <div class="mt-4 fs-20">
-                                <b>{{(Rule && Rule.ruleActions.properties.length > 1) ? 'NextStep Tags' :
+                                <b>{{(Rule && Rule.ruleActions.properties) ? 'NextStep Tags' :
                                     'NextStepTag'}}:</b>
                                 <span class="badge bg-success mx-2 fs-10"
-                                    *ngFor="let property of Rule?.ruleActions?.properties">
-                                    {{property.name}} - {{
-                                    property.val }}
+                                    *ngFor="let property of Rule?.ruleActions?.properties | keyvalue">
+                                    {{property.key}} - {{
+                                    property.value }}
                                 </span>
                             </div>
                             <div class="fs-20 mt-4 d-flex">
@@ -73,7 +73,7 @@
                                 <div *ngFor="let rule of rulepattern.controls,let i = index" [formGroupName]="i">
                                     <div class="row mb-2">
                                         <div class="col-md-3 col-sm-5">
-                                            <select (change)="onAttrNameChangeHandler(i)" formControlName="attrname"
+                                            <select (change)="onAttrNameChangeHandler(i)" formControlName="attr"
                                                 class="form-control" id="{{i}}-attrName">
                                                 <option disabled value="">
                                                     Select
@@ -83,14 +83,14 @@
                                                     {{attrName}}
                                                 </option>
                                             </select>
-                                            <div *ngIf="rulepattern.controls[i].get('attrname')?.touched"
+                                            <div *ngIf="rulepattern.controls[i].get('attr')?.touched"
                                                 class="text-danger">
                                                 <div
-                                                    *ngIf="rulepattern.controls[i].get('attrname')?.hasError('required')">
+                                                    *ngIf="rulepattern.controls[i].get('attr')?.hasError('required')">
                                                     <small>Name is required</small>
                                                 </div>
                                                 <div
-                                                    *ngIf="rulepattern.controls[i].get('attrname')?.hasError('validationError')">
+                                                    *ngIf="rulepattern.controls[i].get('attr')?.hasError('validationError')">
                                                     <small>Validation is required</small>
                                                 </div>
                                             </div>
@@ -116,12 +116,12 @@
                                                 <ng-container *ngSwitchCase="'bool'">
                                                     <div class="form-check form-switch">
                                                         <input class="form-check-input" type="checkbox" role="switch"
-                                                            id="{{i}}-attrval" formControlName="attrval">
+                                                            id="{{i}}-attrval" formControlName="val">
                                                     </div>
                                                 </ng-container>
                                                 <!-- Input for type enum -->
                                                 <ng-container *ngSwitchCase="'enum'">
-                                                    <select formControlName="attrval" class="form-control"
+                                                    <select formControlName="val" class="form-control"
                                                         id="{{i}}-attrval">
                                                         <option disabled value="">
                                                             Select
@@ -133,7 +133,7 @@
                                                     </select>
                                                 </ng-container>
                                                 <ng-container *ngSwitchCase="'ts'">
-                                                    <p-calendar formControlName="attrval" [showIcon]="true"
+                                                    <p-calendar formControlName="val" [showIcon]="true"
                                                         [showTime]="true" [showSeconds]="true"
                                                         appendTo="body"></p-calendar>
                                                 </ng-container>
@@ -142,18 +142,18 @@
                                                     <input
                                                         [type]="getSchemaDetailsByIndex(i)?.valtype == 'int' ? 'number' : 'text'"
                                                         class="form-control" id="{{i}}-attrval"
-                                                        formControlName="attrval" placeholder="attrvalue" />
+                                                        formControlName="val" placeholder="attrvalue" />
                                                 </ng-container>
                                             </ng-container>
-                                            <div *ngIf="rulepattern.controls[i].get('attrval')?.touched"
+                                            <div *ngIf="rulepattern.controls[i].get('val')?.touched"
                                                 class="text-danger">
                                                 <div
-                                                    *ngIf="rulepattern.controls[i].get('attrval')?.hasError('required')">
+                                                    *ngIf="rulepattern.controls[i].get('val')?.hasError('required')">
                                                     <small>Value is required</small>
                                                 </div>
                                                 <div
-                                                    *ngIf="rulepattern.controls[i].get('attrval')?.hasError('ConstraintsError')">
-                                                    <small>{{rulepattern.controls[i].get('attrval')?.errors!['message']
+                                                    *ngIf="rulepattern.controls[i].get('val')?.hasError('ConstraintsError')">
+                                                    <small>{{rulepattern.controls[i].get('val')?.errors!['message']
                                                         }}</small>
                                                 </div>
                                             </div>

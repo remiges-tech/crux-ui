@@ -18,7 +18,7 @@ export interface SchemaDetailResp{
 
 export interface RuleSetListResp{
     data: {
-        rulesets: RulesetsList[]
+        workflows: RulesetsList[]
     },
     status: string,
     statusCode: number,

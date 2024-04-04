@@ -137,7 +137,7 @@ export class WorkflowSchemaComponent {
 			this._commonService.showLoader();
 			this._schemaService.getWorkflowList(data).subscribe((res: RuleSetListResp) => {
 				if (res?.status == CONSTANTS.SUCCESS) {
-					this.WorksFlows = res?.data?.rulesets;
+					this.WorksFlows = res?.data?.workflows;
 					this._commonService.hideLoader();
 				} else {
 					this._toastr.error(res?.message, CONSTANTS.ERROR);

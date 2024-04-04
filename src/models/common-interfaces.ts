@@ -2,8 +2,12 @@ export interface SchemaList {
     app: string,
     slice: number,
     class: string,
-    applong: string,
-    slicedesc: string
+    longname: string,
+    slicedesc: string,
+    createdat: string,
+    createdby: string,
+    editedat: string,
+    editedby: string
 }
 
 export interface SchemaDetails {
@@ -78,7 +82,7 @@ export interface RuleSet {
     app: string,
     class: string,
     name: string,
-    rules: Rule[],
+    flowrules: Rule[],
     is_active: boolean,
     is_internal: boolean,
     createdat: string,
@@ -120,27 +124,22 @@ export interface RTreeRulesets {
 }
 
 export interface RulePatternTerm {
-	attrname: string
+	attr: string
 	op:       string
-	attrval:  any
+	val:  any
 }
 
 export interface RuleActions {
 	tasks:      string[]
-	properties: Property[]
+	properties: Property
 	thencall?:   string
 	elsecall?:   string
 	return?: boolean
 	exit?:   boolean
 }
 
-// interface Property {
-//   [key: string]: string
-// }
-
 export interface Property {
-    name: string,
-    val: string
+    [key:string]: string
   }
 
 export interface App {

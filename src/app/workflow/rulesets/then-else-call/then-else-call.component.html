@@ -155,8 +155,8 @@
         <span>
             <span class="h6">
                 <span *ngFor="let pattern of getMatchList(Rule?.rulePattern!), let isLast = last">
-                    {{ pattern.attrname }} <span [innerHTML]="OperatorsUnicode[pattern.op]" class="fs-5"></span> {{
-                    pattern.attrval }} {{isLast ? '...' : ','}}
+                    {{ pattern.attr }} <span [innerHTML]="OperatorsUnicode[pattern.op]" class="fs-5"></span> {{
+                    pattern.val }} {{isLast ? '...' : ','}}
                 </span>
             </span>
         </span>

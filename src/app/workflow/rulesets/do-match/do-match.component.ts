@@ -18,7 +18,7 @@ export class DoMatchComponent {
   OperatorsUnicode: any = OperatorsUnicode;
   @Input() childHovered: boolean = false;
 
-  private _commonService = inject(CommonService);
+  public _commonService = inject(CommonService);
 
   constructor() { }
 
