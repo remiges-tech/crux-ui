@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="col-md-4 p-0 m-0  ">
-            <button type="button" [routerLink]="['/replicate-realmslice']" class="btn realm d-none d-xl-block d-md-block d-lg-block" style="float: right;">Replicate Realm Slice</button>
+            <button type="button" [routerLink]="['/replicate-realmslice']" class="btn realm d-none d-xl-block d-md-block d-lg-block" style="float: right;" i18n="@@ReplicateRealmSliceButton">Replicate Realm Slice</button>
         </div>
     </div>
     <div class="row mt-2">
@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-3" *ngIf="selectedData.slice">
                     <input id="activateRealmSlice" [(ngModel)]="isRealmSliceActive" type="checkbox" (click)="activateOrDeactiveRealSlice()">&nbsp;
-                    <label for="activateRealmSlice" class=" text-color">Activate RealmSlice</label>
+                    <label for="activateRealmSlice" i18n="@@ActivateRealmSliceLabel" class=" text-color">Activate RealmSlice</label>
                 </div>
             </div>
         </div>

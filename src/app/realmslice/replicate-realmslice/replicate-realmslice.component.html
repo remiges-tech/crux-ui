@@ -3,11 +3,11 @@
         <div class="col-8">
             <div class="d-flex flex-column flex-md-row">
                 <div class="col-3">
-                    <label class="fs-20 fw-600 ml-3 text-color">Realmslice</label>
+                    <label class="fs-20 fw-600 ml-3 text-color" i18n="@@RealmsliceLabel">Realmslice</label>
                 </div>
                 <div class="col-3">
                     <ng-select (change)="getAppsList()" [(ngModel)]="selectedData.realmSlice" class="dropdown"
-                        id="realmslice" placeholder="--Select Realmslice--">
+                        id="realmslice" placeholder="--Select Realmslice--" i18n-placeholder="@@RealmslicePlaceholder">
                         <ng-option *ngFor="let slice of sliceList" [value]="slice.value">{{slice.discription}}</ng-option>
                     </ng-select>
                 </div>
@@ -18,11 +18,11 @@
         <div class="col-8">
             <div class="d-flex flex-column flex-md-row">
                 <div class="col-3">
-                    <label class="fs-20 fw-600 ml-3 text-color">Apps</label>
+                    <label class="fs-20 fw-600 ml-3 text-color" i18n="@@AppsLabel">Apps</label>
                 </div>
                 <div class="col-3 ml-3">
                     <p-multiSelect [options]="appList" [(ngModel)]="selectedData.apps" optionLabel="name"
-                        placeholder="--Select Apps--"></p-multiSelect>
+                        placeholder="--Select Apps--" i18n-placeholder="@@AppsPlaceholder"></p-multiSelect>
                 </div>
             </div>
         </div>
@@ -31,10 +31,10 @@
         <div class="col-8">
             <div class="d-flex flex-column flex-md-row">
                 <div class="col-3">
-                    <label class="fs-20 fw-600 ml-3 text-color">Description</label>
+                    <label class="fs-20 fw-600 ml-3 text-color" i18n="@@DescriptionLabel">Description</label>
                 </div>
                 <div class="col-3 ml-3">
-                    <textarea class="description form-control" [(ngModel)]="selectedData.desc" id="description" placeholder="Type here..."></textarea>
+                    <textarea class="description form-control" [(ngModel)]="selectedData.desc" id="description" i18n-placeholder="@@DescriptionPlaceholder" placeholder="Type here..."></textarea>
                 </div>
             </div>
         </div>
@@ -44,10 +44,11 @@
     </div>
     <div class="mt-4 d-flex justify-content-left">
         <div class="m-2">
-            <a class="click" type="reset" (click)="resetForm()">Reset</a>
+            <a class="click" type="reset" (click)="resetForm()" i18n="@@resetButton">Reset</a>
         </div>
         <div class="m-2">
-            <a class="click" [ngClass]="isDisable() ? 'disabled' : ''" type="submit" (click)="replicateRealmSlice()">{{selectedData.realmSlice != null ? 'Replicate Realm Slice' : 'Create new Realm Slice'}}</a>
+            <a *ngIf="selectedData.realmSlice != null" class="click" [ngClass]="isDisable() ? 'disabled' : ''" type="submit" (click)="replicateRealmSlice()" i18n="@@ReplicateRealmSliceButton">Replicate Realm Slice</a>
+            <a *ngIf="selectedData.realmSlice == null" class="click" [ngClass]="isDisable() ? 'disabled' : ''" type="submit" (click)="replicateRealmSlice()" i18n="@@CreatenewRealmSliceButton">Create new Realm Slice</a>
         </div>
     </div>
 </div>
