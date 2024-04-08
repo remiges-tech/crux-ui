@@ -65,9 +65,10 @@ export class CommonService {
 
   getAppsList(list: AppsList[]): App[] {
     let realmList = [...list.map((item: AppsList) => {
-      return { name: item.name, code: item.name }
+      return { name: item.shortname, code: item.shortname }
     })]
 
+    console.log(realmList,'asdsads')
     return realmList;
   }
 

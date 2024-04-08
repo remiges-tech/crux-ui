@@ -157,6 +157,6 @@ export interface RealmSliceList {
 }
 
 export interface AppsList{
-    name: string,
-    descr: string
+    shortname: string,
+    longname: string
 }
