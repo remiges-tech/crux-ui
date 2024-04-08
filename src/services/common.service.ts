@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { RuleModalComponent } from 'src/app/workflow/rulesets/rule-modal/rule-modal.component';
-import { App, AppInfo, AppsList, RTree, RTreeRulesets, RealmSliceList, RulePatternTerm, RulesetsList, SchemaDetails, SchemaList, SliceInfo } from 'src/models/common-interfaces';
+import { App, AppInfo, AppsList, RTree, RTreeRulesets, RealmSliceList, RulePatternTerm, RuleSet, RulesetsList, SchemaDetails, SchemaList, SliceInfo } from 'src/models/common-interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -99,7 +99,7 @@ export class CommonService {
     this.isLoading = false;
   }
 
-  openRuleModal(rule: RTree, rulesetsList: RTreeRulesets, schemaData:SchemaDetails, workFlows:RulesetsList[], index:number, action:'edit'|'add'='edit') {
+  openRuleModal(rule: RTree, rulesetsList: RTreeRulesets, schemaData:SchemaDetails, workFlows:RulesetsList[], index:number, action:'edit'|'add'|'workflow'='edit') {
     if(rule == undefined || rulesetsList == undefined || schemaData == undefined || workFlows ==  undefined || index == undefined){
       return;
     }

@@ -91,6 +91,9 @@
     <ng-container *ngIf="WorksFlows && WorksFlows.length > 0">
       <div class="container">
         <div class="note d-flex justify-content-end align-items-center">
+          <a class="click m-1 p-1 pointer" (click)="openWorkFlowModal()" style="float: right;">Add workflow</a>
+        </div>
+        <div class="note d-flex justify-content-end align-items-center">
           <div class="inactive-color"></div> &nbsp;<span class="not-active">Inactive</span>
           &nbsp;&nbsp;<div class="active-color"></div>&nbsp;<span class="active">Active</span>
         </div>

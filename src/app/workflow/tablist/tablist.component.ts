@@ -86,9 +86,9 @@ export class TablistComponent {
 		}, 100);
 	}
 
-	openRuleModal(setname:string,tabIndex:number): void {
+	openRuleModal(setname: string, tabIndex: number): void {
 		// Create a empty RTree data.
-		let Rule:RTree = {
+		let Rule: RTree = {
 			setname,
 			rulePattern: [],
 			ruleActions: {
@@ -96,14 +96,33 @@ export class TablistComponent {
 				properties: {}
 			},
 		}
-		let updatedRule = this._commonService.openRuleModal(Rule,this.FinalRulesetsList, this.schemaData!, this.WorksFlows!,0,'add')
+		let updatedRule = this._commonService.openRuleModal(Rule, this.FinalRulesetsList, this.schemaData!, this.WorksFlows!, 0, 'add')
 		updatedRule?.afterClosed().subscribe((res: RTree) => {
-			if(res == undefined){
+			if (res == undefined) {
 				return
 			}
 			this.tabs[tabIndex].RTree.push(res)
 		})
-	  }
+	}
+
+	openWorkFlowModal(): void {
+		// Create a empty RTree data.
+		let Rule: RTree = {
+			setname:'',
+			rulePattern: [],
+			ruleActions: {
+				tasks: [],
+				properties: {}
+			},
+		}
+		let updatedRule = this._commonService.openRuleModal(Rule, this.FinalRulesetsList, this.schemaData!, this.WorksFlows!, 0, 'workflow')
+		// updatedRule?.afterClosed().subscribe((res: RTree) => {
+		// 	if (res == undefined) {
+		// 		return
+		// 	}
+		// 	this.tabs[tabIndex].RTree.push(res)
+		// })
+	}
 
 	updateRtree(Rtree: RTree, tabIndex: number, i: number) {
 		this.tabs[tabIndex].RTree[i] = Rtree;

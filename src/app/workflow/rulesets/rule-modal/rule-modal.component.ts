@@ -1,7 +1,7 @@
 import { Component, Inject, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Property, RTree, RTreeRulesets, RulePatternTerm, RuleSet, RulesetsList, SchemaDetails, SchemaPatternAttr } from 'src/models/common-interfaces';
+import { Property, RTree, RTreeRulesets, Rule, RuleActions, RulePatternTerm, RuleSet, RulesetsList, SchemaDetails, SchemaPatternAttr } from 'src/models/common-interfaces';
 import { OperatorsUnicode, AttrDataTypes, CONSTANTS } from 'src/services/constants.service';
 import { checkConstraints } from 'src/customValidators/rule.contraints.service';
 import { BREschemaService } from 'src/services/breschema.service';
@@ -19,7 +19,7 @@ export class RuleModalComponent {
     private _commonService = inject(CommonService);
     fileName = 'RuleModalComponent'
     isEdit: boolean = false;
-    action:'edit'|'add'='edit';
+    action: 'edit' | 'add' | 'workflow' = 'edit';
     index?: number;
     Rule?: RTree;
     RulesetsList: RTreeRulesets = {}
@@ -28,16 +28,12 @@ export class RuleModalComponent {
     updatedThen?: RTree[]
     updatedElse?: RTree[]
     RuleForm: FormGroup = this.formBuilder.group({
-        rulepattern: this.formBuilder.array<{ attr: string, op: string, val: string }>([]),
-        tasks: [[], [Validators.required]],
-        properties: this.formBuilder.array<{ name: string, val: string }>([]),
-        thenCall: [''],
-        elseCall: [''],
-        willExit: [false],
-        willReturn: [false],
-        isDone: [false],
-        removeThen: [false],
-        removeElse: [false]
+        slice: [0, [Validators.required]],
+        app: ['', [Validators.required]],
+        class: ['', [Validators.required]],
+        name: ['', [Validators.required]],
+        is_internal: [false, [Validators.required]],
+        flowrules: this.formBuilder.array([])
     });
 
     OperatorsUnicode: { [key: string]: string } = OperatorsUnicode;
@@ -45,7 +41,7 @@ export class RuleModalComponent {
     SchemaData?: SchemaDetails;
 
     constructor(@Inject(MAT_DIALOG_DATA) public data:
-        { rule: RTree, Ruleset: RuleSet, rulesetsList: RTreeRulesets, schemaData: SchemaDetails, workFlows: RulesetsList[], index: number,action:'edit'|'add' },
+        { rule: RTree, Ruleset: RuleSet, rulesetsList: RTreeRulesets, schemaData: SchemaDetails, workFlows: RulesetsList[], index: number, action: 'edit' | 'add' | 'workflow' },
         private dialog: MatDialogRef<RuleModalComponent>,
         private formBuilder: FormBuilder) {
 
@@ -59,112 +55,181 @@ export class RuleModalComponent {
             this.workFlow = data.workFlows
             this.index = data.index;
             this.action = data.action;
-            if(data.action == 'add'){
+            if (data.action == 'add' || data.action == 'workflow') {
+                this.patchSchemaValues()
                 this.isEdit = true;
             }
             this.patchRuleValues();
-            this.exitChangeHandler();
         }
     }
 
-    get rulepattern() {
-        return this.RuleForm.get('rulepattern') as FormArray;
+    getFlowRulesAtIndex(index: any) {
+        let fR = this.RuleForm.get('flowrules') as FormArray;
+        return fR.at(index) as FormGroup;
     }
 
-    get isDone() {
-        return this.RuleForm.get('isDone')
+    getRulePatternAt(index: any) {
+        return this.getFlowRulesAtIndex(index).get('rulepattern') as FormArray;
     }
 
-    get removeThen() {
-        return this.RuleForm.get('removeThen')
+    getTasksAt(index: any) {
+        return this.getFlowRulesAtIndex(index).get('ruleactions')?.get('tasks') as FormArray;
     }
 
-    get removeElse() {
-        return this.RuleForm.get('removeElse')
+    getPropertiesnAt(index: any) {
+        return this.getFlowRulesAtIndex(index).get('ruleactions')?.get('properties') as FormArray;
     }
 
-    get properties() {
-        return this.RuleForm.get('properties') as FormArray;
+    getIsDoneAt(index: any) {
+        return this.getFlowRulesAtIndex(index).get('ruleactions')?.get('isDone');
     }
 
-    get tasks() {
-        return this.RuleForm.get('tasks')
+    getThenCallAt(index: any) {
+        return this.getFlowRulesAtIndex(index).get('ruleactions')?.get('thencall');
     }
 
-    get thenCall() {
-        return this.RuleForm.get('thenCall')
+    getElseCallAt(index: any) {
+        return this.getFlowRulesAtIndex(index).get('ruleactions')?.get('elsecall');
     }
 
-    get elseCall() {
-        return this.RuleForm.get('elseCall')
+    getRemoveThenAt(index: any) {
+        return this.getFlowRulesAtIndex(index).get('ruleactions')?.get('removeThen');
     }
 
-    get willReturn() {
-        return this.RuleForm.get('willReturn')
+    getRemoveElseAt(index: any) {
+        return this.getFlowRulesAtIndex(index).get('ruleactions')?.get('removeElse');
     }
 
-    get willExit() {
-        return this.RuleForm.get('willExit')
+    getWillReturnAt(index: any) {
+        return this.getFlowRulesAtIndex(index).get('ruleactions')?.get('return');
     }
 
+    getWillExitAt(index: any) {
+        return this.getFlowRulesAtIndex(index).get('ruleactions')?.get('exit');
+    }
 
-    addPatterns(attrname?: string, op?: string, attrval?: any) {
+    get flowrules() {
+        return this.RuleForm.get('flowrules') as FormArray;
+    }
+
+    addFlowRules() {
+        const flowrule = this.formBuilder.group({
+            rulepattern: this.formBuilder.array<RulePatternTerm>([]),
+            ruleactions: this.formBuilder.group({
+                tasks: [[], [Validators.required]],
+                properties: this.formBuilder.array<{ name: string, val: string }>([]),
+                thencall: [''],
+                elsecall: [''],
+                exit: [false],
+                return: [false],
+                isDone: [false],
+                removeThen: [false],
+                removeElse: [false]
+            })
+        });
+        this.flowrules.push(flowrule)
+    }
+
+    addPatterns(index: number = 0, attrname?: string, op?: string, attrval?: any) {
         const rPattern = this.formBuilder.group({
             attr: [attrname ?? '', [Validators.required]],
             op: [op ?? '', [Validators.required]],
             val: [attrval ?? '', [Validators.required, checkConstraints(this.SchemaData!)]]
         });
-        this.rulepattern.push(rPattern)
+
+        this.getRulePatternAt(index).push(rPattern);
     }
 
-    addPropeties(name?: string, val?: string) {
+    addPropeties(flowRuleIndex: number, name?: string, val?: string) {
         const rProperties = this.formBuilder.group({
             name: [name ?? '', [Validators.required]],
             val: [val ?? '', [Validators.required]]
         });
-        this.properties.push(rProperties)
+        this.getPropertiesnAt(flowRuleIndex).push(rProperties)
     }
 
-    removeRulePatternByIndex(index: number) {
-        this.rulepattern.removeAt(index);
+    removeRulePatternByIndex(flowRuleIndex: number, index: number) {
+        this.getRulePatternAt(flowRuleIndex).removeAt(index);
     }
 
-    removePropertiesByIndex(index: number) {
-        this.properties.removeAt(index);
+    removePropertiesByIndex(flowRuleIndex: number, index: number) {
+        this.getPropertiesnAt(flowRuleIndex).removeAt(index);
     }
 
-    patchRuleValues() {
-        if (this.Rule == undefined) {
+    removeFlowRulesByIndex(flowRuleIndex: number) {
+        this.flowrules.removeAt(flowRuleIndex);
+    }
+
+    patchSchemaValues() {
+        if (this.SchemaData == undefined) {
             return;
         }
 
+        this.RuleForm.patchValue({
+            slice: this.SchemaData?.slice,
+            app: this.SchemaData?.app,
+            class: this.SchemaData?.class
+        })
+    }
+
+    patchRuleValues() {
+        if (this.Rule == undefined || this.Ruleset == undefined) {
+            return;
+        }
+
+        this.addFlowRules();
+
+        this.exitChangeHandler(0);
+
         this.Rule.rulePattern.forEach((pattern: RulePatternTerm) => {
             const attrval = this.getSchemaDetailsByAttrName(pattern.attr)?.valtype == AttrDataTypes.typeTs ? new Date(pattern.attr) : pattern.val
-            this.addPatterns(pattern.attr, pattern.op, attrval);
+            this.addPatterns(0, pattern.attr, pattern.op, attrval);
         })
-        this.RuleForm.patchValue({ tasks: this.Rule.ruleActions.tasks, willReturn: this.Rule.ruleActions.return, willExit: this.Rule.ruleActions.exit, thenCall: this.Rule.ruleActions.thencall, elseCall: this.Rule.ruleActions.elsecall })
-        Object.entries(this.Rule.ruleActions.properties).forEach(([key,value]) => {
-            this.addPropeties(key, value)
+        this.RuleForm.patchValue({
+            slice: this.SchemaData?.slice,
+            app: this.SchemaData?.app,
+            class: this.SchemaData?.class,
+            name: this.Ruleset.name,
+            is_internal: this.Ruleset.is_internal,
+            flowrules: [
+                {
+                    ruleactions: {
+                        tasks: this.Rule.ruleActions.tasks,
+                        thencall: this.Rule.ruleActions.thencall,
+                        elsecall: this.Rule.ruleActions.elsecall,
+                        exit: this.Rule.ruleActions.exit,
+                        return: this.Rule.ruleActions.return
+                    }
+                }
+            ]
+        })
+
+        Object.entries(this.Rule.ruleActions.properties).forEach(([key, value]) => {
+            this.addPropeties(0, key, value)
             if (key == 'done') {
-                this.isDone?.patchValue(true);
-                this.tasks?.disable();
-                this.properties?.disable();
+                this.getIsDoneAt(0)?.patchValue(true);
+                this.getTasksAt(0)?.disable();
+                this.getPropertiesnAt(0)?.disable();
+                this.getThenCallAt(0)?.disable();
+                this.getElseCallAt(0)?.disable();
+                this.getRemoveThenAt(0)?.disable();
+                this.getRemoveElseAt(0)?.disable();
             }
         })
     }
 
-    isAttrNameUsed(attributeName: string, i: number) {
-        return this.rulepattern.value.some((pattern: any, index: number) => pattern.attr == attributeName && index != i)
+    isAttrNameUsed(attributeName: string, flowRuleIndex: number, i: number) {
+        return this.getRulePatternAt(flowRuleIndex).value.some((pattern: any, index: number) => pattern.attr == attributeName && index != i)
     }
 
-    isOperatorUsed(attributeName: string, op: string, i: number) {
-        return this.rulepattern.value.some((pattern: any, index: number) => pattern.attr == attributeName && pattern.op == op && index != i)
+    isOperatorUsed(attributeName: string, op: string, flowRuleIndex: number, i: number) {
+        return this.getRulePatternAt(flowRuleIndex).value.some((pattern: any, index: number) => pattern.attr == attributeName && pattern.op == op && index != i)
     }
 
-    getAttributesNamesByIndex(index: number) {
+    getAttributesNamesByIndex(flowRuleIndex: number, index: number) {
         const attrNameList: string[] = []
         this.SchemaData?.patternschema.attr.forEach((attribute: SchemaPatternAttr) => {
-            if (((attribute.valtype == AttrDataTypes.typeBool || attribute.valtype == AttrDataTypes.typeEnum) && this.isAttrNameUsed(attribute.name, index)) || this.isOperatorUsed(attribute.name, 'eq', index)) {
+            if (((attribute.valtype == AttrDataTypes.typeBool || attribute.valtype == AttrDataTypes.typeEnum) && this.isAttrNameUsed(attribute.name, flowRuleIndex, index)) || this.isOperatorUsed(attribute.name, 'eq', flowRuleIndex, index)) {
                 return;
             }
             attrNameList.push(attribute.name)
@@ -173,113 +238,113 @@ export class RuleModalComponent {
         return attrNameList
     }
 
-    getOperatorsList(index: number) {
-        let schemaDetails = this.getSchemaDetailsByIndex(index)
-        let isUsed = this.rulepattern.value.some((pattern: any, i: number) => pattern.attr == schemaDetails?.name && pattern.op != 'eq' && i != index)
+    getOperatorsList(flowRuleIndex: number, index: number) {
+        let schemaDetails = this.getSchemaDetailsByIndex(flowRuleIndex, index)
+        let isUsed = this.getRulePatternAt(flowRuleIndex).value.some((pattern: any, i: number) => pattern.attr == schemaDetails?.name && pattern.op != 'eq' && i != index)
         if (schemaDetails?.valtype == AttrDataTypes.typeEnum || schemaDetails?.valtype == AttrDataTypes.typeBool) {
             return ['eq', 'ne']
         }
         return isUsed ? this.operators.filter((op: string) => op != 'eq' && op != 'ne') : this.operators;
     }
 
-    getRulesetsList(callType: string) {
+    getRulesetsList(flowRuleIndex: number, callType: string) {
         let workflowList = this.workFlow
         if (callType == 'then') {
-            workflowList = workflowList?.filter((workflow: any) => workflow.name != this.elseCall?.value)
+            workflowList = workflowList?.filter((workflow: any) => workflow.name != this.getElseCallAt(flowRuleIndex)?.value)
         } else {
-            workflowList = workflowList?.filter((workflow: any) => workflow.name != this.thenCall?.value)
+            workflowList = workflowList?.filter((workflow: any) => workflow.name != this.getThenCallAt(flowRuleIndex)?.value)
         }
 
         return workflowList;
     }
 
-    onAttrNameChangeHandler(index: number) {
-        this.rulepattern.controls[index].patchValue({ op: '', val: '' })
-        if (this.getSchemaDetailsByIndex(index)?.valtype == AttrDataTypes.typeBool) {
-            this.rulepattern.controls[index].get('val')?.patchValue(false)
+    onAttrNameChangeHandler(flowRuleIndex: number, index: number) {
+        this.getRulePatternAt(flowRuleIndex).controls[index].patchValue({ op: '', val: '' })
+        if (this.getSchemaDetailsByIndex(flowRuleIndex, index)?.valtype == AttrDataTypes.typeBool) {
+            this.getRulePatternAt(flowRuleIndex).controls[index].get('val')?.patchValue(false)
         }
     }
 
-    propertyNameChangeHandler(index: number) {
-        this.properties.controls[index].patchValue({ val: '' });
+    propertyNameChangeHandler(flowRuleIndex: number, index: number) {
+        this.getPropertiesnAt(flowRuleIndex).controls[index].patchValue({ val: '' });
     }
 
-    markTaskDoneHandler() {
-        this.properties?.value.forEach((index: number) => this.removePropertiesByIndex(index))
-        this.tasks?.patchValue([])
-        this.thenCall?.patchValue("")
+    markTaskDoneHandler(flowRuleIndex: number) {
+        this.getPropertiesnAt(flowRuleIndex)?.value.forEach((index: number) => this.removePropertiesByIndex(flowRuleIndex, index))
+        this.getTasksAt(flowRuleIndex)?.patchValue([])
+        this.getThenCallAt(flowRuleIndex)?.patchValue("")
         this.updatedThen = undefined
-        this.elseCall?.patchValue("")
+        this.getElseCallAt(flowRuleIndex)?.patchValue("")
         this.updatedElse = undefined
-        if (this.isDone?.value) {
-            this.tasks?.disable();
-            this.thenCall?.disable();
-            this.elseCall?.disable();
-            this.removeThen?.disable();
-            this.removeElse?.disable();
-            this.addPropeties('done', 'true');
-            this.properties?.disable();
+        if (this.getIsDoneAt(flowRuleIndex)?.value) {
+            this.getTasksAt(flowRuleIndex)?.disable();
+            this.getThenCallAt(flowRuleIndex)?.disable();
+            this.getElseCallAt(flowRuleIndex)?.disable();
+            this.getRemoveThenAt(flowRuleIndex)?.disable();
+            this.getRemoveElseAt(flowRuleIndex)?.disable();
+            this.addPropeties(flowRuleIndex, 'done', 'true');
+            this.getPropertiesnAt(flowRuleIndex)?.disable();
         } else {
-            this.thenCall?.enable();
-            this.elseCall?.enable();
-            this.removeThen?.enable();
-            this.removeElse?.enable();
-            this.properties?.enable();
-            this.tasks?.enable();
+            this.getThenCallAt(flowRuleIndex)?.enable();
+            this.getElseCallAt(flowRuleIndex)?.enable();
+            this.getRemoveThenAt(flowRuleIndex)?.enable();
+            this.getRemoveElseAt(flowRuleIndex)?.enable();
+            this.getPropertiesnAt(flowRuleIndex)?.enable();
+            this.getTasksAt(flowRuleIndex)?.enable();
         }
     }
 
 
-    toggleRemoveThenCall(){
-        if(this.removeThen?.value || this.isDone?.value){
-            this.thenCall?.patchValue("")
+    toggleRemoveThenCall(flowRuleIndex: number) {
+        if (this.getRemoveThenAt(flowRuleIndex)?.value || this.getIsDoneAt(flowRuleIndex)?.value) {
+            this.getThenCallAt(flowRuleIndex)?.patchValue("")
             this.updatedThen = undefined;
-            this.thenCall?.disable();
-        }else{
-            this.thenCall?.enable();
+            this.getThenCallAt(flowRuleIndex)?.disable();
+        } else {
+            this.getThenCallAt(flowRuleIndex)?.enable();
         }
     }
 
 
-    toggleRemoveElseCall(){
-        if(this.removeElse?.value || this.isDone?.value){
-            this.elseCall?.patchValue("")
+    toggleRemoveElseCall(flowRuleIndex: number) {
+        if (this.getRemoveElseAt(flowRuleIndex)?.value || this.getIsDoneAt(flowRuleIndex)?.value) {
+            this.getElseCallAt(flowRuleIndex)?.patchValue("")
             this.updatedElse = undefined;
-            this.elseCall?.disable();
-        }else{
-            this.elseCall?.enable();
+            this.getElseCallAt(flowRuleIndex)?.disable();
+        } else {
+            this.getElseCallAt(flowRuleIndex)?.enable();
         }
     }
 
 
-    async thenChangeHandler() {
-        if (!this.elseCall?.value) {
-            this.elseCall?.patchValue("")
+    async thenChangeHandler(flowRuleIndex: number) {
+        if (!this.getElseCallAt(flowRuleIndex)?.value) {
+            this.getElseCallAt(flowRuleIndex)?.patchValue("")
         }
-        let data = await this._schemaService.buildRtree(this.Ruleset?.app!, this.Ruleset?.slice!, this.Ruleset?.class!, this.thenCall?.value, this.RulesetsList);
+        let data = await this._schemaService.buildRtree(this.Ruleset?.app!, this.Ruleset?.slice!, this.Ruleset?.class!, this.getThenCallAt(flowRuleIndex)?.value, this.RulesetsList);
         if (data instanceof Error) {
             throw data;
         }
         this.updatedThen = data
     }
 
-    async elseChangeHandler() {
-        if (!this.thenCall?.value) {
-            this.thenCall?.patchValue("")
+    async elseChangeHandler(flowRuleIndex: number) {
+        if (!this.getThenCallAt(flowRuleIndex)?.value) {
+            this.getThenCallAt(flowRuleIndex)?.patchValue("")
         }
-        let data = await this._schemaService.buildRtree(this.Ruleset?.app!, this.Ruleset?.slice!, this.Ruleset?.class!, this.elseCall?.value, this.RulesetsList);
+        let data = await this._schemaService.buildRtree(this.Ruleset?.app!, this.Ruleset?.slice!, this.Ruleset?.class!, this.getElseCallAt(flowRuleIndex)?.value, this.RulesetsList);
         if (data instanceof Error) {
             throw data;
         }
         this.updatedElse = data
     }
 
-    exitChangeHandler() {
-        if (this.willExit?.value) {
-            this.willReturn?.patchValue(false);
-            this.willReturn?.disable()
+    exitChangeHandler(flowRuleIndex: number) {
+        if (this.getWillExitAt(flowRuleIndex)?.value) {
+            this.getWillReturnAt(flowRuleIndex)?.patchValue(false);
+            this.getWillReturnAt(flowRuleIndex)?.disable()
         } else {
-            this.willReturn?.enable()
+            this.getWillReturnAt(flowRuleIndex)?.enable()
         }
     }
 
@@ -287,8 +352,8 @@ export class RuleModalComponent {
     //     moveItemInArray(this.rulePattern.controls, event.previousIndex, event.currentIndex);
     // }
 
-    getSchemaDetailsByIndex(i: number) {
-        const attrName = this.rulepattern.at(i)?.value?.attr
+    getSchemaDetailsByIndex(flowRuleIndex: number, i: number) {
+        const attrName = this.getRulePatternAt(flowRuleIndex).at(i)?.value?.attr
         return this.SchemaData?.patternschema.attr.filter((pattern: any) => pattern.name == attrName)[0] ?? null
     }
 
@@ -297,7 +362,7 @@ export class RuleModalComponent {
     }
 
     closeModal() {
-        if (this.action == 'add' && this.RuleForm.invalid) {
+        if ((this.action == 'add' || this.action == 'workflow') && this.RuleForm.invalid) {
             this.dialog.close();
             return
         }
@@ -320,7 +385,7 @@ export class RuleModalComponent {
 
         let rulePatterns: RulePatternTerm[] = [];
 
-        this.RuleForm.value.rulepattern.forEach((pattern: RulePatternTerm) => {
+        this.RuleForm.value.flowrules.at(0).rulepattern.forEach((pattern: RulePatternTerm) => {
             let originalPattern: RulePatternTerm = pattern
             if (this.getSchemaDetailsByAttrName(pattern.attr)?.valtype == AttrDataTypes.typeTs) {
                 originalPattern.attr = new Date(pattern.attr).toISOString()
@@ -328,47 +393,46 @@ export class RuleModalComponent {
             rulePatterns.push(originalPattern)
         })
 
-        const updatedProperties:Property = this.properties.value.reduce((acc:any, curr:any) => {
+        const updatedProperties: Property = this.getPropertiesnAt(0).value.reduce((acc: any, curr: any) => {
             acc[curr.name] = curr.val;
             return acc;
-          }, {});
+        }, {});
 
-        
+
 
         this.Rule = {
             setname: this.Rule!.setname,
             rulePattern: rulePatterns,
             ruleActions: {
-                tasks: this.tasks?.value,
+                tasks: this.getTasksAt(0)?.value,
                 properties: updatedProperties
             }
         }
 
-        if (this.thenCall?.value != undefined && this.updatedThen != undefined) {
-            this.Rule.ruleActions.thencall = this.thenCall?.value
+        if (this.getThenCallAt(0)?.value != undefined && this.updatedThen != undefined) {
+            this.Rule.ruleActions.thencall = this.getThenCallAt(0)?.value
             this.Rule.thenRuleset = this.updatedThen
         }
 
-        if (this.elseCall?.value != undefined && this.updatedElse != undefined) {
-            this.Rule.ruleActions.elsecall = this.elseCall?.value
+        if (this.getElseCallAt(0)?.value != undefined && this.updatedElse != undefined) {
+            this.Rule.ruleActions.elsecall = this.getElseCallAt(0)?.value
             this.Rule.elseRuleset = this.updatedElse
         }
 
-        if (this.willReturn?.value != undefined) {
-            this.Rule.ruleActions.return = this.willReturn?.value
+        if (this.getWillReturnAt(0)?.value != undefined) {
+            this.Rule.ruleActions.return = this.getWillReturnAt(0)?.value
         }
 
-        if (this.willExit?.value != undefined) {
-            this.Rule.ruleActions.exit = this.willExit?.value
+        if (this.getWillExitAt(0)?.value != undefined) {
+            this.Rule.ruleActions.exit = this.getWillExitAt(0)?.value
         }
 
-        // Separated rules from rulesets and rename it to flowrules
         const updatedRuleset = this.Ruleset!;
 
         // Update the current rules value
-        if(this.action == 'edit'){
+        if (this.action == 'edit') {
             updatedRuleset.flowrules[this.index] = { rulepattern: this.Rule.rulePattern, ruleactions: this.Rule.ruleActions }
-        }else{
+        } else {
             updatedRuleset.flowrules?.push({ rulepattern: this.Rule.rulePattern, ruleactions: this.Rule.ruleActions })
         }
 
@@ -380,6 +444,71 @@ export class RuleModalComponent {
                     this._toastr.success(res?.message, CONSTANTS.SUCCESS);
                     this._commonService.hideLoader();
                     this.isEdit = false;
+                } else {
+                    this._toastr.error(res?.message, CONSTANTS.ERROR);
+                    this._commonService.hideLoader();
+                }
+            }, (err: any) => {
+                this._toastr.error(err, CONSTANTS.ERROR)
+                this._commonService.hideLoader();
+            })
+        } catch (error) {
+            this._commonService.log({
+                fileName: this.fileName,
+                functionName: 'saveHandler',
+                err: error
+            })
+        }
+    }
+
+    addRulesetHandler() {
+        if (this.RuleForm.invalid || this.index == undefined) {
+            return
+        }
+
+
+        let flowRules: Rule[] = [];
+
+        this.RuleForm.value.flowrules.forEach((flowRule: Rule) => {
+            let rulePatterns: RulePatternTerm[] = [];
+            flowRule.rulepattern.forEach((pattern: RulePatternTerm) => {
+                let originalPattern: RulePatternTerm = pattern
+                if (this.getSchemaDetailsByAttrName(pattern.attr)?.valtype == AttrDataTypes.typeTs) {
+                    originalPattern.attr = new Date(pattern.attr).toISOString()
+                }
+                rulePatterns.push(originalPattern)
+            })
+
+            const updatedProperties: Property = this.getPropertiesnAt(0).value.reduce((acc: any, curr: any) => {
+                acc[curr.name] = curr.val;
+                return acc;
+            }, {});
+
+            let { isDone, removeThen, removeElse, ...rest }: any = flowRule.ruleactions
+            let fRule: Rule = {
+                rulepattern: rulePatterns,
+                ruleactions: {
+                    ...rest,
+                    properties: updatedProperties
+                }
+            }
+
+            flowRules.push(fRule)
+        })
+
+        let newWorkFlow = {
+            ...this.RuleForm.value,
+            flowrules: flowRules
+        }
+
+        try {
+
+            this._commonService.showLoader()
+            this._schemaService.createNewWorkflow(newWorkFlow).subscribe((res: RulesetUpdateResp) => {
+                if (res.status == CONSTANTS.SUCCESS) {
+                    this._toastr.success(res?.message, CONSTANTS.SUCCESS);
+                    this._commonService.hideLoader();
+                    this.closeModal()
                 } else {
                     this._toastr.error(res?.message, CONSTANTS.ERROR);
                     this._commonService.hideLoader();

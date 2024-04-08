@@ -98,6 +98,26 @@ export class BREschemaService {
     }
   }
 
+  createNewWorkflow(obj: any): any {
+    try {
+      let dataObj = {
+        method: 'post',
+        api_url: environment.apiUrl + Enums.CONSTANTS.BRE_NEW_WORKFLOW,
+        local_json_file: '',
+        param_data: obj,
+        mapcol: false,
+      };
+      let resp = this._httpService.fetchData(dataObj);
+      return resp;
+    } catch (error) {
+      this._commonService.log({
+        fileName: this.fileName,
+        functionName: 'createNewWorkflow',
+        msg: error
+      });
+    }
+  }
+
   updateWorkflowRule(obj: any): any {
     try {
       let dataObj = {
