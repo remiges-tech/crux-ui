@@ -50,12 +50,12 @@ export class ReplicateRealmsliceComponent implements OnInit {
       this._commonService.showLoader();
       this._realmService.getRealmSliceList().subscribe((res: ReamlSliceListResp) => {
         if (res?.status == CONSTANTS.SUCCESS) {
+          this._commonService.hideLoader();
           if(res?.data?.slices == null || res?.data?.slices == undefined || res?.data?.slices?.length == 0){
             this._toastr.error(CONSTANTS.DATA_NOT_FOUND, CONSTANTS.ERROR);
             return 
           }
           this.sliceList = this._commonService.getRealmSliceList(res?.data?.slices);
-          this._commonService.hideLoader();
         } else {
           this._toastr.error(res?.message, CONSTANTS.ERROR);
           this._commonService.hideLoader();
@@ -81,18 +81,15 @@ export class ReplicateRealmsliceComponent implements OnInit {
       return;
     }
     try {
-      let data = {
-        params: new HttpParams().append('id', this.selectedData.realmSlice)
-      }
       this._commonService.showLoader();
-      this._realmService.getRealmSliceApps(data).subscribe((res: AppListResp) => {
+      this._realmService.getRealmSliceApps(this.selectedData.realmSlice).subscribe((res: AppListResp) => {
         if (res?.status == CONSTANTS.SUCCESS) {
-          if(res?.data?.apps == null || res?.data?.apps == undefined || res?.data?.apps?.length == 0){
+          this._commonService.hideLoader();
+          if(res?.data == null || res?.data == undefined || res?.data?.length == 0){
             this._toastr.error(CONSTANTS.DATA_NOT_FOUND, CONSTANTS.ERROR);
             return 
           }
-          this.appList = this._commonService.getAppsList(res?.data?.apps);
-          this._commonService.hideLoader();
+          this.appList = this._commonService.getAppsList(res?.data);
         } else {
           this._toastr.error(res?.message, CONSTANTS.ERROR);
           this._commonService.hideLoader();
@@ -135,7 +132,7 @@ export class ReplicateRealmsliceComponent implements OnInit {
       this._realmService.postRealmSliceNew(data).subscribe((res: ReplicateRealmResp) => {
         if (res?.status == CONSTANTS.SUCCESS) {
           this._commonService.hideLoader();
-          this._toastr.success(`ReamlSlice id : ${res.data.id}`,CONSTANTS.SUCCESS)
+          this._toastr.success(`ReamlSlice id : ${res.data}`,CONSTANTS.SUCCESS)
         } else {
           this._toastr.error(res?.message, CONSTANTS.ERROR);
           this._commonService.hideLoader();

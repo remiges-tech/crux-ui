@@ -12,7 +12,7 @@ interface Locale {
 })
 export class TopMenuComponent {
   selectedLocale: string = this.locale;
-  isDarkTheme:any;
+  isDarkTheme:boolean = false;
 
   locales: Locale[] = [
     { localeCode: "en-US", label: "English" },

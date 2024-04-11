@@ -1,9 +1,7 @@
 import { AppsList, RealmSliceList, RuleSet, RulesetsList, SchemaDetails, SchemaList } from "./common-interfaces";
 
 export interface SchemaListResp{
-    data: {
-        schemas: SchemaList[]
-    },
+    data:SchemaList[],
     status: string,
     statusCode: number,
     message: string
@@ -42,18 +40,14 @@ export interface ReamlSliceListResp{
 }
 
 export interface AppListResp{
-    data: {
-        apps: AppsList[]
-    },
+    data: AppsList[],
     status: string,
     statusCode: number,
     message: string
 }
 
 export interface ReplicateRealmResp{
-    data: {
-        id: number
-    },
+    data: any,
     status: string,
     statusCode: number,
     message: string

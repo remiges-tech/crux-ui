@@ -17,7 +17,7 @@ export class RealmsliceService {
   getRealmSliceList(): any {
     try {
       let dataObj = {
-        method: 'get',
+        method: 'post',
         api_url: environment.apiUrl + Enums.CONSTANTS.Realm_Slice_LIST_API,
         local_json_file: '',
         param_data: {},
@@ -58,9 +58,9 @@ export class RealmsliceService {
     try {
       let dataObj = {
         method: 'get',
-        api_url: environment.apiUrl + Enums.CONSTANTS.Realm_Slice_Apps_API,
+        api_url: environment.apiUrl + Enums.CONSTANTS.Realm_Slice_Apps_API + '/' + payload,
         local_json_file: '',
-        param_data: payload,
+        param_data: {},
         mapcol: false,
       };
       let resp = this._httpService.fetchData(dataObj);
@@ -80,7 +80,7 @@ export class RealmsliceService {
         method: 'post',
         api_url: environment.apiUrl + Enums.CONSTANTS.Realm_Slice_Activate_API,
         local_json_file: '',
-        param_data: obj,
+        param_data: {data:obj},
         mapcol: false,
       };
       let resp = this._httpService.fetchData(dataObj);
@@ -100,7 +100,7 @@ export class RealmsliceService {
         method: 'post',
         api_url: environment.apiUrl + Enums.CONSTANTS.Realm_Slice_Deactivate_API,
         local_json_file: '',
-        param_data: obj,
+        param_data: {data:obj},
         mapcol: false,
       };
       let resp = this._httpService.fetchData(dataObj);

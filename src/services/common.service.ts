@@ -115,5 +115,31 @@ export class CommonService {
     const slicedEntries = Object.entries(obj).slice(start, end);
     return Object.fromEntries(slicedEntries);
   }
+
+  // replacePlaceholders(data: any) {
+  //   let finalErrMsg = ErrorCodes[data.msgid];
+
+  //   // Replace field placeholder
+  //   finalErrMsg = finalErrMsg.replace(
+  //     "{<field>}",
+  //     data.field
+  //   );
+
+  //   // Replace value placeholders dynamically
+  //   for (let i = 0; i < data.vals.length; i++) {
+  //     const placeholder = `{<val_${i}>}`;
+  //     finalErrMsg = finalErrMsg.replace(placeholder, data.vals[i]);
+  //   }
+
+  //   return finalErrMsg;
+  // }
+
+  // getToastMsg(errorObj: any): any {
+  //   return errorObj.field && errorObj.vals
+  //     ? this.replacePlaceholders(errorObj)
+  //     : errorObj.errcode
+  //     ? errorObj.errcode
+  //     : "";
+  // }
   
 }

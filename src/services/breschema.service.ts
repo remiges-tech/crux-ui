@@ -3,7 +3,6 @@ import { HttpService } from './http.service';
 import * as Enums from './constants.service';
 import { CommonService } from './common.service';
 import { environment } from 'src/environments/environment.development';
-import { HttpParams } from '@angular/common/http';
 import { RTree, RTreeRulesets, Rule } from 'src/models/common-interfaces';
 import { RuleSetDetailResp } from 'src/models/request-response-inteface';
 import { ToastrService } from 'ngx-toastr';
@@ -21,7 +20,7 @@ export class BREschemaService {
   getWorkflowSchemaList(): any {
     try {
       let dataObj = {
-        method: 'get',
+        method: 'post',
         api_url: environment.apiUrl + Enums.CONSTANTS.BRESchema_LIST_API,
         local_json_file: '',
         param_data: {},
@@ -41,7 +40,7 @@ export class BREschemaService {
   getWorkflowSchemaDetail(obj: any): any {
     try {
       let dataObj = {
-        method: 'get',
+        method: 'post',
         api_url: environment.apiUrl + Enums.CONSTANTS.BRESchema_GET_API,
         local_json_file: '',
         param_data: obj,
@@ -61,7 +60,7 @@ export class BREschemaService {
   getWorkflowList(payload:any): any {
     try {
       let dataObj = {
-        method: 'get',
+        method: 'post',
         api_url: environment.apiUrl + Enums.CONSTANTS.BRERulesets_LIST_API,
         local_json_file: '',
         param_data: payload,
@@ -81,7 +80,7 @@ export class BREschemaService {
   getWorkflowDetails(obj: any): any {
     try {
       let dataObj = {
-        method: 'get',
+        method: 'post',
         api_url: environment.apiUrl + Enums.CONSTANTS.BRERulesets_GET_API,
         local_json_file: '',
         param_data: obj,
@@ -104,7 +103,7 @@ export class BREschemaService {
         method: 'post',
         api_url: environment.apiUrl + Enums.CONSTANTS.BRE_NEW_WORKFLOW,
         local_json_file: '',
-        param_data: obj,
+        param_data: {data:obj},
         mapcol: false,
       };
       let resp = this._httpService.fetchData(dataObj);
@@ -124,7 +123,7 @@ export class BREschemaService {
         method: 'post',
         api_url: environment.apiUrl + Enums.CONSTANTS.BRERulesets_UPDATE_API,
         local_json_file: '',
-        param_data: obj,
+        param_data: {data:obj},
         mapcol: false,
       };
       let resp = this._httpService.fetchData(dataObj);
@@ -143,7 +142,11 @@ export class BREschemaService {
 		try {
 			this._commonService.showLoader();
 			let data = {
-				params: new HttpParams().append('app', app).append('slice', slice).append('class', Sclass).append('name', Rname)
+        data:{app,
+        class: Sclass,
+        slice,
+        name: Rname}
+				// params: new HttpParams().append('app', app).append('slice', slice).append('class', Sclass).append('name', Rname)
 			};
 
 			const res: RuleSetDetailResp = await this.getWorkflowDetails(data).toPromise();

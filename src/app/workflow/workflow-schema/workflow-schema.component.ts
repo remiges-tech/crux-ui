@@ -1,4 +1,3 @@
-import { HttpParams } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppInfo, RealmSliceList, RulesetsList, SchemaDetails, SchemaList, SelectedData, SliceInfo } from 'src/models/common-interfaces';
@@ -19,7 +18,7 @@ export class WorkflowSchemaComponent {
   private _commonService = inject(CommonService);
   private _realmService = inject(RealmsliceService);
   private _toastr = inject(ToastrService);
-  isRealmSliceActive:boolean=false;
+  isRealmSliceActive: boolean = false;
   schemasList?: SchemaList[];
   appList?: AppInfo[];
   sliceList?: SliceInfo[];
@@ -30,7 +29,7 @@ export class WorkflowSchemaComponent {
     class: null,
   }
   schemaData?: SchemaDetails;
-	WorksFlows?: RulesetsList[];
+  WorksFlows?: RulesetsList[];
 
   ngOnInit() {
     this.getSchemaList();
@@ -41,13 +40,14 @@ export class WorkflowSchemaComponent {
       this._commonService.showLoader();
       this._schemaService.getWorkflowSchemaList().subscribe((res: SchemaListResp) => {
         if (res?.status == CONSTANTS.SUCCESS) {
-          if(res?.data?.schemas == null || res?.data?.schemas == undefined || res?.data?.schemas?.length == 0){
-            this._toastr.error(CONSTANTS.DATA_NOT_FOUND, CONSTANTS.ERROR);
-            return 
-          }
-          this.schemasList = res?.data?.schemas;
-          this.appList = this._commonService.getAppNamesFromList(res?.data?.schemas);
           this._commonService.hideLoader();
+          if (res?.data == null || res?.data == undefined || res?.data?.length == 0) {
+            this._toastr.error(CONSTANTS.DATA_NOT_FOUND, CONSTANTS.ERROR);
+            return
+          }
+          this.schemasList = res?.data;
+          this.appList = this._commonService.getAppNamesFromList(res?.data);
+          
         } else {
           this._toastr.error(res?.message, CONSTANTS.ERROR);
           this._commonService.hideLoader();
@@ -85,7 +85,7 @@ export class WorkflowSchemaComponent {
     }
   }
 
-  getDetails(){
+  getDetails() {
     this.clearSchemaData();
     this.getSchemaDetails();
     this.getRulesetsList()
@@ -98,23 +98,29 @@ export class WorkflowSchemaComponent {
     }
     try {
       let data = {
-        params: new HttpParams().append('app', this.selectedData.app).append('slice', this.selectedData.slice).append('class', this.selectedData.class)
+        data: {
+          app: this.selectedData.app,
+          class: this.selectedData.class,
+          slice: this.selectedData.slice
+        }
       }
       this._commonService.showLoader()
       this._schemaService.getWorkflowSchemaDetail(data).subscribe((res: SchemaDetailResp) => {
         if (res.status == CONSTANTS.SUCCESS) {
-          if(res.data == null || res.data == undefined || this._commonService.isObjectEmpty(res.data)){
+          this._commonService.hideLoader();
+          if (res.data == null || res.data == undefined || this._commonService.isObjectEmpty(res.data)) {
             this._toastr.error(CONSTANTS.DATA_NOT_FOUND, CONSTANTS.ERROR);
-            return 
+            return
           }
           this.schemaData = res.data
-          this._commonService.hideLoader();
+          
         } else {
           this._toastr.error(res?.message, CONSTANTS.ERROR);
           this._commonService.hideLoader();
         }
       }, (err: any) => {
         this._toastr.error(err, CONSTANTS.ERROR)
+        this._commonService.hideLoader()
       })
     } catch (error) {
       this._commonService.log({
@@ -127,40 +133,45 @@ export class WorkflowSchemaComponent {
 
   getRulesetsList() {
     this.WorksFlows = undefined
-		if (!this.schemasList || !this.selectedData.app || !this.selectedData.slice || !this.selectedData.class) {
-			return;
-		  }
-		try {
-			let data = {
-				params: new HttpParams().append('app', this.selectedData.app).append('slice', this.selectedData.slice).append('class', this.selectedData.class)
-			  }
-			this._commonService.showLoader();
-			this._schemaService.getWorkflowList(data).subscribe((res: RuleSetListResp) => {
-				if (res?.status == CONSTANTS.SUCCESS) {
-					this.WorksFlows = res?.data?.workflows;
-					this._commonService.hideLoader();
-				} else {
-					this._toastr.error(res?.message, CONSTANTS.ERROR);
-					this._commonService.hideLoader();
-				}
-			}, (err: any) => {
-				this._toastr.error(err, CONSTANTS.ERROR)
-			})
-		} catch (error) {
-			this._commonService.log({
-				fileName: this.fileName,
-				functionName: 'getRulesetsList',
-				err: error
-			})
-		}
-	}
+    if (!this.schemasList || !this.selectedData.app || !this.selectedData.slice || !this.selectedData.class) {
+      return;
+    }
+    try {
+      let data = {
+        data: {
+          app: this.selectedData.app,
+          class: this.selectedData.class,
+          slice: this.selectedData.slice
+        }
+      }
+      this._commonService.showLoader();
+      this._schemaService.getWorkflowList(data).subscribe((res: RuleSetListResp) => {
+        if (res?.status == CONSTANTS.SUCCESS) {
+          this.WorksFlows = res?.data?.workflows;
+          this._commonService.hideLoader();
+        } else {
+          this._toastr.error(res?.message, CONSTANTS.ERROR);
+          this._commonService.hideLoader();
+        }
+      }, (err: any) => {
+        this._commonService.hideLoader()
+        this._toastr.error(err, CONSTANTS.ERROR)
+      })
+    } catch (error) {
+      this._commonService.log({
+        fileName: this.fileName,
+        functionName: 'getRulesetsList',
+        err: error
+      })
+    }
+  }
 
-  getRealmSliceList(){
+  getRealmSliceList() {
     this.isRealmSliceActive = false;
     try {
       this._realmService.getRealmSliceList().subscribe((res: ReamlSliceListResp) => {
         if (res?.status == CONSTANTS.SUCCESS) {
-          this.isRealmSliceActive = res?.data?.slices.filter((slice:RealmSliceList) => slice.id == this.selectedData.slice)[0].active;
+          this.isRealmSliceActive = res?.data?.slices.filter((slice: RealmSliceList) => slice.id == this.selectedData.slice)[0].active;
         } else {
           this._toastr.error(res?.message, CONSTANTS.ERROR);
         }
@@ -176,10 +187,10 @@ export class WorkflowSchemaComponent {
     }
   }
 
-  activateOrDeactiveRealSlice(){
+  activateOrDeactiveRealSlice() {
     try {
-      if(this.isRealmSliceActive){
-        this._realmService.realmSliceDeactivate({id:this.selectedData.slice}).subscribe((res: DeactivateRealmSliceResp) => {
+      if (this.isRealmSliceActive) {
+        this._realmService.realmSliceDeactivate({ id: this.selectedData.slice }).subscribe((res: DeactivateRealmSliceResp) => {
           if (res?.status == CONSTANTS.SUCCESS) {
             this.clearCache();
             this.clearSchemaData();
@@ -193,8 +204,8 @@ export class WorkflowSchemaComponent {
           this.isRealmSliceActive = !this.isRealmSliceActive
           this._toastr.error(err, CONSTANTS.ERROR)
         })
-      }else{
-        this._realmService.realmSliceActivate({id:this.selectedData.slice}).subscribe((res: ActivateRealmSliceResp) => {
+      } else {
+        this._realmService.realmSliceActivate({ id: this.selectedData.slice }).subscribe((res: ActivateRealmSliceResp) => {
           if (res?.status == CONSTANTS.SUCCESS) {
             this.clearCache();
             this.clearSchemaData();
@@ -218,15 +229,12 @@ export class WorkflowSchemaComponent {
     }
   }
 
-
-
-
   clearCache() {
     this.sliceList = undefined;
     this.classList = undefined;
   }
 
-  clearSchemaData(){
+  clearSchemaData() {
     this.schemaData = undefined;
     this.WorksFlows = undefined;
   }

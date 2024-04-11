@@ -14,7 +14,7 @@ export interface SchemaDetails {
     slice: number,
     app: string,
     class: string,
-    patternschema: SchemaPattern,
+    patternschema: SchemaPatternAttr[],
     actionschema: SchemaAction,
     createdat: string,
     createdby: string,
@@ -28,7 +28,7 @@ export interface SchemaPattern{
 }
 
 export interface SchemaPatternAttr{
-    name: string,
+    attr: string,
     shortdesc: string,
     longdesc: string,
     valtype: string,

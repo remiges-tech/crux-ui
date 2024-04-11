@@ -63,48 +63,48 @@ export class RuleModalComponent {
         }
     }
 
-    getFlowRulesAtIndex(index: any) {
+    getFlowRulesAtIndex(index: number) {
         let fR = this.RuleForm.get('flowrules') as FormArray;
         return fR.at(index) as FormGroup;
     }
 
-    getRulePatternAt(index: any) {
+    getRulePatternAt(index: number) {
         return this.getFlowRulesAtIndex(index).get('rulepattern') as FormArray;
     }
 
-    getTasksAt(index: any) {
+    getTasksAt(index: number) {
         return this.getFlowRulesAtIndex(index).get('ruleactions')?.get('tasks') as FormArray;
     }
 
-    getPropertiesnAt(index: any) {
+    getPropertiesnAt(index: number) {
         return this.getFlowRulesAtIndex(index).get('ruleactions')?.get('properties') as FormArray;
     }
 
-    getIsDoneAt(index: any) {
+    getIsDoneAt(index: number) {
         return this.getFlowRulesAtIndex(index).get('ruleactions')?.get('isDone');
     }
 
-    getThenCallAt(index: any) {
+    getThenCallAt(index: number) {
         return this.getFlowRulesAtIndex(index).get('ruleactions')?.get('thencall');
     }
 
-    getElseCallAt(index: any) {
+    getElseCallAt(index: number) {
         return this.getFlowRulesAtIndex(index).get('ruleactions')?.get('elsecall');
     }
 
-    getRemoveThenAt(index: any) {
+    getRemoveThenAt(index: number) {
         return this.getFlowRulesAtIndex(index).get('ruleactions')?.get('removeThen');
     }
 
-    getRemoveElseAt(index: any) {
+    getRemoveElseAt(index: number) {
         return this.getFlowRulesAtIndex(index).get('ruleactions')?.get('removeElse');
     }
 
-    getWillReturnAt(index: any) {
+    getWillReturnAt(index: number) {
         return this.getFlowRulesAtIndex(index).get('ruleactions')?.get('return');
     }
 
-    getWillExitAt(index: any) {
+    getWillExitAt(index: number) {
         return this.getFlowRulesAtIndex(index).get('ruleactions')?.get('exit');
     }
 
@@ -219,20 +219,20 @@ export class RuleModalComponent {
     }
 
     isAttrNameUsed(attributeName: string, flowRuleIndex: number, i: number) {
-        return this.getRulePatternAt(flowRuleIndex).value.some((pattern: any, index: number) => pattern.attr == attributeName && index != i)
+        return this.getRulePatternAt(flowRuleIndex).value.some((pattern: RulePatternTerm, index: number) => pattern.attr == attributeName && index != i)
     }
 
     isOperatorUsed(attributeName: string, op: string, flowRuleIndex: number, i: number) {
-        return this.getRulePatternAt(flowRuleIndex).value.some((pattern: any, index: number) => pattern.attr == attributeName && pattern.op == op && index != i)
+        return this.getRulePatternAt(flowRuleIndex).value.some((pattern: RulePatternTerm, index: number) => pattern.attr == attributeName && pattern.op == op && index != i)
     }
 
     getAttributesNamesByIndex(flowRuleIndex: number, index: number) {
         const attrNameList: string[] = []
-        this.SchemaData?.patternschema.attr.forEach((attribute: SchemaPatternAttr) => {
-            if (((attribute.valtype == AttrDataTypes.typeBool || attribute.valtype == AttrDataTypes.typeEnum) && this.isAttrNameUsed(attribute.name, flowRuleIndex, index)) || this.isOperatorUsed(attribute.name, 'eq', flowRuleIndex, index)) {
+        this.SchemaData?.patternschema.forEach((attribute: SchemaPatternAttr) => {
+            if (((attribute.valtype == AttrDataTypes.typeBool || attribute.valtype == AttrDataTypes.typeEnum) && this.isAttrNameUsed(attribute.attr, flowRuleIndex, index)) || this.isOperatorUsed(attribute.attr, 'eq', flowRuleIndex, index)) {
                 return;
             }
-            attrNameList.push(attribute.name)
+            attrNameList.push(attribute.attr)
         })
 
         return attrNameList
@@ -240,7 +240,7 @@ export class RuleModalComponent {
 
     getOperatorsList(flowRuleIndex: number, index: number) {
         let schemaDetails = this.getSchemaDetailsByIndex(flowRuleIndex, index)
-        let isUsed = this.getRulePatternAt(flowRuleIndex).value.some((pattern: any, i: number) => pattern.attr == schemaDetails?.name && pattern.op != 'eq' && i != index)
+        let isUsed = this.getRulePatternAt(flowRuleIndex).value.some((pattern: RulePatternTerm, i: number) => pattern.attr == schemaDetails?.attr && pattern.op != 'eq' && i != index)
         if (schemaDetails?.valtype == AttrDataTypes.typeEnum || schemaDetails?.valtype == AttrDataTypes.typeBool) {
             return ['eq', 'ne']
         }
@@ -354,11 +354,11 @@ export class RuleModalComponent {
 
     getSchemaDetailsByIndex(flowRuleIndex: number, i: number) {
         const attrName = this.getRulePatternAt(flowRuleIndex).at(i)?.value?.attr
-        return this.SchemaData?.patternschema.attr.filter((pattern: any) => pattern.name == attrName)[0] ?? null
+        return this.SchemaData?.patternschema.filter((pattern: SchemaPatternAttr) => pattern.attr == attrName)[0] ?? null
     }
 
     getSchemaDetailsByAttrName(attrName: string) {
-        return this.SchemaData?.patternschema.attr.filter((pattern: any) => pattern.name == attrName)[0] ?? null
+        return this.SchemaData?.patternschema.filter((pattern: SchemaPatternAttr) => pattern.attr == attrName)[0] ?? null
     }
 
     closeModal() {

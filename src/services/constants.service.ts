@@ -8,17 +8,17 @@ export enum CONSTANTS {
   SCHEMA_DETAILS_DATA_NOT_FOUND = 'Details for the selected schema not found.',
   WORKFLOW_LIST_DATA_NOT_FOUND = 'No Workflow list present.',
   PLEASE_WAIT_PROCESSING_YOUR_DATA = 'Please wait, processing your data',
-  BRESchema_LIST_API = '/WF-schema-list',
-  BRESchema_GET_API = '/WF-schema-get',
-  BRERulesets_LIST_API = '/WF-rulesets-list',
-  BRERulesets_GET_API = '/WF-rulesets-get',
-  BRERulesets_UPDATE_API = '/WF-ruleset-update',
-  BRE_NEW_WORKFLOW = '/WorkflowNew', 
-  Realm_Slice_New_API = '/realm-slice-new',
-  Realm_Slice_LIST_API = '/realm-slice-list',
-  Realm_Slice_Apps_API = '/realm-slice-apps',
-  Realm_Slice_Activate_API = '/activate-realmSlice',
-  Realm_Slice_Deactivate_API = '/deactivate-realmSlice'
+  BRESchema_LIST_API = '/wfschemaList',
+  BRESchema_GET_API = '/wfschemaget',
+  BRERulesets_LIST_API = '/workflowlist',
+  BRERulesets_GET_API = '/workflowget',
+  BRERulesets_UPDATE_API = '/workflowUpdate',
+  BRE_NEW_WORKFLOW = '/workflowNew', 
+  Realm_Slice_New_API = '/realmslicenew',
+  Realm_Slice_LIST_API = '/realmslicelist',
+  Realm_Slice_Apps_API = '/realmsliceapps',
+  Realm_Slice_Activate_API = '/realmsliceactivate',
+  Realm_Slice_Deactivate_API = '/realmslicedeactivate'
 }
 
 export const OperatorsUnicode = {

@@ -1,5 +1,5 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { SchemaDetails } from 'src/models/common-interfaces';
+import { SchemaDetails, SchemaPatternAttr } from 'src/models/common-interfaces';
 
 export function checkConstraints(schemaData: SchemaDetails): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -10,7 +10,7 @@ export function checkConstraints(schemaData: SchemaDetails): ValidatorFn {
             return null;
         }
 
-        const patternDetails = schemaData.patternschema.attr.filter((pattern: any) => pattern.name == formArray.value.attrname)[0]
+        const patternDetails = schemaData.patternschema.filter((pattern: SchemaPatternAttr) => pattern.attr == formArray.value.attrname)[0]
 
         if (value < 0) {
             return { ConstraintsError: true, message: 'Value is negative' }
