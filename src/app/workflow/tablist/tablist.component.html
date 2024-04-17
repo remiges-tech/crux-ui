@@ -48,12 +48,12 @@
         <!-- Second Section: Actionschema details -->
         <div class="row">
           <div class=" fs-20 mb-2 text-color">
-            <b>{{schemaData.actionschema.tasks.length > 1 ? 'NextSteps' : 'NextStep'}}:</b>
+            <b>{{schemaData.actionschema.tasks.length > 1 ? 'Tasks' : 'Task'}}:</b>
             <span class="badge bg-primary mx-2 fs-10" *ngFor="let task of schemaData?.actionschema?.tasks">{{ task
               }}</span>
           </div>
           <div class=" mt-2 fs-20 text-color">
-            <b>{{schemaData.actionschema.properties.length > 1 ? 'NextStep Tags' : 'NextStep Tag'}}:</b>
+            <b>{{schemaData.actionschema.properties.length > 1 ? 'Properties' : 'Property'}}:</b>
             <span class="badge bg-success mx-2 fs-10" *ngFor="let property of schemaData?.actionschema?.properties">{{
               property }}</span>
           </div>
@@ -88,11 +88,11 @@
   </div>
   <!-- Rulesets Tab content -->
   <div class="tab-pane fade show" id="rulesets" role="tabpanel" aria-labelledby="rulesets-tab">
-    <ng-container *ngIf="WorksFlows && WorksFlows.length > 0">
-      <div class="container">
-        <div class="note d-flex justify-content-end align-items-center">
-          <a class="click m-1 p-1 pointer" (click)="openWorkFlowModal()" style="float: right;">Add workflow</a>
-        </div>
+    <div class="container">
+      <div class="note d-flex justify-content-end align-items-center">
+        <a class="click m-1 p-1 pointer" (click)="openWorkFlowModal()" style="float: right;">Add workflow</a>
+      </div>
+      <ng-container *ngIf="WorksFlows && WorksFlows.length > 0">
         <div class="note d-flex justify-content-end align-items-center">
           <div class="inactive-color"></div> &nbsp;<span class="not-active">Inactive</span>
           &nbsp;&nbsp;<div class="active-color"></div>&nbsp;<span class="active">Active</span>
@@ -101,13 +101,13 @@
           <app-workflow-list id="{{i}}" [workflow]="workflow"
             (openDetail)="openRuledetailTabAndMakeAPIcall($event)"></app-workflow-list>
         </div>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="!WorksFlows || WorksFlows.length == 0">
-      <div class="container d-flex justify-content-center">
-        <h3 class="text-color">{{constants.WORKFLOW_LIST_DATA_NOT_FOUND}}</h3>
-      </div>
-    </ng-container>
+      </ng-container>
+      <ng-container *ngIf="!WorksFlows || WorksFlows.length == 0">
+        <div class="container d-flex justify-content-center">
+          <h3 class="text-color">{{constants.WORKFLOW_LIST_DATA_NOT_FOUND}}</h3>
+        </div>
+      </ng-container>
+    </div>
   </div>
 
   <!-- Dynamic tab contents -->
@@ -123,7 +123,8 @@
           <div *ngIf="!showSource">
             <ng-container *ngFor="let Rule of t.RTree, let i = index">
               <app-then-else-call [Rule]="Rule" [index]="i" [rulesets]="FinalRulesetsList" [schemaData]="schemaData"
-                  [WorksFlows]="WorksFlows" (openDetail)="openNewTab($event)" (updateRule)="updateRtree($event,tabIndex,i)"></app-then-else-call>
+                [WorksFlows]="WorksFlows" (openDetail)="openNewTab($event)"
+                (updateRule)="updateRtree($event,tabIndex,i)"></app-then-else-call>
             </ng-container>
           </div>
           <div *ngIf="showSource">

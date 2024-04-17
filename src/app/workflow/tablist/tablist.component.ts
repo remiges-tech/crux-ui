@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { RTree, RTreeRulesets, RulesetsList, SchemaDetails } from 'src/models/common-interfaces';
 import { BREschemaService } from 'src/services/breschema.service';
 import { CommonService } from 'src/services/common.service';
@@ -24,6 +25,7 @@ export class TablistComponent {
 	@Input({ required: true }) WorksFlows?: RulesetsList[] = [];
 	private _schemaService = inject(BREschemaService);
 	private _commonService = inject(CommonService);
+    private _toastr = inject(ToastrService);
 	tabs: Tabs[] = [];
 	FinalRulesetsList: RTreeRulesets = {}
 
@@ -50,7 +52,7 @@ export class TablistComponent {
 				if (data instanceof Error) {
 					throw data;
 				}
-				else if (data.length > 0) {
+				else {
 					this.tabs.push({
 						name: ruleset.name,
 						RTree: data
@@ -72,7 +74,6 @@ export class TablistComponent {
 	}
 
 	openNewTab(data: { name: string, RTree: RTree[] }) {
-		console.log(data)
 		let tabAlreadyExist = this.tabs.find(tab => tab.name === data.name);
 		if (!tabAlreadyExist) {
 			this.tabs.push({
@@ -87,6 +88,10 @@ export class TablistComponent {
 	}
 
 	openRuleModal(setname: string, tabIndex: number): void {
+		if (this.FinalRulesetsList[setname]?.is_active) {
+			this._toastr.warning(CONSTANTS.CANNOT_EDIT_RULESET_MSG, CONSTANTS.WARNING)
+			return;
+		}
 		// Create a empty RTree data.
 		let Rule: RTree = {
 			setname,
@@ -115,7 +120,7 @@ export class TablistComponent {
 				properties: {}
 			},
 		}
-		let updatedRule = this._commonService.openRuleModal(Rule, this.FinalRulesetsList, this.schemaData!, this.WorksFlows!, 0, 'workflow')
+		let updatedRule = this._commonService.openRuleModal(Rule, this.FinalRulesetsList, this.schemaData!, this.WorksFlows || [], 0, 'workflow')
 		// updatedRule?.afterClosed().subscribe((res: RTree) => {
 		// 	if (res == undefined) {
 		// 		return

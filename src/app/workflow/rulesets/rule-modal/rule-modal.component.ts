@@ -128,6 +128,9 @@ export class RuleModalComponent {
             })
         });
         this.flowrules.push(flowrule)
+        if(this.Rule != undefined && this.Rule.rulePattern.length < 1){
+            this.addPatterns(this.flowrules.length -1)
+        }
     }
 
     addPatterns(index: number = 0, attrname?: string, op?: string, attrval?: any) {

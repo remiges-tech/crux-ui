@@ -25,10 +25,10 @@
                 <div class="card px-2 pointer" [ngClass]="childHovered ? 'hovered': ''" (mouseenter)="childHovered = true"
                     (mouseleave)="childHovered = false">
                     <div>
-                        <b>{{Rule && Rule.ruleActions.tasks.length > 1 ? 'NextSteps' : 'NextStep'}}:</b>
+                        <b>{{Rule && Rule.ruleActions.tasks.length > 1 ? 'Tasks' : 'Task'}}:</b>
                         <span class="h6"> {{Rule && Rule.ruleActions.tasks[0]}}...</span>&nbsp;
                         <span>
-                            <b>{{Rule && Rule.ruleActions.tasks.length > 1 ? 'NextStep Tags' : 'NextStep Tag'}}:</b>
+                            <b>{{Rule && Rule.ruleActions.tasks.length > 1 ? 'Properties' : 'Property'}}:</b>
                             <span class="h6" *ngFor="let property of _commonService.sliceObject(Rule?.ruleActions?.properties,0,1) | keyvalue">
                                 {{ property.key }} - {{
                                     property.value }}...

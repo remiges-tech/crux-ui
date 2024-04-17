@@ -4,7 +4,7 @@ import { RulesetsList } from 'src/models/common-interfaces';
 @Component({
   selector: 'app-workflow-list',
   template: `
-  <div *ngIf="!workflow?.is_internal" class="card no-border mt-3">
+  <div *ngIf="!workflow?.is_internal" class="card mt-3">
       <div class="card-header">
         <div class="row justify-content-center">
           <div class="col vertically-center">

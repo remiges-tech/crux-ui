@@ -101,9 +101,11 @@ export class CommonService {
   }
 
   openRuleModal(rule: RTree, rulesetsList: RTreeRulesets, schemaData:SchemaDetails, workFlows:RulesetsList[], index:number, action:'edit'|'add'|'workflow'='edit') {
-    if(rule == undefined || rulesetsList == undefined || schemaData == undefined || workFlows ==  undefined || index == undefined){
+    if(rule == undefined || rulesetsList == undefined || schemaData == undefined || index == undefined){
       return;
     }
+
+    console.log(workFlows)
     let Ruleset = rulesetsList ? rulesetsList[rule.setname] : null;
     return this.dialog.open(RuleModalComponent, {
       width: '80%',

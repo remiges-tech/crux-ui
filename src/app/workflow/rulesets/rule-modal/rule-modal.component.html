@@ -34,14 +34,14 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="fs-20 mb-2">
-                                <b>{{(Rule && Rule.ruleActions.tasks.length > 1) ? 'NextSteps' : 'NextStep'}}:</b>
+                                <b>{{(Rule && Rule.ruleActions.tasks.length > 1) ? 'Tasks' : 'Task'}}:</b>
                                 <span class="badge bg-primary mx-2 fs-10"
                                     *ngFor="let task of Rule?.ruleActions?.tasks">{{
                                     task }}</span>
                             </div>
                             <div class="mt-4 fs-20">
-                                <b>{{(Rule && Rule.ruleActions.properties) ? 'NextStep Tags' :
-                                    'NextStepTag'}}:</b>
+                                <b>{{(Rule && Rule.ruleActions.properties) ? 'Properties' :
+                                    'Property'}}:</b>
                                 <span class="badge bg-success mx-2 fs-10"
                                     *ngFor="let property of Rule?.ruleActions?.properties | keyvalue">
                                     {{property.key}} - {{
@@ -108,7 +108,7 @@
                                                 <select (change)="onAttrNameChangeHandler(flowRulesIndex,i)"
                                                     formControlName="attr" class="form-control" id="{{i}}-attrName">
                                                     <option disabled value="">
-                                                        Select
+                                                        attrname
                                                     </option>
                                                     <option
                                                         *ngFor="let attrName of getAttributesNamesByIndex(flowRulesIndex,i)"
@@ -131,7 +131,7 @@
                                             <div class="col-md-1 col-sm-2">
                                                 <select formControlName="op" class="form-control" id="{{i}}-op">
                                                     <option disabled value="">
-                                                        Select
+                                                        op
                                                     </option>
                                                     <option *ngFor="let op of getOperatorsList(flowRulesIndex,i)"
                                                         [value]="op">
@@ -211,15 +211,15 @@
                             </div>
                             <hr>
                             <div formGroupName="ruleactions">
-                                <!--Edit NextStep-->
+                                <!--Edit Tasks-->
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="fs-20 mb-2">
                                             <div class="row">
                                                 <div class="col-md-8">
                                                     <b class="m-2">{{getFlowRulesAtIndex(flowRulesIndex).get('ruleactions')?.get('tasks')?.value.length
-                                                        > 1 ? 'NextSteps:'
-                                                        : 'NextStep:'}}</b>
+                                                        > 1 ? 'Tasks:'
+                                                        : 'Task:'}}</b>
                                                     <p-multiSelect [filter]="false" class="w-100" display="chip"
                                                         [options]="SchemaData?.actionschema?.tasks"
                                                         formControlName="tasks"
@@ -241,13 +241,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--Edit NextStep Tags-->
+                                <!--Edit Properties-->
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="fs-20 mb-2" formArrayName="properties">
                                             <b class="m-2">{{getFlowRulesAtIndex(flowRulesIndex).get('ruleactions')?.get('properties')?.value.length
-                                                > 1 ? 'NextStep Tags:'
-                                                : 'NextStep Tag:'}}</b>
+                                                > 1 ? 'Properties:'
+                                                : 'Property:'}}</b>
                                             <div *ngFor="let property of getPropertiesnAt(flowRulesIndex).controls,let i = index"
                                                 [formGroupName]="i">
                                                 <div class="row mb-2">
@@ -302,7 +302,7 @@
                                             <div>
                                                 <button class="btn realm add-btn"
                                                     [disabled]="getIsDoneAt(flowRulesIndex)?.value"
-                                                    (click)="addPropeties(flowRulesIndex)">Add NextStepTag</button>
+                                                    (click)="addPropeties(flowRulesIndex)">Add Property</button>
                                             </div>
                                         </div>
                                     </div>
