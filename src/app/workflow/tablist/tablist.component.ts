@@ -89,7 +89,7 @@ export class TablistComponent {
 
 	openRuleModal(setname: string, tabIndex: number): void {
 		if (this.FinalRulesetsList[setname]?.is_active) {
-			this._toastr.warning(CONSTANTS.CANNOT_EDIT_RULESET_MSG, CONSTANTS.WARNING)
+			this._toastr.warning(CONSTANTS.CANNOT_ADD_RULE_MSG, CONSTANTS.WARNING)
 			return;
 		}
 		// Create a empty RTree data.

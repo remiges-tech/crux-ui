@@ -5,6 +5,7 @@ export enum CONSTANTS {
   WARNING = 'Warning',
   DATA_NOT_FOUND = 'Data not found!',
   CANNOT_EDIT_RULESET_MSG = 'Ruleset cannot be edited as it is active',
+  CANNOT_ADD_RULE_MSG = 'Rule cannot be added as it is active',
   SCHEMA_DETAILS_DATA_NOT_FOUND = 'Details for the selected schema not found.',
   WORKFLOW_LIST_DATA_NOT_FOUND = 'No Workflow list present.',
   PLEASE_WAIT_PROCESSING_YOUR_DATA = 'Please wait, processing your data',
