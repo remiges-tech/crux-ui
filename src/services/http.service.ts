@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Observable, catchError, throwError, timeout } from "rxjs";
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -12,17 +13,13 @@ export class HttpService {
         let url = dataObj.api_url;
         let data = dataObj.param_data;
         switch (dataObj.method) {
-            case 'post':
-                return this._httpClient.post<any>(url, data).pipe(
-                    timeout(1000), catchError(this.handleError)
-                );
             case 'get':
                 return this._httpClient.get<any>(url, data).pipe(
-                    timeout(1000), catchError(this.handleError)
+                    timeout(environment.apiTimeout), catchError(this.handleError)
                 );
             default:
                 return this._httpClient.post<any>(url, data).pipe(
-                    timeout(1000), catchError(this.handleError)
+                    timeout(environment.apiTimeout), catchError(this.handleError)
                 );
         }
     }

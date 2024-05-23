@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ReplicateRealmsliceComponent } from './realmslice/replicate-realmslice/replicate-realmslice.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { WorkflowSchemaComponent } from './workflow/workflow-schema/workflow-schema.component';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 const routes: Routes = [
   {path:'', component:WorkflowSchemaComponent},
@@ -12,6 +13,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }]
 })
 export class AppRoutingModule { }

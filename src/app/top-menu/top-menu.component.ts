@@ -1,4 +1,5 @@
 import { Component, Inject, LOCALE_ID } from '@angular/core';
+import { Router } from '@angular/router';
 
 interface Locale {
   localeCode: string;
@@ -20,7 +21,7 @@ export class TopMenuComponent {
     { localeCode: "ar", label: "Arabic" },
   ];
 
-  constructor(@Inject(LOCALE_ID) public locale: string) {}
+  constructor(@Inject(LOCALE_ID) public locale: string, private _router: Router) {}
 
   ngOnInit(){
     this.currentTheme();
@@ -28,7 +29,7 @@ export class TopMenuComponent {
   
   navigateToLocale(localeCode: string): void {
     this.selectedLocale = this.locale;
-    const url = `/${localeCode}`; 
+    const url = `/${localeCode}/#/${this._router.url}`; 
     window.location.href = url;  // Change the window location directly
   }
 

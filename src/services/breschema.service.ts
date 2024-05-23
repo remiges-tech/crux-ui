@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpService } from './http.service';
 import * as Enums from './constants.service';
 import { CommonService } from './common.service';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 import { RTree, RTreeRulesets, Rule } from 'src/models/common-interfaces';
 import { RuleSetDetailResp } from 'src/models/request-response-inteface';
 import { ToastrService } from 'ngx-toastr';

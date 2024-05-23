@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { CommonService } from './common.service';
 import * as Enums from './constants.service';
 import { HttpService } from './http.service';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'

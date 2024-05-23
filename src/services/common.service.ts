@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { RuleModalComponent } from 'src/app/workflow/rulesets/rule-modal/rule-modal.component';
+import { environment } from 'src/environments/environment';
 import { App, AppInfo, AppsList, RTree, RTreeRulesets, RealmSliceList, RulePatternTerm, RuleSet, RulesetsList, SchemaDetails, SchemaList, SliceInfo } from 'src/models/common-interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommonService {
-  private production: boolean = false;
+  private production: boolean = environment.production;
   isLoading: boolean = false;
   subject = new Subject<any>();
 
@@ -105,7 +106,6 @@ export class CommonService {
       return;
     }
 
-    console.log(workFlows)
     let Ruleset = rulesetsList ? rulesetsList[rule.setname] : null;
     return this.dialog.open(RuleModalComponent, {
       width: '80%',
