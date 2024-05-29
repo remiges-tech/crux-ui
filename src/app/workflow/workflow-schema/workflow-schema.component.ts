@@ -47,7 +47,6 @@ export class WorkflowSchemaComponent {
           }
           this.schemasList = res?.data;
           this.appList = this._commonService.getAppNamesFromList(res?.data);
-          
         } else {
           this._toastr.error(res?.message, CONSTANTS.ERROR);
           this._commonService.hideLoader();

@@ -1,9 +1,11 @@
 import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { RTree, RTreeRulesets, RulesetsList, SchemaDetails } from 'src/models/common-interfaces';
 import { BREschemaService } from 'src/services/breschema.service';
 import { CommonService } from 'src/services/common.service';
 import { CONSTANTS } from 'src/services/constants.service';
+import { TryModalComponent } from '../rulesets/try-modal/try-modal.component';
 
 interface Tabs {
 	name: string,
@@ -28,6 +30,8 @@ export class TablistComponent {
     private _toastr = inject(ToastrService);
 	tabs: Tabs[] = [];
 	FinalRulesetsList: RTreeRulesets = {}
+
+	constructor(public dialog: MatDialog) {} 
 
 	// Function to close dynamic Tab
 	close(event: MouseEvent, toRemove: Tabs) {
@@ -161,4 +165,16 @@ export class TablistComponent {
 			}
 		})
 	}
+
+	openTryModal(){
+			let dialogRef = this.dialog.open(TryModalComponent, { 
+			  width: '80%', 
+			  height: '80%',
+			  data: {  } 
+			}); 
+		  
+			dialogRef.afterClosed().subscribe(res => { 
+			//  res = alert("Called")
+			}); 
+		  } 
 }

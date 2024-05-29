@@ -118,6 +118,7 @@
           <a class="click m-1 p-1 pointer" (click)="openRuleModal(t.name,tabIndex)" style="float: right;">Add rule</a>
           <a class="click m-1 p-1 pointer" (click)="this.showSource = !this.showSource;" style="float: right;">View
             Source</a>
+            <a class="click m-1 p-1 pointer" (click)="openTryModal()" style="float: right;">Try</a>
         </div>
         <div class="col-12">
           <div *ngIf="!showSource">
