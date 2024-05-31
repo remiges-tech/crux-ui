@@ -18,6 +18,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { WorkflowModule } from './workflow/workflow.module';
 import { DatePipe } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { CanvasComponent } from './components/canvas/canvas.component';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     LoaderComponent,
     ReplicateRealmsliceComponent,
     PageNotFoundComponent,
+    // CanvasComponent,
   ],
   imports: [
     NgSelectModule,

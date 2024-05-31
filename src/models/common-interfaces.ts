@@ -160,3 +160,33 @@ export interface AppsList{
     shortname: string,
     longname: string
 }
+export interface Trace{
+    start:string;
+    end:string;
+    realm:string;
+    app:string;
+    entryRulesetID:number;
+    entryRulesetName:string;
+    tracedata: TraceData[];
+}
+
+export interface TraceData{
+    id:number;
+    setName:string;
+    rules: TraceDataRule[];
+}
+
+interface TraceDataRule{
+    r:number;
+    res:string;
+    nextset?:string
+    pattern?:any;
+    tasks?:string[];
+    properties?:Property;
+    actionset?: ActionSet
+}
+
+interface ActionSet{
+    tasks: string[];
+    properties: Property;
+}

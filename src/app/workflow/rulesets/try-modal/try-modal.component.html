@@ -40,8 +40,7 @@
                                 <div class="d-flex align-items-center">
                                     <b>Stepfailed: </b>
                                     <div style="display: inline-flex;" class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox"
-                                            role="switch">
+                                        <input class="form-check-input" type="checkbox" role="switch">
                                     </div>
                                 </div>
                             </div>
@@ -63,5 +62,17 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="mt-4 d-flex justify-content-left">
+                    <div class="m-2">
+                        <a class="click" type="reset" (click)="tryInstance()" i18n="@@startTry">Start</a>
+                    </div>
+                </div>
+
+                <ng-container *ngIf="tryData != undefined">
+                    <app-canvas [Height]="50" [Width]="50" [traceData]="tryData.tracedata"></app-canvas>
+                </ng-container>
             </div>
         </div>
+    </div>
+</div>

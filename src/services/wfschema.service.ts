@@ -10,8 +10,8 @@ import { ToastrService } from 'ngx-toastr';
 @Injectable({
   providedIn: 'root'
 })
-export class BREschemaService {
-  fileName: string = 'SchemaService'
+export class WFschemaService {
+  fileName: string = 'WFschemaService'
   _httpService = inject(HttpService);
   _commonService = inject(CommonService);
   private _toastr = inject(ToastrService);
@@ -21,7 +21,7 @@ export class BREschemaService {
     try {
       let dataObj = {
         method: 'post',
-        api_url: environment.apiUrl + Enums.CONSTANTS.BRESchema_LIST_API,
+        api_url: environment.apiUrl + Enums.CONSTANTS.WF_SCHEMA_LIST_API,
         local_json_file: '',
         param_data: {},
         mapcol: false,
@@ -41,7 +41,7 @@ export class BREschemaService {
     try {
       let dataObj = {
         method: 'post',
-        api_url: environment.apiUrl + Enums.CONSTANTS.BRESchema_GET_API,
+        api_url: environment.apiUrl + Enums.CONSTANTS.WF_SCHEMA_GET_API,
         local_json_file: '',
         param_data: obj,
         mapcol: false,
@@ -61,7 +61,7 @@ export class BREschemaService {
     try {
       let dataObj = {
         method: 'post',
-        api_url: environment.apiUrl + Enums.CONSTANTS.BRERulesets_LIST_API,
+        api_url: environment.apiUrl + Enums.CONSTANTS.WF_RULESETS_LIST_API,
         local_json_file: '',
         param_data: payload,
         mapcol: false,
@@ -81,7 +81,7 @@ export class BREschemaService {
     try {
       let dataObj = {
         method: 'post',
-        api_url: environment.apiUrl + Enums.CONSTANTS.BRERulesets_GET_API,
+        api_url: environment.apiUrl + Enums.CONSTANTS.WF_RULESETS_GET_API,
         local_json_file: '',
         param_data: obj,
         mapcol: false,
@@ -101,7 +101,7 @@ export class BREschemaService {
     try {
       let dataObj = {
         method: 'post',
-        api_url: environment.apiUrl + Enums.CONSTANTS.BRE_NEW_WORKFLOW,
+        api_url: environment.apiUrl + Enums.CONSTANTS.WF_WORKFLOW_NEW_API,
         local_json_file: '',
         param_data: {data:obj},
         mapcol: false,
@@ -121,7 +121,7 @@ export class BREschemaService {
     try {
       let dataObj = {
         method: 'post',
-        api_url: environment.apiUrl + Enums.CONSTANTS.BRERulesets_UPDATE_API,
+        api_url: environment.apiUrl + Enums.CONSTANTS.WF_RULESETS_UPDATE_API,
         local_json_file: '',
         param_data: {data:obj},
         mapcol: false,
@@ -201,4 +201,24 @@ export class BREschemaService {
 			return error;
 		}
 	}
+
+  wfinstancetry(obj: any): any {
+    try {
+      let dataObj = {
+        method: 'post',
+        api_url: environment.apiUrl + Enums.CONSTANTS.WF_INSTANCE_TRY_API,
+        local_json_file: '',
+        param_data: obj,
+        mapcol: false,
+      };
+      let resp = this._httpService.fetchData(dataObj);
+      return resp;
+    } catch (error) {
+      this._commonService.log({
+        fileName: this.fileName,
+        functionName: 'wfinstancetry',
+        msg: error
+      });
+    }
+  }
 }

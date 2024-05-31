@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppInfo, RealmSliceList, RulesetsList, SchemaDetails, SchemaList, SelectedData, SliceInfo } from 'src/models/common-interfaces';
 import { ActivateRealmSliceResp, DeactivateRealmSliceResp, ReamlSliceListResp, RuleSetListResp, SchemaDetailResp, SchemaListResp } from 'src/models/request-response-inteface';
-import { BREschemaService } from 'src/services/breschema.service';
+import { WFschemaService } from 'src/services/wfschema.service';
 import { CommonService } from 'src/services/common.service';
 import { CONSTANTS } from 'src/services/constants.service';
 import { RealmsliceService } from 'src/services/realmslice.service';
@@ -14,7 +14,7 @@ import { RealmsliceService } from 'src/services/realmslice.service';
 })
 export class WorkflowSchemaComponent {
   fileName: string = 'SchemaComponent';
-  private _schemaService = inject(BREschemaService);
+  private _schemaService = inject(WFschemaService);
   private _commonService = inject(CommonService);
   private _realmService = inject(RealmsliceService);
   private _toastr = inject(ToastrService);

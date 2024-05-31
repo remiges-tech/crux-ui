@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Property, RTree, RTreeRulesets, Rule, RuleActions, RulePatternTerm, RuleSet, RulesetsList, SchemaDetails, SchemaPatternAttr } from 'src/models/common-interfaces';
 import { OperatorsUnicode, AttrDataTypes, CONSTANTS } from 'src/services/constants.service';
 import { checkConstraints } from 'src/customValidators/rule.contraints.service';
-import { BREschemaService } from 'src/services/breschema.service';
+import { WFschemaService } from 'src/services/wfschema.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonService } from 'src/services/common.service';
 import { RulesetUpdateResp } from 'src/models/request-response-inteface';
@@ -14,7 +14,7 @@ import { RulesetUpdateResp } from 'src/models/request-response-inteface';
     styleUrls: ['./rule-modal.component.scss']
 })
 export class RuleModalComponent {
-    private _schemaService = inject(BREschemaService);
+    private _schemaService = inject(WFschemaService);
     private _toastr = inject(ToastrService);
     private _commonService = inject(CommonService);
     fileName = 'RuleModalComponent'

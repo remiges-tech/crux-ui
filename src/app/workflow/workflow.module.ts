@@ -18,6 +18,7 @@ import { RouterModule } from '@angular/router';
 
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { TryModalComponent } from './rulesets/try-modal/try-modal.component';
+import { CanvasComponent } from '../components/canvas/canvas.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { TryModalComponent } from './rulesets/try-modal/try-modal.component';
     ThenElseCallComponent,
     DoMatchComponent,
     RuleModalComponent,
-    TryModalComponent
+    TryModalComponent,
+    CanvasComponent
   ],
   imports: [
     CommonModule,

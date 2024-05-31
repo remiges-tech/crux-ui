@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren, injec
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { RTree, RTreeRulesets, RulesetsList, SchemaDetails } from 'src/models/common-interfaces';
-import { BREschemaService } from 'src/services/breschema.service';
+import { WFschemaService } from 'src/services/wfschema.service';
 import { CommonService } from 'src/services/common.service';
 import { CONSTANTS } from 'src/services/constants.service';
 import { TryModalComponent } from '../rulesets/try-modal/try-modal.component';
@@ -25,7 +25,7 @@ export class TablistComponent {
 	@ViewChildren('dynamicTab') Tabs: QueryList<any> | undefined;
 	@Input({ required: true }) schemaData?: SchemaDetails
 	@Input({ required: true }) WorksFlows?: RulesetsList[] = [];
-	private _schemaService = inject(BREschemaService);
+	private _schemaService = inject(WFschemaService);
 	private _commonService = inject(CommonService);
     private _toastr = inject(ToastrService);
 	tabs: Tabs[] = [];
