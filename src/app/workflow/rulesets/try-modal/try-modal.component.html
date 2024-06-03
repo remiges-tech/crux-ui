@@ -7,7 +7,7 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="max-height: none; overflow: hidden; overflow-y: auto;">
             <div class="container mt-2">
                 <div class="row">
                     <div class="col-8">
@@ -65,12 +65,31 @@
 
                 <div class="mt-4 d-flex justify-content-left">
                     <div class="m-2">
-                        <a class="click" type="reset" (click)="tryInstance()" i18n="@@startTry">Start</a>
+                        <a class="click m-4" type="reset" (click)="tryInstance()" i18n="@@startTry">Start</a>
+                        <a class="click" type="reset" (click)="resetInstance()">Reset</a>
                     </div>
                 </div>
 
                 <ng-container *ngIf="tryData != undefined">
-                    <app-canvas [Height]="50" [Width]="50" [traceData]="tryData.tracedata"></app-canvas>
+                    <div class="canvas-container">
+                        <app-canvas [Height]="50" [Width]="50" [traceData]="tryData.tracedata"></app-canvas>
+                        <div class="legend">
+                            <div class="legend-items">
+                                <div class="legend-item green">
+                                    <div class="color-box green"></div><span class="legend-text">{{constants.MATCHED}}</span>
+                                </div>
+                                <div class="legend-item red">
+                                    <div class="color-box red"></div><span class="legend-text">{{constants.DID_NOT_MATCH}}</span>
+                                </div>
+                                <div class="legend-item blue">
+                                    <div class="color-box blue"></div><span class="legend-text">{{constants.MATCHED_WITH_THENCALL}}</span>
+                                </div>
+                                <div class="legend-item yellow">
+                                    <div class="color-box yellow"></div><span class="legend-text">{{constants.DID_NOT_MATCH_WITH_ELSECALL}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </ng-container>
             </div>
         </div>

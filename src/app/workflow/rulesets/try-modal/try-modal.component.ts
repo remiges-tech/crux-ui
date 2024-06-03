@@ -13,6 +13,7 @@ import { WFschemaService } from 'src/services/wfschema.service';
 })
 export class TryModalComponent {
   fileName:string = 'TryModalComponent';
+  constants = CONSTANTS;
   private _commonService = inject(CommonService);
   private _schemaService = inject(WFschemaService);
   private _toastr = inject(ToastrService);
@@ -30,12 +31,11 @@ export class TryModalComponent {
   tryInstance(){
     try {
       let obj = {
-        trace: 1
+        trace: 2
       }
       this._commonService.showLoader();
       this._schemaService.wfinstancetry(obj).subscribe((res: Trace) => {
         this._commonService.hideLoader();
-        console.log(res);
         this.tryData = res;
       }, (err: any) => {
         this._toastr.error(err, CONSTANTS.ERROR)
@@ -49,6 +49,10 @@ export class TryModalComponent {
         err: error
       })
     }
+  }
+
+  resetInstance(){
+    this.tryData = undefined;
   }
 
 }

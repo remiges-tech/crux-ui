@@ -1,0 +1,44 @@
+.legend {
+    position: absolute;
+    top: 200px; 
+    right: 20px;
+  }
+  
+  .legend-items {
+    flex-direction: column;
+    align-items: flex-end; 
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .color-box {
+    height: 10px;
+    width: 20px;
+    margin: 10px;
+    border: 1.5px solid;
+  }
+  
+  .legend-text {
+    margin-right: 5px; 
+  }
+
+  .green .color-box {
+    border-color: green;
+  }
+  
+  .red .color-box {
+    border-color: red;
+  }
+  
+  .blue .color-box {
+    border-color: blue;
+  }
+  
+  .yellow .color-box {
+    border-color: orange;
+  }
+  
+  
