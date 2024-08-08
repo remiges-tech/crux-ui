@@ -6,6 +6,7 @@ import { WFschemaService } from 'src/services/wfschema.service';
 import { CommonService } from 'src/services/common.service';
 import { CONSTANTS } from 'src/services/constants.service';
 import { RealmsliceService } from 'src/services/realmslice.service';
+import { schemaDetailsModel, schemaListModel } from 'src/models/data.model';
 
 @Component({
   selector: 'app-workflow-schema',
@@ -41,12 +42,15 @@ export class WorkflowSchemaComponent {
       this._schemaService.getWorkflowSchemaList().subscribe((res: SchemaListResp) => {
         if (res?.status == CONSTANTS.SUCCESS) {
           this._commonService.hideLoader();
+          let valid = this._commonService.checkValidJsonSchema(res, schemaListModel)
           if (res?.data == null || res?.data == undefined || res?.data?.length == 0) {
             this._toastr.error(CONSTANTS.DATA_NOT_FOUND, CONSTANTS.ERROR);
             return
           }
-          this.schemasList = res?.data;
-          this.appList = this._commonService.getAppNamesFromList(res?.data);
+          if(valid){
+            this.schemasList = res?.data;
+            this.appList = this._commonService.getAppNamesFromList(res?.data);
+          }
         } else {
           this._toastr.error(res?.message, CONSTANTS.ERROR);
           this._commonService.hideLoader();
@@ -107,12 +111,14 @@ export class WorkflowSchemaComponent {
       this._schemaService.getWorkflowSchemaDetail(data).subscribe((res: SchemaDetailResp) => {
         if (res.status == CONSTANTS.SUCCESS) {
           this._commonService.hideLoader();
+          let valid = this._commonService.checkValidJsonSchema(res.data, schemaDetailsModel)
           if (res.data == null || res.data == undefined || this._commonService.isObjectEmpty(res.data)) {
             this._toastr.error(CONSTANTS.DATA_NOT_FOUND, CONSTANTS.ERROR);
             return
           }
-          this.schemaData = res.data
-          
+          if(valid){
+            this.schemaData = res.data
+          }
         } else {
           this._toastr.error(res?.message, CONSTANTS.ERROR);
           this._commonService.hideLoader();
@@ -170,7 +176,7 @@ export class WorkflowSchemaComponent {
     try {
       this._realmService.getRealmSliceList().subscribe((res: ReamlSliceListResp) => {
         if (res?.status == CONSTANTS.SUCCESS) {
-          this.isRealmSliceActive = res?.data?.slices.filter((slice: RealmSliceList) => slice.id == this.selectedData.slice)[0].active;
+          this.isRealmSliceActive = res?.data?.slices?.filter((slice: RealmSliceList) => slice.id == this.selectedData.slice)[0].active;
         } else {
           this._toastr.error(res?.message, CONSTANTS.ERROR);
         }

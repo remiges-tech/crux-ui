@@ -9,7 +9,7 @@
         </div>
         <div class="modal-body" style="max-height: none; overflow: hidden; overflow-y: auto;">
             <div class="container mt-2">
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-8">
                         <div class="d-flex flex-column flex-md-row">
                             <div class="col-3">
@@ -20,11 +20,12 @@
                                     placeholder="--Select App--">
                                     ng option here
                                 </ng-select>
+                                <h4>{{tryData?.app}}</h4>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row mt-2">
+                </div> -->
+                <!-- <div class="row mt-2">
                     <div class="col-8">
                         <div class="d-flex flex-column flex-md-row">
                             <div class="col-3">
@@ -35,6 +36,7 @@
                                     placeholder="--Select Slice--">
                                     ng option here
                                 </ng-select>
+                                <h4>{{tryData?.realm}}</h4>
                             </div>
                             <div class="col-md-2">
                                 <div class="d-flex align-items-center">
@@ -46,8 +48,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row mt-2">
+                </div> -->
+                <!-- <div class="row mt-2">
                     <div class="col-8">
                         <div class="d-flex flex-column flex-md-row">
                             <div class="col-3">
@@ -58,6 +60,21 @@
                                     placeholder="--Select Class--">
                                     ng option here
                                 </ng-select>
+                                <h4>{{tryData?.entryRulesetName}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="row">
+                    <div class="col-8">
+                        <div class="d-flex flex-column flex-md-row">
+                            <div class="col-3">
+                                <label i18n="@@App" class="fs-20 fw-600 ml-3 text-color">Trace Level</label>
+                            </div>
+                            <div class="col-3">
+                                <ng-select class="dropdown" id="tace" i18n-placeholder="@@placeholderApp" [(ngModel)]="selectedTrace"
+                                    placeholder="--Select App--" [items]="tracelevel" bindLabel="value" bindValue="value" (change)="resetInstance()">
+                                </ng-select>
                             </div>
                         </div>
                     </div>
@@ -65,8 +82,8 @@
 
                 <div class="mt-4 d-flex justify-content-left">
                     <div class="m-2">
-                        <a class="click m-4" type="reset" (click)="tryInstance()" i18n="@@startTry">Start</a>
-                        <a class="click" type="reset" (click)="resetInstance()">Reset</a>
+                        <a class="click m-4 fs-20" type="reset" (click)="tryInstance()" i18n="@@startTry">Start</a>
+                        <!-- <a class="click" type="reset" (click)="resetInstance()">Reset</a> -->
                     </div>
                 </div>
 
@@ -76,16 +93,20 @@
                         <div class="legend">
                             <div class="legend-items">
                                 <div class="legend-item green">
-                                    <div class="color-box green"></div><span class="legend-text">{{constants.MATCHED}}</span>
+                                    <div class="color-box green"></div><span
+                                        class="legend-text">{{constants.MATCHED}}</span>
                                 </div>
                                 <div class="legend-item red">
-                                    <div class="color-box red"></div><span class="legend-text">{{constants.DID_NOT_MATCH}}</span>
+                                    <div class="color-box red"></div><span
+                                        class="legend-text">{{constants.DID_NOT_MATCH}}</span>
                                 </div>
                                 <div class="legend-item blue">
-                                    <div class="color-box blue"></div><span class="legend-text">{{constants.MATCHED_WITH_THENCALL}}</span>
+                                    <div class="color-box blue"></div><span
+                                        class="legend-text">{{constants.MATCHED_WITH_THENCALL}}</span>
                                 </div>
                                 <div class="legend-item yellow">
-                                    <div class="color-box yellow"></div><span class="legend-text">{{constants.DID_NOT_MATCH_WITH_ELSECALL}}</span>
+                                    <div class="color-box yellow"></div><span
+                                        class="legend-text">{{constants.DID_NOT_MATCH_WITH_ELSECALL}}</span>
                                 </div>
                             </div>
                         </div>

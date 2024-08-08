@@ -206,7 +206,7 @@ export class RuleModalComponent {
                 }
             ]
         })
-
+        
         Object.entries(this.Rule.ruleActions.properties).forEach(([key, value]) => {
             this.addPropeties(0, key, value)
             if (key == 'done') {
@@ -503,6 +503,7 @@ export class RuleModalComponent {
             ...this.RuleForm.value,
             flowrules: flowRules
         }
+        console.log(newWorkFlow)
 
         try {
 

@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { RuleModalComponent } from 'src/app/workflow/rulesets/rule-modal/rule-modal.component';
 import { environment } from 'src/environments/environment';
@@ -12,8 +13,9 @@ export class CommonService {
   private production: boolean = environment.production;
   isLoading: boolean = false;
   subject = new Subject<any>();
+  private _toastr = inject(ToastrService);
 
-  constructor(private dialog: MatDialog){}
+  constructor(private dialog: MatDialog) { }
 
   log(value: any, type?: string) {
     if (!this.production) {
@@ -68,8 +70,6 @@ export class CommonService {
     let realmList = [...list.map((item: AppsList) => {
       return { name: item.shortname, code: item.shortname }
     })]
-
-    console.log(realmList,'asdsads')
     return realmList;
   }
 
@@ -101,15 +101,15 @@ export class CommonService {
     this.isLoading = false;
   }
 
-  openRuleModal(rule: RTree, rulesetsList: RTreeRulesets, schemaData:SchemaDetails, workFlows:RulesetsList[], index:number, action:'edit'|'add'|'workflow'='edit') {
-    if(rule == undefined || rulesetsList == undefined || schemaData == undefined || index == undefined){
+  openRuleModal(rule: RTree, rulesetsList: RTreeRulesets, schemaData: SchemaDetails, workFlows: RulesetsList[], index: number, action: 'edit' | 'add' | 'workflow' = 'edit') {
+    if (rule == undefined || rulesetsList == undefined || schemaData == undefined || index == undefined) {
       return;
     }
 
     let Ruleset = rulesetsList ? rulesetsList[rule.setname] : null;
     return this.dialog.open(RuleModalComponent, {
       width: '80%',
-      data: { rule, Ruleset, rulesetsList, schemaData, workFlows,index,action}
+      data: { rule, Ruleset, rulesetsList, schemaData, workFlows, index, action }
     });
   }
 
@@ -118,30 +118,57 @@ export class CommonService {
     return Object.fromEntries(slicedEntries);
   }
 
-  // replacePlaceholders(data: any) {
-  //   let finalErrMsg = ErrorCodes[data.msgid];
+  // JSON schema validation code to compare and match API response with model.
+  checkValidJsonSchema(data: any, model: any): boolean {
+    let errorStr: string[] = [];
+    if (data == null || data === undefined || Object.keys(data).length === 0) {
+      this._toastr.error('Data is empty.', 'ERROR');
+      return false;
+    }
+    for (let key in model) {
+      if (model[key].isRequired) {
+        if (!data.hasOwnProperty(key)) {
+          errorStr.push(`Data must have required property '${key}'.`);
+        } else {
+          if (model[key].type === 'object') {
+            if (!this.checkValidJsonSchema(data[key], model[key].nestedData)) {
+              errorStr.push(`Invalid data for nested object '${key}'.`);
+            }
+          } else if (model[key].type === 'array') {
+            if (!Array.isArray(data[key])) {
+              errorStr.push(`Required field '${key}' is not an array.`);
+            } else if (data[key].length === 0) {
+              errorStr.push(`Array '${key}' must not be empty.`);
+            } else {
+              let valid = true;
+              data[key].forEach((subData: any) => {
+                if (!this.checkValidJsonSchema(subData, model[key].nestedData)) {
+                  valid = false;
+                }
+              });
+              if (!valid) {
+                errorStr.push(`Invalid data in array '${key}'.`);
+              }
+            }
+          } else {
+            if (typeof data[key] !== model[key].type) {
+              errorStr.push(`Data property '${key}' must be '${model[key].type}' but got '${typeof data[key]}'.`);
+            } else if (model[key].type === 'string' && data[key] === '') {
+              errorStr.push(`Data property '${key}' cannot be empty.`);
+            }
+          }
+        }
+      }
+    }
 
-  //   // Replace field placeholder
-  //   finalErrMsg = finalErrMsg.replace(
-  //     "{<field>}",
-  //     data.field
-  //   );
+    // Display error msg on the screen.
+    if (errorStr.length > 0) {
+      errorStr.forEach((msg: string) => {
+        this._toastr.error(msg, 'ERROR');
+      });
+      return false;
+    }
+    return true;
+  }
 
-  //   // Replace value placeholders dynamically
-  //   for (let i = 0; i < data.vals.length; i++) {
-  //     const placeholder = `{<val_${i}>}`;
-  //     finalErrMsg = finalErrMsg.replace(placeholder, data.vals[i]);
-  //   }
-
-  //   return finalErrMsg;
-  // }
-
-  // getToastMsg(errorObj: any): any {
-  //   return errorObj.field && errorObj.vals
-  //     ? this.replacePlaceholders(errorObj)
-  //     : errorObj.errcode
-  //     ? errorObj.errcode
-  //     : "";
-  // }
-  
 }
