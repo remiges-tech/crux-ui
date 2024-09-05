@@ -10,7 +10,7 @@ import { CONSTANTS } from 'src/services/constants.service';
       <div class="loader-spinner"></div>
       <div class="col-auto">
         <div class="row align-items-center">
-          <p class="text-color fs-20 fw-50">{{ constants.PLEASE_WAIT_PROCESSING_YOUR_DATA }}</p>
+          <p class="text-color fs-20 fw-50" i18n="@@Loader">{{ constants.PLEASE_WAIT_PROCESSING_YOUR_DATA }}</p>
         </div>
       </div>
     </div>

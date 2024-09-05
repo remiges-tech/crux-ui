@@ -2,7 +2,7 @@
 <div class="modal-dialog modal-md modal-dialog-centered" style="padding: 20px 10px;" role="document">
     <div class="modal-content">
         <div class="modal-header justify-content-between">
-            <h5 class="modal-title fw-bold" id="ruleModalLabel">Try Modal</h5>
+            <h5 class="modal-title fw-bold" id="ruleModalLabel" i18n="@@TryModal">Try Modal</h5>
             <button type="button" class="close" (click)="onClose()" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -94,19 +94,19 @@
                             <div class="legend-items">
                                 <div class="legend-item green">
                                     <div class="color-box green"></div><span
-                                        class="legend-text">{{constants.MATCHED}}</span>
+                                        class="legend-text" i18n="@@Matched">{{constants.MATCHED}}</span>
                                 </div>
                                 <div class="legend-item red">
                                     <div class="color-box red"></div><span
-                                        class="legend-text">{{constants.DID_NOT_MATCH}}</span>
+                                        class="legend-text" i18n="@@DidNotMatch">{{constants.DID_NOT_MATCH}}</span>
                                 </div>
                                 <div class="legend-item blue">
                                     <div class="color-box blue"></div><span
-                                        class="legend-text">{{constants.MATCHED_WITH_THENCALL}}</span>
+                                        class="legend-text" i18n="@@MatchedWithThenCall">{{constants.MATCHED_WITH_THENCALL}}</span>
                                 </div>
                                 <div class="legend-item yellow">
                                     <div class="color-box yellow"></div><span
-                                        class="legend-text">{{constants.DID_NOT_MATCH_WITH_ELSECALL}}</span>
+                                        class="legend-text" i18n="@@DidNotMatchWithElseCall">{{constants.DID_NOT_MATCH_WITH_ELSECALL}}</span>
                                 </div>
                             </div>
                         </div>
